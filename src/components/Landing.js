@@ -23,7 +23,7 @@ const Landing = () => {
           <Register />
         </Grid>
         <Grid item xs={6} align="center">
-          <Search />
+          <Search onClick={() => navigate("/findEvent")} />
         </Grid>
         <Grid item xs={6} align="center">
           <Attend />
