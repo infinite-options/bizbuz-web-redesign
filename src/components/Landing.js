@@ -26,7 +26,7 @@ const Landing = () => {
           <Search onClick={() => navigate("/findEvent")} />
         </Grid>
         <Grid item xs={6} align="center">
-          <Attend />
+          <Attend onClick={() => navigate("/currentEvents")}/>
         </Grid>
         <Grid item xs={6} align="center">
           <Create onClick={() => navigate("/createEvent")} />
