@@ -41,13 +41,17 @@ const CreateEvent = () => {
     <Box display="flex" flexDirection="column">
       <Brand style={{ marginTop: "36px" }} />
       <Typography variant="h1" sx={{ mt: "78px" }}>
-        Create new Event
+        {"Create new Event"}
       </Typography>
-      <Button variant="contained" sx={{ mt: "8px" }}>
-        Create
+      <Button
+        variant="contained"
+        sx={{ mt: "8px" }}
+        onClick={() => navigate("/eventDetails")}
+      >
+        {"Create"}
       </Button>
       <Typography variant="h1" sx={{ mt: "35px" }}>
-        Edit Event
+        {"Edit Event"}
       </Typography>
       <Stack
         direction="column"
@@ -56,7 +60,7 @@ const CreateEvent = () => {
         sx={{ mt: 2 }}
       >
         {events.map((event) => (
-          <Card>
+          <Card key={event.event_uid}>
             <CardActionArea
               onClick={() => {
                 setEvent(event);
@@ -67,7 +71,7 @@ const CreateEvent = () => {
                 <Typography gutterBottom variant="h2" component="div">
                   {event.event_title}
                 </Typography>
-                <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
+                <Grid container rowSpacing={1}>
                   <Grid
                     item
                     xs={6}
@@ -104,6 +108,7 @@ const CreateEvent = () => {
                     sx={{ display: "flex", flexDirection: "row" }}
                   >
                     <MarkerIcon />
+                    &nbsp;
                     <Typography
                       variant="body1"
                       sx={{ fontSize: 12, maxWidth: "80%" }}
@@ -114,7 +119,12 @@ const CreateEvent = () => {
                 </Grid>
               </CardContent>
               {JSON.parse(event.event_photo).length === 0 ? (
-                <img src={NoImage} alt="default" />
+                <CardMedia
+                  component="img"
+                  height="174px"
+                  image={NoImage}
+                  alt="default"
+                />
               ) : (
                 <CardMedia
                   component="img"
