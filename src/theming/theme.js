@@ -46,6 +46,9 @@ const theme = createTheme({
         h1 {
             color: #FFFFFF;
         }
+        h2 {
+          color: #FFFFFF;
+        }
       `,
     },
     MuiContainer: {
@@ -65,6 +68,18 @@ const theme = createTheme({
           borderRadius: "10px",
           textTransform: "none",
           fontSize: 16,
+          fontWeight: 600,
+        },
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          fontFamily: "'Inter Variable', sans-serif",
+          height: "36px",
+          borderRadius: "8px",
+          textTransform: "none",
+          fontSize: 14,
           fontWeight: 600,
         },
       },

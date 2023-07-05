@@ -22,27 +22,16 @@ import NoImage from "../../assets/NoImage.png";
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EarlyArrival = () => {
-    // const location = useLocation();
-    // const { eventObj, user } = location.state;
-    // const userObj = typeof user === "string" ? JSON.parse(user) : user;
+    const location = useLocation();
+    const { eventObj} = location.state;
     const navigate = useNavigate();
-    // const { addAttendee, isAttendeePresent } = useAbly(eventObj.event_uid);
 
 
-    // const handleEnterWaitingRoom = async () => {
-    //     const response = await axios.get(
-    //       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
-    //     );
-    //     if (response.data.eventStarted === "1") {
-    //       navigate("/networkingActivity", {
-    //         state: { eventObj, userObj },
-    //       });
-    //     } else {
-    //       navigate("/eventAttendees", {
-    //         state: { eventObj, userObj },
-    //       });
-    //     }
-    //   };
+    const handleEnterWaitingRoom = async () => {
+      navigate("/eventRegistrants", {
+        state: { eventObj },
+      });
+    }
     
     //   const handleNewAttendee = async () => {
     //     await axios.put(
@@ -91,14 +80,14 @@ const EarlyArrival = () => {
 
     return (
     <Box display="flex" flexDirection="column">
-        <Brand style={{ marginTop: "36px" }} />
+        <Brand style={{ marginTop: "36px" }}  onClick={() => {navigate("/");}} />
         <Stack
         direction="column"
         justifyContent="center"
         spacing={2}
         sx={{ mt: 2 }}
         >
-        {/* <Card>
+        <Card>
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h2" component="div">
@@ -161,8 +150,8 @@ const EarlyArrival = () => {
                 />
               )}
             </CardActionArea>
-          </Card> */}
-          <Box display="flex" justifyContent="center" flexDirection="column">
+          </Card>
+          {/* <Box display="flex" justifyContent="center" flexDirection="column">
             <Grid
               container
               rowSpacing={{ xs: 1, sm: 10 }}
@@ -172,12 +161,12 @@ const EarlyArrival = () => {
             <Grid item xs={5} align="center">
             <CareerFair onClick={() => navigate("/earlyArrival")}/>
             </Grid>
-          </Box>
+          </Box> */}
         </Stack>
         <Typography variant="h1" sx={{ mt: "35px" }}>
             Event has not started
         </Typography>
-        <Button variant="contained" sx={{ mt: "8px" }} color="secondary" onClick={() => navigate("/eventRegistrants")}>
+        <Button variant="contained" sx={{ mt: "8px" }} color="secondary" onClick={handleEnterWaitingRoom}>
             Go to the Waiting Room
         </Button>
     </Box>

@@ -19,50 +19,67 @@ import Snackbar from "@mui/material/Snackbar";
 import MUIAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+
 const EventAttendees = () => {
     
     const navigate = useNavigate();
+    const location = useLocation();
+    const { eventObj } = location.state;
+    const [attendees, setAttendees] = useState([]);
 
-    const attendees = [
-        {
-          user_uid: "1",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "John",
-        },
-        {
-          user_uid: "2",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "Jane",
-        },
-        {
-          user_uid: "3",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "Mike",
-        },
-        {
-            user_uid: "4",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-        {
-        user_uid: "5",
-        images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-        first_name: "Mike",
-        },
-        {
-            user_uid: "6",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-        {
-            user_uid: "7",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-      ];
+    const fetchAttendees = async () => {
+      const response = await axios.get(
+        `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
+      );
+      const data = response["data"];
+      setAttendees(data["attendees"]);
+    };
+
+    useEffect(() => {
+      fetchAttendees();
+    }, []);
+
+    // const attendees = [
+    //     {
+    //       user_uid: "1",
+    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //       first_name: "John",
+    //     },
+    //     {
+    //       user_uid: "2",
+    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //       first_name: "Jane",
+    //     },
+    //     {
+    //       user_uid: "3",
+    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //       first_name: "Mike",
+    //     },
+    //     {
+    //         user_uid: "4",
+    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //         first_name: "Mike",
+    //     },
+    //     {
+    //     user_uid: "5",
+    //     images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //     first_name: "Mike",
+    //     },
+    //     {
+    //         user_uid: "6",
+    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //         first_name: "Mike",
+    //     },
+    //     {
+    //         user_uid: "7",
+    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
+    //         first_name: "Mike",
+    //     },
+    //   ];
     return ( 
         <Box display="flex" flexDirection="column">
-            <Brand style={{ marginTop: "36px" }} />
+            <Brand style={{ marginTop: "36px" }} onClick={() => {navigate("/");}}/>
             <Stack
             direction="column"
             justifyContent="center"
@@ -73,7 +90,7 @@ const EventAttendees = () => {
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h2" component="div">
-                  {"eventObj.event_title"}
+                  {eventObj.event_title}
                 </Typography>
                 <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
                   <Grid
@@ -103,7 +120,7 @@ const EventAttendees = () => {
                     <ClockIcon />
                     &nbsp;
                     <Typography variant="body1">
-                      {`eventObj.event_start_time - eventObj.event_end_time}`}
+                      {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
                     </Typography>
                   </Grid>
                   <Grid
@@ -116,7 +133,7 @@ const EventAttendees = () => {
                       variant="body1"
                       sx={{ fontSize: 12, maxWidth: "80%" }}
                     >
-                      {"eventObj.event_location"}
+                      {eventObj.event_location}
                     </Typography>
                   </Grid>
                 </Grid>

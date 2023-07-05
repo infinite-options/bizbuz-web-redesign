@@ -53,27 +53,26 @@ const CurrentEvents = () => {
               state: { path: "/earlyArrival", eventObj: event },
             });
       } else {
-        navigate("/login", {
+        navigate("/earlyArrival", {
           state: { path: "/earlyArrival", eventObj: event },
         });
       }
     };
 
     const getEventsByUser = async () => {
-        let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        const response = await axios.get(
-          `${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
-        );
-        setEvents(response.data.result);
+      const response = await axios.get(
+        `${BASE_URL}/GetEvents`
+      );
+      setEvents(response.data.result);
     };
 
-    // useEffect(() => {
-    //     getEventsByUser();
-    // }, []);
+    useEffect(() => {
+        getEventsByUser();
+    }, []);
     
     return ( 
     <Box display="flex" flexDirection="column">
-      <Brand style={{ marginTop: "36px" }} />
+      <Brand style={{ marginTop: "36px" }}  onClick={() => {navigate("/");}}/>
       <Stack
         direction="column"
         justifyContent="center"

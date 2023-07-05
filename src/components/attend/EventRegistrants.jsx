@@ -22,72 +22,51 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const EventRegistrants = () => {
 
     const navigate = useNavigate();
-    // const location = useLocation();
-    // const { eventObj, userObj } = location.state;
-    // const [registrants, setRegistrants] = useState([]);
-
-
-
-    // const fetchRegistrants = async () => {
-    //     const response = await axios.get(
-    //       `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
-    //     );
-    //     const data = response["data"];
-    //     setRegistrants(data["attendees"]);
-    //   };
-
-    //   useEffect(() => {
-    //     fetchRegistrants();
-    //   }, []);
-
-    const registrants = [
-        {
-          user_uid: "1",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "John",
-        },
-        {
-          user_uid: "2",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "Jane",
-        },
-        {
-          user_uid: "3",
-          images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-          first_name: "Mike",
-        },
-        {
-            user_uid: "4",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-        {
-        user_uid: "5",
+    const location = useLocation();
+    const { eventObj } = location.state;
+    const [registrants, setRegistrants] = useState([]);
+    const [eventHost, setEventHost] = useState(
+      { user_uid: "7",
         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
         first_name: "Mike",
-        },
-        {
-            user_uid: "6",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-        {
-            user_uid: "7",
-            images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-            first_name: "Mike",
-        },
-      ];
+      }
+    );
 
-      const eventHost={
-        user_uid: "1",
-        images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-        first_name: "Jack",
+    const handleAttendEvent = async () => {
+      navigate("/eventAttendees", {
+        state: { eventObj },
+      });
     }
-      
+    const fetchRegistrants = async () => {
+        const response = await axios.get(
+          `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
+        );
+        const data = response["data"];
+
+        setRegistrants(data["attendees"]);
+      };
+
+      const fetchOrganizers = async () => {
+        const response = await axios.get( `${BASE_URL}/GetOrganizers`);
+        const organizersData = response.data.result;
+        console.log("Organizers Data:", organizersData); 
+        const eventHost = organizersData.find(
+          (organizer) => organizer.event_uid === eventObj.event_uid
+        );
+        console.log("Event Host:", eventHost);
+        setEventHost(eventHost);
+      };
+
+
+
+      useEffect(() => {
+        fetchOrganizers();
+        fetchRegistrants();
+      }, []);
 
     return (
         <Box display="flex" flexDirection="column">
-            <Brand style={{ marginTop: "36px" }} />
+            <Brand style={{ marginTop: "36px" }} onClick={() => {navigate("/");}}/>
             <Stack
             direction="column"
             justifyContent="center"
@@ -98,7 +77,7 @@ const EventRegistrants = () => {
             <CardActionArea>
               <CardContent>
                 <Typography gutterBottom variant="h2" component="div">
-                  {"eventObj.event_title"}
+                  {eventObj.event_title}
                 </Typography>
                 <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
                   <Grid
@@ -128,7 +107,7 @@ const EventRegistrants = () => {
                     <ClockIcon />
                     &nbsp;
                     <Typography variant="body1">
-                      {`eventObj.event_start_time - eventObj.event_end_time}`}
+                      {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
                     </Typography>
                   </Grid>
                   <Grid
@@ -141,7 +120,7 @@ const EventRegistrants = () => {
                       variant="body1"
                       sx={{ fontSize: 12, maxWidth: "80%" }}
                     >
-                      {"eventObj.event_location"}
+                      {eventObj.event_location}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -208,7 +187,7 @@ const EventRegistrants = () => {
               </CardActionArea>
             </Card>
             
-            <Button variant="contained" sx={{width: '70%', mt: "8px", marginLeft:"auto", marginRight:"auto"}} color="secondary" onClick={() => navigate("/eventAttendees")}>
+            <Button variant="contained" sx={{width: '70%', mt: "8px", marginLeft:"auto", marginRight:"auto"}} color="secondary" onClick={handleAttendEvent}>
                     Attend Event
             </Button>
         </Box>
