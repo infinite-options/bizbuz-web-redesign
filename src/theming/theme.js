@@ -21,6 +21,7 @@ const theme = createTheme({
       contrastText: "#FFFFFF",
     },
   },
+  spacing: 16,
   typography: {
     h1: {
       fontFamily: "'Fira Sans', sans-serif",
@@ -57,6 +58,7 @@ const theme = createTheme({
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
+          padding: 16,
         },
       },
     },

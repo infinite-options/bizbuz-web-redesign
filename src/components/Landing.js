@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import { ReactComponent as Brand } from "../assets/brand.svg";
 import { ReactComponent as Footer } from "../assets/footer.svg";
 import { ReactComponent as Register } from "../assets/register.svg";
 import { ReactComponent as Search } from "../assets/search.svg";
@@ -13,14 +12,13 @@ const Landing = () => {
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
-      <Brand style={{ marginTop: "36px" }} />
       <Grid
         container
         rowSpacing={{ xs: 1, sm: 10 }}
         sx={{ mt: "18% !important" }}
       >
         <Grid item xs={6} align="center">
-          <Register />
+          <Register onClick={() => navigate("/registrationPage")} />
         </Grid>
         <Grid item xs={6} align="center">
           <Search onClick={() => navigate("/findEvent")} />

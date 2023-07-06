@@ -1,0 +1,20 @@
+REACT_APP_GOOGLE_CLIENT_ID = 336598290180-jrgltgbu7j1qq1924vhgtue3i3gd8roh.apps.googleusercontent.com
+REACT_APP_GOOGLE_CLIENT_SECRET = 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
+
+REACT_APP_MAP_KEY = AIzaSyDIzqIlKj-79kZv9B3g-AnnmcTTLhxcLP0
+
+REACT_APP_GOOGLE_API_KEY = AIzaSyDNnAgWzY172kCYQlw6KMuxzETjhJCTFQo
+
+REACT_APP_SERVER_BASE_URI = https://qlw29nnkwh.execute-api.us-west-1.amazonaws.com/dev/api/v2
+
+REACT_APP_GOOGLE_LOGIN = googleSocialLogin1
+
+//REACT_APP_CLIENT_BASE_URI = https://bizbuz.design
+REACT_APP_CLIENT_BASE_URI = http://localhost:3000
+
+REACT_APP_ENKEY = InfiniteOptions033123
+
+REACT_APP_ABLY_API_KEY = uVw8ZQ.JeIy0w:oGVPDlf8XqW8GGYFkjpbMaxjGb7PFr0Go8xp7NMWB28
+
+GENERATE_SOURCEMAP=false
+SKIP_PREFLIGHT_CHECK=true
