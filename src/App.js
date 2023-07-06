@@ -6,7 +6,8 @@ import EventDetails from "./components/create/EventDetails";
 import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
 import EventTitle from "./components/create/EventTitle";
-import RegistrationPage from "./components/RegistrationPage";
+import RegistrationPage from "./pages/registration-page";
+import SearchEventsByDate from "./pages/search-events-by-date";
 import { ReactComponent as Brand } from "./assets/brand.svg";
 import { Box } from "@mui/material";
 
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/eventTitle" element={<EventTitle />} />
         <Route path="/findEvent" element={<FindBy />} />
         <Route path="/registrationPage" element={<RegistrationPage />} />
+        <Route path="/searchEventsByDate" element={<SearchEventsByDate />} />
       </Routes>
     </>
     // </Container>

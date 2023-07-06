@@ -40,6 +40,10 @@ const theme = createTheme({
       fontSize: 12,
       fontWeight: 600,
     },
+    h6: {
+      fontFamily: "Fira Sans",
+      fontWeight: 700,
+    },
   },
   components: {
     MuiCssBaseline: {
@@ -57,7 +61,7 @@ const theme = createTheme({
         root: {
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          // minHeight: "100vh",
           padding: 16,
         },
       },

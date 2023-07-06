@@ -1,36 +1,26 @@
-import dayjs from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { IconButton, InputAdornment } from "@mui/material";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { InputAdornment, IconButton } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import { ReactComponent as CalenderIcon } from "../../assets/calendar-date.svg";
 
-const DatePickerInputIconButton = () => {
-  return (
-    <IconButton edge="end">
-      <CalendarMonthIcon />
-    </IconButton>
-  );
-};
-
-const DatePickerInput = ({ defaultValue = dayjs(), handleDateChange }) => {
+const DatePickerInput = ({ onDateChange = () => {} }) => {
   return (
     <DatePicker
-      onChange={(newDate) => handleDateChange(newDate)}
-      defaultValue={defaultValue}
+      onChange={(newValue) => onDateChange(newValue)}
       slots={{
-        openPickerIcon: CalendarMonthIcon,
+        openPickerIcon: CalenderIcon,
       }}
-      // MUI date picker does not show icons on mobile view so we manually override the underlying textfield
-      // This causes visible differences in UX. See: https://github.com/mui/mui-x/issues/4836
       slotProps={{
         textField: {
           style: {
             background: "white",
-            borderRadius: "0.3rem",
+            borderRadius: "0.7rem",
           },
           InputProps: {
             endAdornment: (
               <InputAdornment position="end">
-                <DatePickerInputIconButton />
+                <IconButton edge="end">
+                  <CalenderIcon />
+                </IconButton>
               </InputAdornment>
             ),
           },
