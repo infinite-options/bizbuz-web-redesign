@@ -93,6 +93,19 @@ const theme = createTheme({
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+          color: "#143959",
+          borderRadius: "10px",
+        },
+        paper: {
+          backgroundColor: "#143959",
+        },
+      },
+    },
   },
 });
 
