@@ -6,6 +6,15 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as BackIcon } from "../../assets/arrow-circle-left.svg";
 import { ReactComponent as NextIcon } from "../../assets/arrow-square-right.svg";
+import { ReactComponent as HelpIcon } from "../../assets/help.svg";
+import { styled } from "@mui/material/styles";
+
+const Dot = styled("div")(({ color }) => ({
+  backgroundColor: color,
+  borderRadius: "50%",
+  width: "10px",
+  height: "10px",
+}));
 
 const EventTitle = () => {
   const navigate = useNavigate();
@@ -20,24 +29,74 @@ const EventTitle = () => {
         <TextField
           variant="outlined"
           placeholder="Write Event's title here..."
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
         />
         <Typography variant="h2">{"Event Description"}</Typography>
         <TextField
           variant="outlined"
+          multiline
+          rows={8}
           placeholder="Describe your Event here..."
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "white", borderRadius: "8px" }}
         />
+        <Typography variant="h2">
+          {"Accessibility"}&nbsp;
+          <HelpIcon />
+        </Typography>
         <Stack
           spacing={2}
           direction="row"
-          style={{ width: "92vw", position: "fixed", bottom: "15px" }}
+          style={{
+            maxWidth: "550px",
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#FFFFFF",
+              width: "128px",
+              height: "40px",
+              color: "#000000",
+            }}
+          >
+            <Dot color="#AA0E00" />
+            &nbsp;
+            {"Public"}
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "#FFFFFF",
+              width: "128px",
+              height: "40px",
+              color: "#000000",
+            }}
+          >
+            <Dot color="#20B2AA" />
+            &nbsp;
+            {"Private"}
+          </Button>
+        </Stack>
+        <Stack
+          spacing={2}
+          direction="row"
+          style={{
+            width: "92vw",
+            position: "fixed",
+            bottom: "15px",
+            maxWidth: "550px",
+          }}
         >
           <Button variant="contained" onClick={() => navigate(-1)} fullWidth>
             <BackIcon />
             {"Back"}
           </Button>
-          <Button color="secondary" variant="contained" fullWidth>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => navigate("/eventImage")}
+            fullWidth
+          >
             <NextIcon />
             {"Next"}
           </Button>

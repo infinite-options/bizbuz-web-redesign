@@ -66,7 +66,12 @@ const EventLocation = () => {
         <Stack
           spacing={2}
           direction="row"
-          style={{ width: "92vw", position: "fixed", bottom: "15px" }}
+          style={{
+            width: "92vw",
+            position: "fixed",
+            bottom: "15px",
+            maxWidth: "550px",
+          }}
         >
           <Button variant="contained" onClick={() => navigate(-1)} fullWidth>
             <BackIcon />
