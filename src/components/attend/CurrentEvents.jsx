@@ -77,7 +77,7 @@ const CurrentEvents = () => {
         direction="column"
         justifyContent="center"
         spacing={2}
-        sx={{ mt: 2 }}
+        sx={{ mt: 6 }}
       >
         {events.length > 0 ? (
           events.map((event) => { return (

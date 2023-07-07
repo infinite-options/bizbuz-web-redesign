@@ -23,7 +23,7 @@ const EventRegistrants = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { eventObj } = location.state;
+    const { eventObj, userObj } = location.state;
     const [registrants, setRegistrants] = useState([]);
     const [eventHost, setEventHost] = useState(
       { user_uid: "7",
@@ -34,7 +34,7 @@ const EventRegistrants = () => {
 
     const handleAttendEvent = async () => {
       navigate("/eventAttendees", {
-        state: { eventObj },
+        state: { eventObj, userObj },
       });
     }
     const fetchRegistrants = async () => {
@@ -71,7 +71,7 @@ const EventRegistrants = () => {
             direction="column"
             justifyContent="center"
             spacing={2}
-            sx={{ mt: 2 }}
+            sx={{ mt: 6 }}
             >
             <Card>
             <CardActionArea>
@@ -129,7 +129,7 @@ const EventRegistrants = () => {
             </Card>
             </Stack>
 
-            <Card sx={{ mt: "8px", bgcolor: "#FFFFFF", color: "#000000"}}>
+            <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000"}}>
                 <CardActionArea>
                 <CardContent sx={{display: "flex", alignItems: "center"}}>
                     <Typography gutterBottom variant="h2" component="div" sx={{ flexGrow: 1 }}>
@@ -154,7 +154,7 @@ const EventRegistrants = () => {
               </CardActionArea>
             </Card>
 
-            <Card sx={{ mt: "8px", bgcolor: "#FFFFFF", color: "#000000"}}>
+            <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000"}}>
                 <CardActionArea>
                 <CardContent>
                     <Typography gutterBottom variant="h2" component="div">
@@ -187,8 +187,28 @@ const EventRegistrants = () => {
               </CardActionArea>
             </Card>
             
-            <Button variant="contained" sx={{width: '70%', mt: "8px", marginLeft:"auto", marginRight:"auto"}} color="secondary" onClick={handleAttendEvent}>
-                    Attend Event
+            <Button
+              variant="contained"
+              sx={{
+                display: 'flex',
+                width: '203px',
+                height: '48px',
+                padding: '8px 14px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '8px',
+                flexShrink: 0,
+                borderRadius: '8px',
+                background: '#FFF',
+                boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+                mt: '16px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+              }}
+              color="secondary"
+              onClick={handleAttendEvent}
+            >
+              Attend Event
             </Button>
         </Box>
      );

@@ -23,13 +23,13 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EarlyArrival = () => {
     const location = useLocation();
-    const { eventObj} = location.state;
+    const { eventObj, userObj} = location.state;
     const navigate = useNavigate();
 
 
     const handleEnterWaitingRoom = async () => {
       navigate("/eventRegistrants", {
-        state: { eventObj },
+        state: { eventObj, userObj},
       });
     }
     
@@ -85,7 +85,7 @@ const EarlyArrival = () => {
         direction="column"
         justifyContent="center"
         spacing={2}
-        sx={{ mt: 2 }}
+        sx={{ mt: 6 }}
         >
         <Card>
             <CardActionArea>

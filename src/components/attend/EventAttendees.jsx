@@ -15,68 +15,107 @@ import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import MUIAlert from "@mui/material/Alert";
-import Slide from "@mui/material/Slide";
+import NoImage from "../../assets/NoImage.png";
+import Highcharts from "../../util/networking";
+import HighchartsReact from "highcharts-react-official";
+import useStyles from "../../theming/styles";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EventAttendees = () => {
-    
+    const classes = useStyles();
     const navigate = useNavigate();
     const location = useLocation();
-    const { eventObj } = location.state;
-    const [attendees, setAttendees] = useState([]);
+    const { eventObj, userObj } = location.state;
+    const [options, setOptions] = useState({
+      chart: {
+        type: "networkgraph",
+        height: 400,
+        backgroundColor: "transparent",
+        margin: 25,
+        reflow: false,
+      },
+      title: {
+        text: null,
+      },
+      plotOptions: {
+        networkgraph: {
+          turboThreshold: 0,
+          keys: ["from", "to"],
+          layoutAlgorithm: {
+            enableSimulation: false,
+            initialPositions: "circle",
+            attractiveForce: () => 0,
+            repulsiveForce: () => 100,
+          },
+          point: {
+            events: {
+              click(e) {
+                // handleNodeClick(e.point);
+              },
+            },
+          },
+        },
+      },
+      series: [
+        {
+          link: {
+            width: 2,
+            color: "white",
+          },
+          dataLabels: {
+            enabled: false,
+            linkFormat: "",
+            allowOverlap: true,
+          },
+          id: "networking",
+          data: [],
+          nodes: [],
+        },
+      ],
+      credits: {
+        enabled: false,
+      },
+    });
 
-    const fetchAttendees = async () => {
+    const handleUserImage = (images) => {
+      const imagesArr = JSON.parse(images);
+      return imagesArr.length > 0 ? imagesArr[0] : NoImage;
+    };
+
+    const refreshGraph = async () => {
       const response = await axios.get(
-        `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
+        `${BASE_URL}/networkingGraph?eventId=200-000098&userId=100-000038`
       );
       const data = response["data"];
-      setAttendees(data["attendees"]);
+      let nodesArr = [];
+      data["users"].forEach((u) => {
+        nodesArr.push({
+          id: u.user_uid,
+          mass: 1,
+          marker: {
+            symbol: `url(${handleUserImage(u.images)})`,
+            width: 50,
+            height: 50,
+          },
+          name: `${u.first_name} is ${u.role}`,
+          className: classes.circularImage,
+        });
+      });
+      setOptions({
+        series: [
+          {
+            data: data["links"],
+            nodes: nodesArr,
+          },
+        ],
+      });
     };
 
     useEffect(() => {
-      fetchAttendees();
+      refreshGraph();
     }, []);
 
-    // const attendees = [
-    //     {
-    //       user_uid: "1",
-    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //       first_name: "John",
-    //     },
-    //     {
-    //       user_uid: "2",
-    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //       first_name: "Jane",
-    //     },
-    //     {
-    //       user_uid: "3",
-    //       images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //       first_name: "Mike",
-    //     },
-    //     {
-    //         user_uid: "4",
-    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //         first_name: "Mike",
-    //     },
-    //     {
-    //     user_uid: "5",
-    //     images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //     first_name: "Mike",
-    //     },
-    //     {
-    //         user_uid: "6",
-    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //         first_name: "Mike",
-    //     },
-    //     {
-    //         user_uid: "7",
-    //         images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    //         first_name: "Mike",
-    //     },
-    //   ];
     return ( 
         <Box display="flex" flexDirection="column">
             <Brand style={{ marginTop: "36px" }} onClick={() => {navigate("/");}}/>
@@ -84,7 +123,7 @@ const EventAttendees = () => {
             direction="column"
             justifyContent="center"
             spacing={2}
-            sx={{ mt: 2 }}
+            sx={{ mt: 6 }}
             >
             <Card>
             <CardActionArea>
@@ -141,35 +180,10 @@ const EventAttendees = () => {
             </CardActionArea>
             </Card>
             </Stack>
-            
-            <Grid
-                container
-                rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                alignItems="center"
-                sx={{ minHeight: "30vh", mt: "16px"}}
-            >
-                {attendees.map((attendee) => (
-                <Grid key={attendee.user_uid} item xs={4}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <Avatar
-                        src={JSON.parse(attendee.images)[0]}
-                        sx={{
-                        width: "80px",
-                        height: "80px",
-                        bgcolor: "#ff5722",
-                        alignSelf: "center",
-                        }}
-                        alt={attendee.first_name}
-                        // onClick={() => handleClickAttendee(attendee)}
-                    />
-                    <Typography align="center" color="#FFFFFF">
-                        {attendee.first_name}
-                    </Typography>
-                    </Box>
-                </Grid>
-                ))}
-            </Grid>
+    
+            <Stack spacing={2} direction="column">
+              <HighchartsReact highcharts={Highcharts} options={options} />
+            </Stack>
 
             <Button variant="contained" sx={{ mt: "16px" }} color="primary" onClick={() => navigate("/")}>
                 Leave Event
