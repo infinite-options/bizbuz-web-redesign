@@ -140,7 +140,12 @@ const EarlyArrival = () => {
                 </Grid>
               </CardContent>
               {JSON.parse(eventObj.event_photo).length === 0 ? (
-                <img src={NoImage} alt="default" />
+                <CardMedia
+                  component="img"
+                  height="174px"
+                  image={NoImage}
+                  alt="default"
+                />
               ) : (
                 <CardMedia
                   component="img"
@@ -151,17 +156,6 @@ const EarlyArrival = () => {
               )}
             </CardActionArea>
           </Card>
-          {/* <Box display="flex" justifyContent="center" flexDirection="column">
-            <Grid
-              container
-              rowSpacing={{ xs: 1, sm: 10 }}
-              sx={{ mt: "18% !important" }}
-            >
-            </Grid>
-            <Grid item xs={5} align="center">
-            <CareerFair onClick={() => navigate("/earlyArrival")}/>
-            </Grid>
-          </Box> */}
         </Stack>
         <Typography variant="h1" sx={{ mt: "35px" }}>
             Event has not started

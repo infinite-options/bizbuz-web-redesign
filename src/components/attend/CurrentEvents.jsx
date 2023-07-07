@@ -14,8 +14,6 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import { ReactComponent as CareerFair } from "../../assets/CareerFair.svg";
-import { ReactComponent as Taylor } from "../../assets/Taylor.svg";
 import NoImage from "../../assets/NoImage.png";
 
 
@@ -138,7 +136,12 @@ const CurrentEvents = () => {
                   </Grid>
                 </CardContent>
                 {JSON.parse(event.event_photo).length === 0 ? (
-                  <img src={NoImage} alt="default" />
+                  <CardMedia
+                    component="img"
+                    height="174px"
+                    image={NoImage}
+                    alt="default"
+                  />
                 ) : (
                   <CardMedia
                     component="img"
@@ -159,10 +162,9 @@ const CurrentEvents = () => {
             >
             </Grid>
             <Grid item xs={5} align="center">
-            <CareerFair onClick={() => navigate("/earlyArrival")}/>
-            </Grid>
-            <Grid item xs={5} align="center">
-            <Taylor onClick={() => navigate("/earlyArrival")}/>
+            <Typography gutterBottom variant="h2" component="div" style={{ color: 'white' }}>
+              No Events Available For Now
+            </Typography>
             </Grid>
           </Box>
         )}

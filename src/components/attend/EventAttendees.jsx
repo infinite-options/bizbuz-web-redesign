@@ -44,9 +44,8 @@ const EventAttendees = () => {
           keys: ["from", "to"],
           layoutAlgorithm: {
             enableSimulation: false,
+            linkLength: 50,
             initialPositions: "circle",
-            attractiveForce: () => 0,
-            repulsiveForce: () => 100,
           },
           point: {
             events: {
@@ -92,7 +91,6 @@ const EventAttendees = () => {
       data["users"].forEach((u) => {
         nodesArr.push({
           id: u.user_uid,
-          mass: 1,
           marker: {
             symbol: `url(${handleUserImage(u.images)})`,
             width: 50,
