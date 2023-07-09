@@ -34,6 +34,13 @@ const theme = createTheme({
       fontWeight: 600,
       fontKerning: "none",
     },
+    h3: {
+      fontFamily: "'Fira Sans Condensed', sans-serif",
+      fontSize: 18,
+      fontWeight: 600,
+      fontKerning: "none",
+      color: "white",
+    },
     body1: {
       fontFamily: "'Inter Variable', sans-serif",
       fontSize: 12,
