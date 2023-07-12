@@ -77,30 +77,29 @@ const CreateEvent = () => {
                     xs={6}
                     sx={{ display: "flex", flexDirection: "row" }}
                   >
-                    <CalendarIcon />
-                    &nbsp;
-                    <Typography variant="body1">
-                      {new Date(event.event_start_date).toLocaleString(
-                        "default",
-                        {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        }
-                      )}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6} />
-                  <Grid
-                    item
-                    xs={6}
-                    sx={{ display: "flex", flexDirection: "row" }}
-                  >
-                    <ClockIcon />
-                    &nbsp;
-                    <Typography variant="body1">
-                      {`${event.event_start_time} - ${event.event_end_time}`}
-                    </Typography>
+                    <Stack spacing={2}>
+                      <Stack direction="row">
+                        <CalendarIcon />
+                        &nbsp;
+                        <Typography variant="body1">
+                          {new Date(event.event_start_date).toLocaleString(
+                            "default",
+                            {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            }
+                          )}
+                        </Typography>
+                      </Stack>
+                      <Stack direction="row">
+                        <ClockIcon />
+                        &nbsp;
+                        <Typography variant="body1">
+                          {`${event.event_start_time} - ${event.event_end_time}`}
+                        </Typography>
+                      </Stack>
+                    </Stack>
                   </Grid>
                   <Grid
                     item

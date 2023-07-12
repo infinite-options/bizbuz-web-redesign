@@ -50,14 +50,20 @@ const EventDetails = () => {
           value={eventType}
           exclusive
           onChange={handleEventTypeChange}
-          sx={{ display: "flex", flexDirection: "column" }}
+          sx={{ display: "flex" }}
         >
           <Grid container spacing={1}>
             <Grid item>
               <ToggleButton
                 value="Business Marketing"
                 variant="contained"
-                sx={{ width: "202px", backgroundColor: "#C2E9D9" }}
+                sx={{
+                  width: "202px",
+                  backgroundColor: "#C2E9D9",
+                  "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                    backgroundColor: "#20B2AA",
+                  },
+                }}
               >
                 <Dot color="#20B2AA" />
                 &nbsp;
@@ -68,9 +74,15 @@ const EventDetails = () => {
               <ToggleButton
                 value="Social Mixer"
                 variant="contained"
-                sx={{ width: "128px", backgroundColor: "#F2ABA5" }}
+                sx={{
+                  width: "128px",
+                  backgroundColor: "#F2ABA5",
+                  "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                    backgroundColor: "#F26457",
+                  },
+                }}
               >
-                <Dot />
+                <Dot color="#F26457" />
                 &nbsp;
                 {"Social Mixer"}
               </ToggleButton>
@@ -79,9 +91,15 @@ const EventDetails = () => {
               <ToggleButton
                 value="Party or Event"
                 variant="contained"
-                sx={{ width: "202px", backgroundColor: "#C1DEEF" }}
+                sx={{
+                  width: "202px",
+                  backgroundColor: "#C1DEEF",
+                  "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                    backgroundColor: "#90CAED",
+                  },
+                }}
               >
-                <Dot />
+                <Dot color="#90CAED" />
                 &nbsp;
                 {"Party or Event"}
               </ToggleButton>
@@ -90,9 +108,15 @@ const EventDetails = () => {
               <ToggleButton
                 value="Other"
                 variant="contained"
-                sx={{ width: "128px", backgroundColor: "#CE807A" }}
+                sx={{
+                  width: "128px",
+                  backgroundColor: "#CE807A",
+                  "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                    backgroundColor: "#AA0E00",
+                  },
+                }}
               >
-                <Dot />
+                <Dot color="#AA0E00" />
                 &nbsp;
                 {"Other"}
               </ToggleButton>
