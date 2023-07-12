@@ -50,7 +50,7 @@ class SearchBox extends Component {
     return (
       <Wrapper>
         <OutlinedInput
-          ref={(ref) => {
+          inputRef={(ref) => {
             this.searchInput = ref;
           }}
           endAdornment={
@@ -61,8 +61,7 @@ class SearchBox extends Component {
           type="text"
           onFocus={this.clearSearchBox}
           placeholder="Enter a location"
-          sx={{ backgroundColor: "#FFFFFF" }}
-          fullWidth
+          sx={{ backgroundColor: "#FFFFFF", width: "82vw", maxWidth: "550px" }}
         />
       </Wrapper>
     );

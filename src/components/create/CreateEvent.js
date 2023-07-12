@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -21,14 +21,17 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const CreateEvent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
+  const [getUser, setUser] = useLocalStorage("user");
   const [events, setEvents] = useState([]);
-  const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
+  const [getEvent, setEvent] = useLocalStorage("event");
 
   const getEventsByUser = async () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const response = await axios.get(
       BASE_URL +
-        `/GetEvents?event_organizer_uid=100-000038&timeZone=${user_timezone}`
+        `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
     );
     setEvents(response.data.result);
   };

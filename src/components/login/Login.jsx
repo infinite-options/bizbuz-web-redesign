@@ -5,7 +5,7 @@ import GoogleLogin from "./GoogleLogin";
 import EmailLogin from "./EmailLogin";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
-import Back from "../../assets/Back.png";
+// import Back from "../../assets/Back.png";
 import { hidden } from "../../styles";
 export default function Login() {
   const navigate = useNavigate();
@@ -29,7 +29,10 @@ export default function Login() {
         eventObj={eventObj}
       /> */}
 
-      <Brand style={{ marginTop: "36px" }} />
+      <Brand style={{ marginTop: "36px", marginBottom: "2rem" }} />
+      <Typography variant="h1" sx={{ mt: "58px" }}>
+        {"Login here"}
+      </Typography>
       <Stack
         direction="column"
         justifyContent="center"
@@ -81,7 +84,7 @@ export default function Login() {
         </div>
       </Stack>
 
-      <Stack sx={{ mt: 12 }}>
+      {/* <Stack sx={{ mt: 12 }}>
         {showForm ? (
           " "
         ) : (
@@ -90,7 +93,7 @@ export default function Login() {
             &nbsp; &nbsp;Back
           </Button>
         )}
-      </Stack>
+      </Stack> */}
       <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0" }} />
     </Box>
   );

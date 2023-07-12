@@ -1,31 +1,66 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { ReactComponent as BackIcon } from "../../assets/arrow-circle-left.svg";
-import { ReactComponent as NextIcon } from "../../assets/arrow-square-right.svg";
+import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
+import { ReactComponent as NextIcon } from "../../assets/continue.svg";
 import { ReactComponent as EventDefaultImage } from "../../assets/event-default.svg";
 import { ReactComponent as CameraIcon } from "../../assets/camera.svg";
-import { styled } from "@mui/material/styles";
-
-const Dot = styled("div")(({ color }) => ({
-  backgroundColor: color,
-  borderRadius: "50%",
-  width: "10px",
-  height: "10px",
-}));
 
 const EventImage = () => {
   const navigate = useNavigate();
+  const [image, setImage] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [getEvent, setEvent] = useLocalStorage("event");
+
+  const readImage = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      file.image = e.target.result;
+      setImage(file);
+    };
+    reader.readAsDataURL(file.file);
+  };
+
+  const addFile = (e) => {
+    const file = {
+      index: 0,
+      file: e.target.files[0],
+      image: null,
+    };
+    let isLarge = file.file.size > 5000000;
+    let file_size = (file.file.size / 1000000).toFixed(1);
+    if (isLarge) {
+      setErrorMessage(`Your file size is too large (${file_size} MB)`);
+      return;
+    } else {
+      setErrorMessage("");
+    }
+    readImage(file);
+  };
+
+  const handleContinue = () => {
+    const event = getEvent();
+    event.img_cover = image.image;
+    setEvent(event);
+    navigate("/eventQuestions");
+  };
 
   return (
     <Box display="flex" flexDirection="column">
-      <Typography variant="h1" sx={{ mt: "114px" }}>
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+      </Stack>
+      <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
       </Typography>
-      <Stack direction="column" spacing={2} sx={{ mt: "36px" }}>
+      <Stack direction="column" spacing={2} sx={{ mt: "26px" }}>
         <Typography variant="h2">{"Event Photo"}</Typography>
         <Stack spacing={2} direction="column">
           <Button
@@ -75,6 +110,7 @@ const EventImage = () => {
                 <Stack spacing={2} direction="column">
                   <Button
                     variant="contained"
+                    component="label"
                     sx={{
                       backgroundColor: "#FFFFFF",
                       color: "#000000",
@@ -82,6 +118,12 @@ const EventImage = () => {
                     }}
                   >
                     {"Choose Image"}
+                    <input
+                      hidden
+                      type="file"
+                      accept="image/*"
+                      onChange={addFile}
+                    />
                   </Button>
                   <Button
                     variant="contained"
@@ -102,8 +144,29 @@ const EventImage = () => {
                     color: "#000000",
                     width: "154px",
                     height: "130px",
+                    p: 0,
+                    m: 0,
                   }}
-                ></Button>
+                >
+                  {
+                    <div>
+                      {image.image ? (
+                        <img
+                          key={Date.now()}
+                          src={image.image}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                          alt="event"
+                        />
+                      ) : (
+                        <br />
+                      )}
+                    </div>
+                  }
+                </Button>
               </Stack>
             </Stack>
           </Button>
@@ -114,22 +177,13 @@ const EventImage = () => {
           style={{
             width: "92vw",
             position: "fixed",
-            bottom: "15px",
+            bottom: "30px",
             maxWidth: "550px",
           }}
         >
-          <Button variant="contained" onClick={() => navigate(-1)} fullWidth>
-            <BackIcon />
-            {"Back"}
-          </Button>
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={() => navigate("/eventQuestions")}
-            fullWidth
-          >
+          <Button variant="contained" onClick={handleContinue} fullWidth>
+            {"Continue"}&nbsp;
             <NextIcon />
-            {"Next"}
           </Button>
         </Stack>
       </Stack>

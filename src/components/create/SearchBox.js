@@ -43,7 +43,7 @@ class Searchbox extends Component {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          paddingTop: "5%",
+          paddingTop: "2%",
         }}
       >
         {mapApiLoaded && (

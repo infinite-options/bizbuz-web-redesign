@@ -4,9 +4,7 @@ import RoomOutlinedIcon from "@mui/icons-material/RoomOutlined";
 
 const SomeReactComponent = ({ text }) => {
   return (
-    <div>
-      <RoomOutlinedIcon fontSize="large" />
-    </div>
+    <RoomOutlinedIcon fontSize="large" sx={{ ml: "-17.5px", mt: "-35px" }} />
   );
 };
 
@@ -17,6 +15,7 @@ export default class Map extends Component {
       lng: -121.88737,
     },
     zoom: 14,
+    height: "40vh",
   };
 
   render() {
@@ -30,7 +29,7 @@ export default class Map extends Component {
     };
 
     return (
-      <div style={{ height: "30%", width: "90%" }}>
+      <div style={{ height: this.props.height, width: "90%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,

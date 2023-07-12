@@ -113,6 +113,58 @@ const theme = createTheme({
         },
       },
     },
+    MuiPickersLayout: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiPickersDay: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+        "&.Mui-disabled": {
+          color: "#000000",
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiDayCalendar: {
+      styleOverrides: {
+        weekDayLabel: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiClockNumber: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiPickersToolbarText: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    // MuiPickersToolbar: {
+    //   styleOverrides: {
+    //     "&.Mui-selected": {
+    //       color: "#F26457",
+    //     },
+    //   },
+    // },
   },
 });
 

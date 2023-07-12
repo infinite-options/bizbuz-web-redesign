@@ -194,10 +194,15 @@ export default function EmailLogin(props) {
         <Stack direction="column" justifyContent="center" sx={{ mt: 2 }}>
           <FormControl>
             <FormGroup>
-              <Typography variant="h3">Username</Typography>
+              <Typography variant="h3" sx={{ width: "92vw" }}>
+                {"Username"}
+              </Typography>
               <TextField
-                style={{
+                sx={{
                   backgroundColor: "white",
+                  width: "92vw",
+                  height: "44px",
+                  borderRadius: "8px",
                 }}
                 type="email"
                 value={email}
@@ -207,10 +212,15 @@ export default function EmailLogin(props) {
               />
             </FormGroup>
             <FormGroup>
-              <Typography variant="h3">Password</Typography>
+              <Typography variant="h3" sx={{ width: "92vw" }}>
+                {"Password"}
+              </Typography>
               <TextField
-                style={{
+                sx={{
                   backgroundColor: "white",
+                  width: "92vw",
+                  height: "44px",
+                  borderRadius: "8px",
                 }}
                 type="password"
                 value={password}
@@ -223,7 +233,7 @@ export default function EmailLogin(props) {
           <div className="text-center pt-1 pb-2">
             <div className="text-center">
               <p onClick={onReset} variant="body1" style={{ color: "white" }}>
-                Forgot Password?
+                {"Forgot Password?"}
               </p>
             </div>
           </div>
@@ -237,16 +247,20 @@ export default function EmailLogin(props) {
       ) : (
         <Button
           onClick={() => setShowForm(true)}
-          style={{
+          sx={{
             textTransform: "none",
             backgroundColor: "white",
+            color: "#000000",
+            width: "92vw",
+            height: "44px",
           }}
         >
           <img
             src={Email}
             style={{ width: "3rem", padding: "1rem", cursor: "pointer" }}
+            alt="email"
           />
-          Register with Email
+          {"Register with Email"}
         </Button>
       )}
       <Stack>
@@ -257,9 +271,12 @@ export default function EmailLogin(props) {
               backgroundColor: "#F26457",
               color: "white",
               marginTop: "-2rem",
+              width: "92vw",
+              height: "56px",
+              borderRadius: "10px",
             }}
           >
-            Login
+            {"Login"}
           </Button>
         ) : (
           ""

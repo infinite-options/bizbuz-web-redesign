@@ -16,6 +16,7 @@ import EmailSignup from "./components/signup/EmailSignup";
 import GoogleSignupForm from "./components/signup/GoogleSignupForm";
 import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
+import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
 
 const App = () => {
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/eventImage" element={<EventImage />} />
           <Route path="/eventQuestions" element={<EventQuestions />} />
           <Route path="/eventReview" element={<EventReview />} />
+          <Route path="/eventCode" element={<EventCode />} />
           <Route path="/findEvent" element={<FindBy />} />
         </Routes>
       </LoginContext.Provider>
