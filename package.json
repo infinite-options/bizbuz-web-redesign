@@ -16,6 +16,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ably": "^1.2.40",
     "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
     "google-map-react": "^2.2.1",
     "highcharts": "^11.0.1",
     "highcharts-react-official": "^3.2.0",

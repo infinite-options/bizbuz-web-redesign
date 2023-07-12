@@ -25,6 +25,7 @@ const EarlyArrival = () => {
     const location = useLocation();
     const { eventObj, userObj} = location.state;
     const navigate = useNavigate();
+    // const { addAttendee, isAttendeePresent } = useAbly(eventObj.event_uid);
 
 
     const handleEnterWaitingRoom = async () => {
@@ -33,50 +34,31 @@ const EarlyArrival = () => {
       });
     }
     
-    //   const handleNewAttendee = async () => {
-    //     await axios.put(
-    //       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
-    //     );
-    //     addAttendee(userObj.user_uid);
-    //   };
+      // const handleNewAttendee = async () => {
+      //   await axios.put(
+      //     `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
+      //   );
+      //   addAttendee(userObj.user_uid);
+      // };
     
-    //   const validateAndRoute = async () => {
-    //     const response = await axios.get(
-    //       `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
-    //     );
-    //     if (response.data.isOrganizer) {
-    //       handleNewAttendee();
-    //       navigate("/eventDashboard", {
-    //         state: { eventObj, userObj },
-    //       });
-    //     } else {
-    //       const response = await axios.get(
-    //         `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
-    //       );
-    //       if (!response.data.hasRegistered) {
-    //         navigate("/preregistration-event/" + eventObj.event_registration_code, {
-    //           state: { event: eventObj },
-    //         });
-    //         return;
-    //       }
-    //       handleNewAttendee();
-    //       isAttendeePresent(eventObj.event_organizer_uid, () => {
-    //         if (response.data.eventStarted === "1") {
-    //           navigate("/networkingActivity", {
-    //             state: { eventObj, userObj },
-    //           });
-    //         } else {
-    //           navigate("/waiting", {
-    //             state: { eventObj, userObj },
-    //           });
-    //         }
-    //       });
-    //     }
-    //   };
+      const validateAndRoute = async () => {
+        const response = await axios.get(
+          `${BASE_URL}/isOrganizer?userId=100-000038&eventId=200-000098`
+        );
+        if (response.data.isOrganizer) {
+          navigate("/eventDashboard", {
+            state: { eventObj, userObj },
+          });
+        } else {
+          navigate("/earlyArrival", {
+            state: { eventObj, userObj },
+          });
+        }
+      };
     
-    //   useEffect(() => {
-    //     validateAndRoute();
-    //   }, []);
+      useEffect(() => {
+        validateAndRoute();
+      }, []);
 
     return (
     <Box display="flex" flexDirection="column">

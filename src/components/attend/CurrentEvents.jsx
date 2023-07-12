@@ -51,13 +51,17 @@ const CurrentEvents = () => {
               state: { path: "/earlyArrival", eventObj: event },
             });
       } else {
-        navigate("/earlyArrival", {
+        navigate("/login", {
           state: { path: "/earlyArrival", eventObj: event },
         });
       }
     };
 
     const getEventsByUser = async () => {
+      let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // const response = await axios.get(
+      //   `${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
+      // );
       const response = await axios.get(
         `${BASE_URL}/GetEvents`
       );

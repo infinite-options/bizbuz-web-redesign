@@ -10,6 +10,9 @@ import EarlyArrival from "./components/attend/EarlyArrival";
 import EventRegistrants from "./components/attend/EventRegistrants";
 import EventAttendees from "./components/attend/EventAttendees";
 import EventTitle from "./components/create/EventTitle";
+import EventDashboard from "./components/attend/EventDashboard";
+import OverallNetwork from "./components/attend/OverallNetwork";
+import NetworkingActivity from "./components/attend/NetworkingActivity";
 
 const App = () => {
   return (
@@ -25,6 +28,9 @@ const App = () => {
         <Route exact path="/earlyArrival" element={<EarlyArrival />} />
         <Route exact path="/eventRegistrants" element={<EventRegistrants />} />
         <Route exact path="/eventAttendees" element={<EventAttendees />} />
+        <Route exact path="/eventDashboard" element={<EventDashboard />}/>
+        <Route exact path="/overallNetwork" element={<OverallNetwork />}/>
+        <Route exact path="/networkingActivity" element={<NetworkingActivity />}/>
       </Routes>
     </Container>
   );
