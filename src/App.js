@@ -6,6 +6,8 @@ import CreateEvent from "./components/create/CreateEvent";
 import EventDetails from "./components/create/EventDetails";
 import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
+import EventListsWithFilter from "./components/find/EventListsWithFilter";
+import EventInfo from "./components/find/EventInfo";
 import CurrentEvents from "./components/attend/CurrentEvents";
 import EarlyArrival from "./components/attend/EarlyArrival";
 import EventRegistrants from "./components/attend/EventRegistrants";
@@ -24,6 +26,7 @@ import GoogleSignupForm from "./components/signup/GoogleSignupForm";
 import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
+
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -82,6 +85,8 @@ const App = () => {
           <Route exact path="/eventDashboard" element={<EventDashboard />}/>
           <Route exact path="/overallNetwork" element={<OverallNetwork />}/>
           <Route exact path="/networkingActivity" element={<NetworkingActivity />}/>
+          <Route exact path="/eventListsWithFilter" element={<EventListsWithFilter />}/>
+          <Route exact path="/eventInfo" element={<EventInfo />}/>
         </Routes>
       </LoginContext.Provider>
     </Container>

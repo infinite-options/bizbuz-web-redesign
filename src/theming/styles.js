@@ -3,6 +3,24 @@ import { makeStyles } from "@mui/styles";
 // import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
+  textfield: {
+    width: "350px",
+    height: "56px",
+    marginLeft: "20px",
+    fontSize: 12,
+    backgroundColor: "white",
+    borderRadius: "8px",
+    marginTop: "16px",
+    color: `${theme.palette.primary.contrastText} !important`,
+    "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+      underline: "none",
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+      underline: "none",
+    },
+  },
   
   error: {
     fontSize: "small",
