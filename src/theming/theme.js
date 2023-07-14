@@ -20,6 +20,10 @@ const theme = createTheme({
       main: "#3B8C75",
       contrastText: "#FFFFFF",
     },
+    buttonAlternative: {
+      main: "#F2F2F2",
+      contrastText: "#3B8C75",
+    },
   },
   spacing: 16,
   typography: {
@@ -37,7 +41,7 @@ const theme = createTheme({
     },
     body1: {
       fontFamily: "'Inter Variable', sans-serif",
-      fontSize: 12,
+      fontSize: 18,
       fontWeight: 600,
     },
     h6: {
@@ -96,6 +100,14 @@ const theme = createTheme({
           backgroundColor: "#3B8C75",
           color: "#FFFFFF",
           borderRadius: "10px",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          borderRadius: "8px",
         },
       },
     },
