@@ -19,7 +19,6 @@ import NoImage from "../../assets/NoImage.png";
 const EventListsWithFilter = () => {
     const location = useLocation();
     const {events} = location.state;
-    // const [event, setEvent] = useState([]);
     const navigate = useNavigate();
     return (
         <Box display="flex" justifyContent="center" flexDirection="column">
@@ -50,12 +49,9 @@ const EventListsWithFilter = () => {
                             marginTop: "1rem",
                             minWidth: "100%",
                             borderRadius: "25px 25px 0px 0px",
-                            width: "389px",
-                            height: "732px",
                         }}
                         >
                         <Box
-                            sx={{ mt: -45}}
                             style={{
                             display: "flex",
                             justifyContent: "center",

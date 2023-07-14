@@ -199,7 +199,7 @@ const EventRegistrants = () => {
                 gap: '8px',
                 flexShrink: 0,
                 borderRadius: '8px',
-                background: '#FFF',
+                background: '#3C8F7D',
                 boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
                 mt: '16px',
                 marginLeft: 'auto',

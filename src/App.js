@@ -8,6 +8,8 @@ import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
 import EventListsWithFilter from "./components/find/EventListsWithFilter";
 import EventInfo from "./components/find/EventInfo";
+import EventQuestionnaire from "./components/find/EventQuestionnaire";
+import RegistrationConfirmation from "./components/find/RegistrationConfirmation";
 import CurrentEvents from "./components/attend/CurrentEvents";
 import EarlyArrival from "./components/attend/EarlyArrival";
 import EventRegistrants from "./components/attend/EventRegistrants";
@@ -87,6 +89,8 @@ const App = () => {
           <Route exact path="/networkingActivity" element={<NetworkingActivity />}/>
           <Route exact path="/eventListsWithFilter" element={<EventListsWithFilter />}/>
           <Route exact path="/eventInfo" element={<EventInfo />}/>
+          <Route exact path="/eventQuestionnaire" element={<EventQuestionnaire />}/>
+          <Route exact path="/registrationConfirmation" element={<RegistrationConfirmation />}/>
         </Routes>
       </LoginContext.Provider>
     </Container>

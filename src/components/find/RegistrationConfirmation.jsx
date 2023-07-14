@@ -16,10 +16,8 @@ import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import NoImage from "../../assets/NoImage.png";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/Back.svg";
-
-const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
-const EventInnfo = () => {
+import { ReactComponent as Done } from "../../assets/Done.svg";
+const RegistrationConfirmation = () => {
     const location = useLocation();
     const {event} = location.state;
     const navigate = useNavigate();
@@ -109,55 +107,49 @@ const EventInnfo = () => {
                 variant="h1" 
                 sx={{
                     mt: "35px",
+                    textAlign: "center",
                     color: "#FFF",
                     fontFamily: "Fira Sans Condensed",
-                    fontSize: "22px",
+                    fontSize: "20px",
                     fontStyle: "normal",
                     fontWeight: 500,
                     lineHeight: "normal",
+                    marginBottom: '70px',
                   }}
             >
-                {"About The Event"}
+                {"Registration Confirmed!"}
             </Typography>
             <Box
-                display="flex"
-                width="347px"
-                flexDirection="column"
-                justifyContent="center"
-                flexShrink={0}
                 sx={{
-                    typography: {
-                    color: "#FFF",
-                    fontFamily: "Inter",
-                    fontSize: "15px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "22.5px",
-                    },
-                    textIndent: "1em",
-                    textAlign: "justify",
-                    marginTop: "8px",
-                }}
-                >
-                {event.event_description}
+                    marginLeft: '151px',
+                    position: 'relative',
+                    left: 0,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    }}
+            >
+                <Done  />
             </Box>
             <Typography 
                 variant="h1" 
                 sx={{
-                    mt: "35px",
+                    mt: "-32px",
+                    textAlign: "center",
                     color: "#FFF",
                     fontFamily: "Fira Sans Condensed",
-                    fontSize: "22px",
+                    fontSize: "20px",
                     fontStyle: "normal",
                     fontWeight: 500,
                     lineHeight: "normal",
                   }}
             >
-                {"Event Questions"}
+                Registration Code: <span style={{ fontSize: "30px", marginLeft: "8px"}}>{event.event_registration_code}</span>
             </Typography>
+
             <Box
                 display="flex"
                 width="347px"
+                height="163px"
                 flexDirection="column"
                 justifyContent="center"
                 flexShrink={0}
@@ -175,34 +167,15 @@ const EventInnfo = () => {
                     marginTop: "8px",
                 }}
                 >
-                {JSON.parse(event.pre_event_questionnaire).map((question, index) => (
-                    <Typography key={question.id} variant="body1">
-                        {`${index + 1}. ${question.question}`}
-                    </Typography>
-                ))}
+                <Typography>
+                    A confirmation email has been sent to the provided email address. Please check your inbox for further details.
+                </Typography>
+                <Typography sx={{mt: "32px"}}>
+                    We look forward to seeing you at the event and hope you have a great experience!
+                </Typography>
             </Box>
-            <Button
-                variant="contained"
-                sx={{ 
-                width: "352.5px",
-                height: "56px",
-                mt: 'auto',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                position: 'fixed', 
-                bottom: '20px', 
-                left: '0', 
-                right: '0', 
-                }}
-                onClick={() => {
-                    navigate("/eventQuestionnaire",  {state: { event: event}});
-                }}
-            >
-                {"Continue Registration"}
-            </Button>
         </Box>
-        
      );
 }
  
-export default EventInnfo;
+export default RegistrationConfirmation;
