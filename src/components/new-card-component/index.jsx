@@ -17,30 +17,6 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
   const handleRegisterClick = () => {
     onRegisterClick(event);
   };
-
-  const event = {
-    event_uid: "200-000106",
-    event_title: "Party at the Lake",
-    event_description: "Lake Party - bring swimsuits",
-    event_organizer_uid: "100-000037",
-    event_start_time: "3:00 PM",
-    event_end_time: "12:00 AM",
-    event_registration_code: "198774",
-    event_type: "Party",
-    event_visibility: "Public",
-    pre_event_questionnaire:
-      '[{"id":1,"question":"What is your current role?"},{"id":2,"question":"What is one thing you are really proud of?"}]',
-    event_photo: "[]",
-    event_capacity: "No Limit",
-    event_start_date: "07/31/2023",
-    event_end_date: "08/01/2023",
-    event_location: "6099 Winfield Blvd, San Jose, CA 95120, USA",
-    event_zip: "95120",
-    event_location_name: "Almaden Lake Park",
-    event_checkin_code: "726621",
-    event_status: null,
-    num_attendees: 0,
-  };
   return (
     <Card sx={{ minWidth: 275 }}>
       <Box bgcolor={"#3a8d75"}>
