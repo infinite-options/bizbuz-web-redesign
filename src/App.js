@@ -18,6 +18,17 @@ import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
+import EventListsWithFilter from "./components/find/EventListsWithFilter";
+import EventInfo from "./components/find/EventInfo";
+import EventQuestionnaire from "./components/find/EventQuestionnaire";
+import RegistrationConfirmation from "./components/find/RegistrationConfirmation";
+import CurrentEvents from "./components/attend/CurrentEvents";
+import EarlyArrival from "./components/attend/EarlyArrival";
+import EventRegistrants from "./components/attend/EventRegistrants";
+import EventAttendees from "./components/attend/EventAttendees";
+import EventDashboard from "./components/attend/EventDashboard";
+import OverallNetwork from "./components/attend/OverallNetwork";
+import NetworkingActivity from "./components/attend/NetworkingActivity";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -70,6 +81,23 @@ const App = () => {
           <Route path="/eventReview" element={<EventReview />} />
           <Route path="/eventCode" element={<EventCode />} />
           <Route path="/findEvent" element={<FindBy />} />
+          <Route path="/currentEvents" element={<CurrentEvents />} />
+          <Route path="/earlyArrival" element={<EarlyArrival />} />
+          <Route path="/eventRegistrants" element={<EventRegistrants />} />
+          <Route path="/eventAttendees" element={<EventAttendees />} />
+          <Route path="/eventDashboard" element={<EventDashboard />} />
+          <Route path="/overallNetwork" element={<OverallNetwork />} />
+          <Route path="/networkingActivity" element={<NetworkingActivity />} />
+          <Route
+            path="/eventListsWithFilter"
+            element={<EventListsWithFilter />}
+          />
+          <Route path="/eventInfo" element={<EventInfo />} />
+          <Route path="/eventQuestionnaire" element={<EventQuestionnaire />} />
+          <Route
+            path="/registrationConfirmation"
+            element={<RegistrationConfirmation />}
+          />
         </Routes>
       </LoginContext.Provider>
     </Container>

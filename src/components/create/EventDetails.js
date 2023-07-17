@@ -38,19 +38,21 @@ const EventDetails = () => {
   const navigate = useNavigate();
   const [eventType, setEventType] = useState("Business Marketing");
   const eventCapacity = useRef();
-  const [eventLimit, setEventLimit] = useState("No Limit");
+  const [isDisabled, setDisabled] = useState(true);
+  const [eventLimit, setEventLimit] = useState();
   const [startDate, setStartDate] = useState(dayjs());
   const [endDate, setEndDate] = useState(dayjs());
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
 
-  const handleEventTypeChange = (e, newEventType) => {
-    setEventType(newEventType);
+  const handleEventTypeChange = (v) => {
+    setEventType(v);
   };
 
   const handleStartDateChange = (v) => {
     setStartDate(v);
+    if (endDate < v) setEndDate(v);
   };
 
   const handleEndDateChange = (v) => {
@@ -59,6 +61,8 @@ const EventDetails = () => {
 
   const handleEndTimeChange = (v) => {
     setEndTime(v);
+    if (v < startTime && startDate === endDate)
+      setEndDate(dayjs(startDate).add(1, "day"));
   };
 
   const handleStartTimeChange = (v) => {
@@ -66,6 +70,8 @@ const EventDetails = () => {
   };
 
   const handleEventLimitChange = (v) => {
+    if (v === "Set Limit") setDisabled(false);
+    else setDisabled(true);
     setEventLimit(v);
   };
 
@@ -87,7 +93,8 @@ const EventDetails = () => {
       minute: "2-digit",
     });
     event.eventEndTime = eventEndTime ? eventEndTime.replace(/^0+/, "") : "";
-    if (eventLimit === "Set Limit") event.eventCapacity = eventCapacity.current;
+    if (eventLimit === "Set Limit")
+      event.eventCapacity = eventCapacity.current.value;
     else event.eventCapacity = eventLimit;
     setEvent(event);
     navigate("/eventLocation");
@@ -104,15 +111,12 @@ const EventDetails = () => {
       </Typography>
       <Stack direction="column" spacing={2} sx={{ mt: "36px" }}>
         <Typography variant="h2">{"Event Type"}</Typography>
-        <ToggleButtonGroup
-          value={eventType}
-          exclusive
-          onChange={handleEventTypeChange}
-          sx={{ display: "flex" }}
-        >
+        <ToggleButtonGroup exclusive sx={{ display: "flex" }}>
           <Grid container spacing={1}>
             <Grid item>
               <ToggleButton
+                onChange={() => handleEventTypeChange("Business Marketing")}
+                selected={eventType === "Business Marketing"}
                 value="Business Marketing"
                 variant="contained"
                 sx={{
@@ -130,6 +134,8 @@ const EventDetails = () => {
             </Grid>
             <Grid item>
               <ToggleButton
+                onChange={() => handleEventTypeChange("Social Mixer")}
+                selected={eventType === "Social Mixer"}
                 value="Social Mixer"
                 variant="contained"
                 sx={{
@@ -147,6 +153,8 @@ const EventDetails = () => {
             </Grid>
             <Grid item>
               <ToggleButton
+                onChange={() => handleEventTypeChange("Party or Event")}
+                selected={eventType === "Party or Event"}
                 value="Party or Event"
                 variant="contained"
                 sx={{
@@ -164,6 +172,8 @@ const EventDetails = () => {
             </Grid>
             <Grid item>
               <ToggleButton
+                onChange={() => handleEventTypeChange("Other")}
+                selected={eventType === "Other"}
                 value="Other"
                 variant="contained"
                 sx={{
@@ -332,17 +342,14 @@ const EventDetails = () => {
         </Grid>
         <Typography variant="h2">{"Event Capacity"}</Typography>
         <FormControl>
-          <RadioGroup
-            color="secondary"
-            value={eventLimit}
-            onChange={handleEventLimitChange}
-          >
+          <RadioGroup color="secondary">
             <Grid container spacing={1}>
               <Grid item xs={6}>
                 <FormControlLabel
                   value="No Limit"
                   control={
                     <Radio
+                      onClick={() => handleEventLimitChange("No Limit")}
                       sx={{
                         color: "white",
                         "&.Mui-checked": {
@@ -358,6 +365,7 @@ const EventDetails = () => {
               <Grid item xs={6}>
                 <FormControlLabel
                   value="Set Limit"
+                  onClick={() => handleEventLimitChange("Set Limit")}
                   control={
                     <Radio
                       sx={{
@@ -375,7 +383,7 @@ const EventDetails = () => {
               <Grid item xs={6} />
               <Grid item xs={6}>
                 <OutlinedInput
-                  ref={eventCapacity}
+                  inputRef={eventCapacity}
                   sx={{
                     width: "129px",
                     height: "36px",
@@ -383,6 +391,7 @@ const EventDetails = () => {
                     backgroundColor: "white",
                     borderRadius: "8px",
                   }}
+                  disabled={isDisabled}
                 />
               </Grid>
             </Grid>

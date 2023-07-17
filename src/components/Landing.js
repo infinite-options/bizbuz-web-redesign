@@ -22,7 +22,7 @@ const Landing = () => {
           <RSVPs />
         </Grid>
         <Grid item xs={6} align="center">
-          <Attend />
+          <Attend onClick={() => navigate("/currentEvents")} />
         </Grid>
         <Grid item xs={6} align="center">
           <Create
@@ -43,10 +43,12 @@ const Landing = () => {
                           .split("; ")
                           .find((row) => row.startsWith("user_email="))
                           .split("=")[1],
-                        user: document.cookie
-                          .split("; ")
-                          .find((row) => row.startsWith("user_details="))
-                          .split("=")[1],
+                        user: JSON.parse(
+                          document.cookie
+                            .split("; ")
+                            .find((row) => row.startsWith("user_details="))
+                            .split("=")[1]
+                        ),
                       },
                     })
                   : navigate("/login", {

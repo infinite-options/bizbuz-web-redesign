@@ -17,6 +17,7 @@ const EventImage = () => {
   const [image, setImage] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
+  const [isDefault, setDefault] = useState(false);
 
   const readImage = (file) => {
     const reader = new FileReader();
@@ -44,9 +45,9 @@ const EventImage = () => {
     readImage(file);
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     const event = getEvent();
-    event.img_cover = image.image;
+    if (!isDefault) event.img_cover = image.image;
     setEvent(event);
     navigate("/eventQuestions");
   };
@@ -64,6 +65,7 @@ const EventImage = () => {
         <Typography variant="h2">{"Event Photo"}</Typography>
         <Stack spacing={2} direction="column">
           <Button
+            onClick={() => setDefault(true)}
             variant="contained"
             sx={{
               backgroundColor: "#FFFFFF",
@@ -96,6 +98,7 @@ const EventImage = () => {
             {"or"}
           </Divider>
           <Button
+            onClick={() => setDefault(false)}
             variant="contained"
             sx={{
               backgroundColor: "#FFFFFF",

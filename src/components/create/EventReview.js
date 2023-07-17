@@ -1,21 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Map from "./Map";
+import { Card, CardContent, CardMedia } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
+import EventDefaultImage from "../../assets/event-default.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import NoImage from "../../assets/NoImage.png";
 
 const BASE_URL =
   "https://qlw29nnkwh.execute-api.us-west-1.amazonaws.com/dev/api/v2";
@@ -25,6 +22,7 @@ const EventReview = () => {
   const navigate = useNavigate();
   const [getEvent] = useLocalStorage("event");
   const event = getEvent();
+  console.log(event);
 
   const handleAddEvent = async () => {
     const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -76,65 +74,75 @@ const EventReview = () => {
         <Box display="flex" flexDirection="column" sx={{ minHeight: "62vh" }}>
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
-            <Card>
-              <CardActionArea>
+            <Card sx={{ minWidth: 275 }}>
+              <Box bgcolor={"#3a8d75"}>
                 <CardContent>
-                  <Typography gutterBottom variant="h2" component="div">
+                  <Typography variant="h2" color="secondary" mb={1} align="end">
+                    {dayjs(event.eventStartDate).format("MMMM DD")}
+                  </Typography>
+                  <Typography variant="h2" color="secondary" mb={1}>
                     {event.eventTitle}
                   </Typography>
-                  <Grid container rowSpacing={1}>
-                    <Grid
-                      item
-                      xs={6}
-                      sx={{ display: "flex", flexDirection: "row" }}
-                    >
-                      <Stack spacing={2}>
-                        <Stack direction="row">
-                          <CalendarIcon />
-                          &nbsp;
-                          <Typography variant="body1">
-                            {new Date(event.eventStartDate).toLocaleString(
-                              "default",
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              }
-                            )}
-                          </Typography>
-                        </Stack>
-                        <Stack direction="row">
-                          <ClockIcon />
-                          &nbsp;
-                          <Typography variant="body1">
-                            {`${event.eventStartTime} - ${event.eventEndTime}`}
-                          </Typography>
-                        </Stack>
-                      </Stack>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={6}
-                      sx={{ display: "flex", flexDirection: "row" }}
-                    >
-                      <MarkerIcon />
-                      &nbsp;
+                  <Stack direction="row" spacing={1}>
+                    <Box>
+                      {!event.img_cover ? (
+                        <CardMedia
+                          component="img"
+                          height="174px"
+                          image={EventDefaultImage}
+                          alt="default"
+                          sx={{ borderRadius: 3 }}
+                        />
+                      ) : (
+                        <CardMedia
+                          component="img"
+                          height="174px"
+                          image={event.img_cover}
+                          alt="event"
+                          sx={{ borderRadius: 3 }}
+                        />
+                      )}
+                    </Box>
+                    <Stack spacing={1}>
                       <Typography
-                        variant="body1"
-                        sx={{ fontSize: 12, maxWidth: "80%" }}
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                        color="secondary"
+                        variant="body2"
                       >
-                        {event.eventLocation}
+                        <ClockIcon mr={1} />
+                        <span>
+                          {event.eventStartTime} - {event.eventEndTime}
+                        </span>
                       </Typography>
-                    </Grid>
-                  </Grid>
+                      <Typography
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                        color="secondary"
+                        variant="body2"
+                      >
+                        <MarkerIcon mr={1} />
+                        <span> {event.eventLocation}</span>
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="buttonAlternative"
+                        size="small"
+                        sx={{ height: 40 }}
+                        onClick={() => {
+                          navigate("/eventInfo", {
+                            state: { event: event },
+                          });
+                        }}
+                      >
+                        {"Register"}
+                      </Button>
+                    </Stack>
+                  </Stack>
                 </CardContent>
-                <CardMedia
-                  component="img"
-                  height="174px"
-                  image={event.img_cover}
-                  alt="event"
-                />
-              </CardActionArea>
+              </Box>
             </Card>
             <Button
               sx={{
