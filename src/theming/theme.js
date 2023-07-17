@@ -20,6 +20,10 @@ const theme = createTheme({
       main: "#3B8C75",
       contrastText: "#FFFFFF",
     },
+    buttonAlternative: {
+      main: "#F2F2F2",
+      contrastText: "#3B8C75",
+    },
   },
   typography: {
     h1: {
@@ -97,6 +101,14 @@ const theme = createTheme({
           backgroundColor: "#3B8C75",
           color: "#FFFFFF",
           borderRadius: "10px",
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          borderRadius: "8px",
         },
       },
     },

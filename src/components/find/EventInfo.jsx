@@ -16,6 +16,7 @@ import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import NoImage from "../../assets/NoImage.png";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/Back.svg";
+import dayjs from "dayjs";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -35,75 +36,74 @@ const EventInnfo = () => {
                 spacing={2}
                 sx={{ mt: 10 }}
             >
-                <Card key={event.event_uid}>
-                    <CardActionArea>
-                    <CardContent>
-                        <Typography gutterBottom variant="h2" component="div">
-                        {event.event_title}
+                <Card sx={{ minWidth: 275 }}>
+                    <Box bgcolor={"#3a8d75"}>
+                        <CardContent>
+                        <Typography variant="h2" color="secondary" mb={1} align="end">
+                            {dayjs(event.event_start_date).format("MMMM DD")}
                         </Typography>
-                        <Grid container rowSpacing={1}>
-                        <Grid
-                            item
-                            xs={6}
-                            sx={{ display: "flex", flexDirection: "row" }}
-                        >
-                            <Stack spacing={2}>
-                            <Stack direction="row">
-                                <CalendarIcon />
-                                &nbsp;
-                                <Typography variant="body1">
-                                {new Date(event.event_start_date).toLocaleString(
-                                    "default",
-                                    {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                    }
-                                )}
-                                </Typography>
-                            </Stack>
-                            <Stack direction="row">
-                                <ClockIcon />
-                                &nbsp;
-                                <Typography variant="body1">
-                                {`${event.event_start_time} - ${event.event_end_time}`}
-                                </Typography>
-                            </Stack>
-                            </Stack>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={6}
-                            sx={{ display: "flex", flexDirection: "row" }}
-                        >
-                            <MarkerIcon />
-                            &nbsp;
+                        <Typography variant="h2" color="secondary" mb={1}>
+                            {event.event_title}
+                        </Typography>
+                        <Stack direction="row" spacing={1}>
+                            <Box>
+                            {JSON.parse(event.event_photo).length === 0 ? (
+                                <CardMedia
+                                component="img"
+                                height="174px"
+                                image={NoImage}
+                                alt="default"
+                                sx={{ borderRadius: 3 }}
+                                />
+                            ) : (
+                                <CardMedia
+                                component="img"
+                                height="174px"
+                                image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
+                                alt="event"
+                                sx={{ borderRadius: 3 }}
+                                />
+                            )}
+                            </Box>
+                            <Stack spacing={1}>
                             <Typography
-                            variant="body1"
-                            sx={{ fontSize: 12, maxWidth: "80%" }}
+                                display={"flex"}
+                                alignItems={"center"}
+                                gap={0.5}
+                                color="secondary"
+                                variant="body2"
                             >
-                            {event.event_location}
+                                <ClockIcon mr={1} />
+                                <span>
+                                {event.event_start_time} - {event.event_end_time}
+                                </span>
                             </Typography>
-                        </Grid>
-                        </Grid>
-                    </CardContent>
-                    {JSON.parse(event.event_photo).length === 0 ? (
-                        <CardMedia
-                        component="img"
-                        height="174px"
-                        image={NoImage}
-                        alt="default"
-                        />
-                    ) : (
-                        <CardMedia
-                        component="img"
-                        height="174px"
-                        image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
-                        alt="event"
-                        />
-                    )}
-                    </CardActionArea>
-                </Card>
+                            <Typography
+                                display={"flex"}
+                                alignItems={"center"}
+                                gap={0.5}
+                                color="secondary"
+                                variant="body2"
+                            >
+                                <MarkerIcon mr={1} />
+                                <span> {event.event_location}</span>
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                color="buttonAlternative"
+                                size="small"
+                                sx={{ height: 40 }}
+                                onClick={() => {
+                                    navigate("/eventQuestionnaire",  {state: { event: event}});
+                                }}
+                            >
+                                Register
+                            </Button>
+                            </Stack>
+                        </Stack>
+                        </CardContent>
+                    </Box>
+                    </Card>
             </Stack>
             <Typography 
                 variant="h1" 
