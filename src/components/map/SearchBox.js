@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import { ReactComponent as SearchIcon } from "../../assets/search-icon.svg";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -46,13 +49,19 @@ class SearchBox extends Component {
   render() {
     return (
       <Wrapper>
-        <input
-          ref={(ref) => {
+        <OutlinedInput
+          inputRef={(ref) => {
             this.searchInput = ref;
           }}
+          endAdornment={
+            <InputAdornment position="end">
+              <SearchIcon />
+            </InputAdornment>
+          }
           type="text"
           onFocus={this.clearSearchBox}
           placeholder="Enter a location"
+          sx={{ backgroundColor: "#FFFFFF", width: "82vw", maxWidth: "550px" }}
         />
       </Wrapper>
     );

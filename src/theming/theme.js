@@ -39,6 +39,13 @@ const theme = createTheme({
       fontWeight: 600,
       fontKerning: "none",
     },
+    h3: {
+      fontFamily: "'Fira Sans Condensed', sans-serif",
+      fontSize: 18,
+      fontWeight: 600,
+      fontKerning: "none",
+      color: "white",
+    },
     body1: {
       fontFamily: "'Inter Variable', sans-serif",
       fontSize: 18,
@@ -103,6 +110,64 @@ const theme = createTheme({
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "transparent",
+          boxShadow: "none",
+          color: "#143959",
+          borderRadius: "10px",
+        },
+        paper: {
+          backgroundColor: "#143959",
+        },
+      },
+    },
+    MuiPickersLayout: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiPickersDay: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+        "&.Mui-disabled": {
+          color: "#000000",
+        },
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiDayCalendar: {
+      styleOverrides: {
+        weekDayLabel: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiClockNumber: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+    MuiPickersToolbarText: {
+      styleOverrides: {
+        root: {
+          color: "#FFFFFF",
+        },
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         root: {
@@ -111,6 +176,13 @@ const theme = createTheme({
         },
       },
     },
+    // MuiPickersToolbar: {
+    //   styleOverrides: {
+    //     "&.Mui-selected": {
+    //       color: "#F26457",
+    //     },
+    //   },
+    // },
   },
 });
 
