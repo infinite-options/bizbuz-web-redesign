@@ -4,23 +4,22 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Button,
   Box,
   Stack,
   Icon,
 } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as ClockBlackIcon } from "../../assets/card-clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
+import { ReactComponent as UserAltIcon } from "../../assets/user-alt.svg";
+import { ReactComponent as UserAltBlackIcon } from "../../assets/user-alt-black.svg";
+import { ReactComponent as DoneRingIcon } from "../../assets/done-ring.svg";
+import { ReactComponent as DoneRingBlackIcon } from "../../assets/done-ring-black.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
+import { ReactComponent as ClockBlackIcon } from "../../assets/card-clock-black.svg";
 import DefaultEventImage from "../../assets/default-event-image.png";
 import dayjs from "dayjs";
 
-const NewCardComponent = (onRegisterClick = () => {}) => {
-  const handleRegisterClick = () => {
-    onRegisterClick(event);
-  };
-
+const RegisteredCardComponent = () => {
   const event = {
     event_uid: "200-000106",
     event_title: "Party at the Lake",
@@ -29,7 +28,7 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
     event_start_time: "3:00 PM",
     event_end_time: "12:00 AM",
     event_registration_code: "198774",
-    event_type: "Business Marketing",
+    event_type: "Social Mixer",
     event_visibility: "Public",
     pre_event_questionnaire:
       '[{"id":1,"question":"What is your current role?"},{"id":2,"question":"What is one thing you are really proud of?"}]',
@@ -42,7 +41,7 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
     event_location_name: "Almaden Lake Park",
     event_checkin_code: "726621",
     event_status: null,
-    num_attendees: 0,
+    num_attendees: 15,
   };
 
   const getEventTypeColor = () => {
@@ -52,24 +51,32 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
         textColor: "secondary",
         clockIcon: <ClockIcon />,
         markerIcon: <MarkerIcon />,
+        userAltIcon: <UserAltIcon />,
+        doneRingIcon: <DoneRingIcon />,
       },
       "Business Marketing": {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
+        userAltIcon: <UserAltBlackIcon />,
+        doneRingIcon: <DoneRingBlackIcon />,
       },
       "Social Mixer": {
         backgroundColor: "#F2ABA5",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
+        userAltIcon: <UserAltBlackIcon />,
+        doneRingIcon: <DoneRingBlackIcon />,
       },
       Other: {
         backgroundColor: "#CE807A",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
+        userAltIcon: <UserAltBlackIcon />,
+        doneRingIcon: <DoneRingBlackIcon />,
       },
     };
 
@@ -80,6 +87,8 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
         textColor: "secondary",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
+        userAltIcon: <UserAltBlackIcon />,
+        doneRingIcon: <DoneRingBlackIcon />,
       }
     );
   };
@@ -87,20 +96,34 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
 
   return (
     <Card sx={{ minWidth: 275 }}>
-      <Box
-        bgcolor={eventTypeColor.backgroundColor}
-        justifyContent="flex-end"
-        alignItems="flex-start"
-      >
+      <Box bgcolor={eventTypeColor.backgroundColor}>
         <CardContent>
-          <Typography
-            variant="h2"
-            color={eventTypeColor.textColor}
-            mb={1}
-            align="end"
-          >
-            {dayjs(event.event_start_date).format("MMMM DD")}
-          </Typography>
+          <Stack direction="row" spacing={1} mb={1}>
+            <Box width="50%">
+              <Typography
+                color={eventTypeColor.textColor}
+                align="left"
+                variant="b"
+              >
+                <Icon>{eventTypeColor.doneRingIcon}</Icon>
+                <span> Attending</span>
+              </Typography>
+            </Box>
+            <Box
+              width="50%"
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="flex-start"
+            >
+              <Typography
+                variant="h2"
+                color={eventTypeColor.textColor}
+                align="right"
+              >
+                {dayjs(event.event_start_date).format("MMMM DD")}
+              </Typography>
+            </Box>
+          </Stack>
 
           <Typography variant="h2" color={eventTypeColor.textColor} mb={1}>
             {event.event_title}
@@ -110,18 +133,20 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
               {JSON.parse(event.event_photo).length === 0 ? (
                 <CardMedia
                   component="img"
-                  height="174px"
+                  height="100%"
+                  width="50%"
                   image={DefaultEventImage}
                   alt="default"
-                  sx={{ borderRadius: 3 }}
+                  sx={{ borderRadius: 3, objectFit: "cover" }}
                 />
               ) : (
                 <CardMedia
                   component="img"
-                  height="174px"
+                  height="50%"
+                  width="100%"
                   image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                   alt="event"
-                  sx={{ borderRadius: 3 }}
+                  sx={{ borderRadius: 3, objectFit: "cover" }}
                 />
               )}
             </Box>
@@ -134,7 +159,6 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
                 variant="body2"
                 my={1}
               >
-                {/* <ClockIcon mr={1} /> */}
                 {eventTypeColor.clockIcon}
                 <span>
                   {event.event_start_time} - {event.event_end_time}
@@ -151,15 +175,16 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
                 <Icon>{eventTypeColor.markerIcon}</Icon>
                 <span> {event.event_location}</span>
               </Typography>
-              <Button
-                variant="contained"
-                color="buttonAlternative"
-                size="large"
-                sx={{ width: "90%", height: 40 }}
-                onClick={handleRegisterClick}
+              <Typography
+                display={"flex"}
+                alignItems={"center"}
+                gap={0.5}
+                color={eventTypeColor.textColor}
+                variant="body2"
               >
-                Register
-              </Button>
+                <Icon>{eventTypeColor.userAltIcon}</Icon>
+                {event.num_attendees} Registrants
+              </Typography>
             </Box>
           </Stack>
         </CardContent>
@@ -168,4 +193,4 @@ const NewCardComponent = (onRegisterClick = () => {}) => {
   );
 };
 
-export default NewCardComponent;
+export default RegisteredCardComponent;
