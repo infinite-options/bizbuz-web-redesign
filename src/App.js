@@ -18,7 +18,6 @@ import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
-import EventListsWithFilter from "./components/find/EventListsWithFilter";
 import EventInfo from "./components/find/EventInfo";
 import EventQuestionnaire from "./components/find/EventQuestionnaire";
 import RegistrationConfirmation from "./components/find/RegistrationConfirmation";
@@ -88,10 +87,6 @@ const App = () => {
           <Route path="/eventDashboard" element={<EventDashboard />} />
           <Route path="/overallNetwork" element={<OverallNetwork />} />
           <Route path="/networkingActivity" element={<NetworkingActivity />} />
-          <Route
-            path="/eventListsWithFilter"
-            element={<EventListsWithFilter />}
-          />
           <Route path="/eventInfo" element={<EventInfo />} />
           <Route path="/eventQuestionnaire" element={<EventQuestionnaire />} />
           <Route

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -16,25 +16,20 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as Location } from "../../assets/marker-black.svg";
-import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
+import EventCard from "../common/EventCard";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Down } from "../../assets/down.svg";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import { Select, MenuItem } from "@mui/material";
-import NoImage from "../../assets/NoImage.png";
-import dayjs from "dayjs";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
   const navigate = useNavigate();
   const [showList, setShowList] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-  const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
+  const [miles, setMiles] = useState(5);
+  const [zipCode, setZipCode] = useState("");
   const [type, setType] = useState("");
   const [registionCode, setRegistionCode] = useState("");
 
@@ -43,37 +38,87 @@ export default function FindBy() {
     let query = BASE_URL + `/GetEvents?timeZone=${user_timezone}`;
     if (selectedDate) {
       query += `&event_start_date=${selectedDate}`;
+      axios
+      .get(query)
+      .then((response) => {
+        setEvents(response.data.result);
+        if (!showList) setShowList(!showList);
+        setSelectedDate("");
+        console.log(query);
+        console.log(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
     }
 
-    if (location) {
-      query += `&event_location=${location}`;
+    if (city) {
+      let obj = {
+        city: city,
+      };
+      axios
+        .post(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj)
+        .then((response) => {
+          setEvents(response.data.result);
+          if (!showList) setShowList(!showList);
+          setCity("");
+        });
+      console.log(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj);
+    } 
+    if(miles && zipCode){
+      let obj = {
+        miles: miles,
+        zip_code: zipCode,
+      };
+      axios
+        .post(BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`, obj)
+        .then((response) => {
+          setEvents(response.data.result);
+          if (!showList) setShowList(!showList);
+          setMiles(5);
+          setZipCode("");
+        });
+      console.log(BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`, obj);
     }
 
     if (type) {
       query += `&event_type=${type}`;
+      axios
+      .get(query)
+      .then((response) => {
+        setEvents(response.data.result);
+        if (!showList) setShowList(!showList);
+        setType("");
+        console.log(query);
+        console.log(response.data.result);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
     }
 
     if (registionCode) {
       query = BASE_URL + `/verifyRegCode/${registionCode}`;
-    }
-    if (isLoading) {
       axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result);
-          // navigate("/eventListsWithFilter", {state: { events: response.data.result},});
-          if (registionCode) {
-            // navigate("/eventListsWithFilter", {state: { events: response.data.result.result},});
-            setEvents(response.data.result.result);
-            console.log(response.data.result.result);
-          }
-          if (!showList) setShowList(!showList);
-          console.log(query);
-          console.log(response.data.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
+      .get(query)
+      .then((response) => {
+        setEvents(response.data.result.result);
+        if (!showList) setShowList(!showList);
+        setRegistionCode("");
+        console.log(query);
+        console.log(response.data.result.result);
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
+    }
+    if(!selectedDate && !city && !type && !registionCode && !zipCode) {
+      axios
+      .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
+      .then((response) => {
+        setEvents(response.data.result);
+        if (!showList) setShowList(!showList);
+      });
     }
   };
 
@@ -85,130 +130,225 @@ export default function FindBy() {
       </Box>
 
       <Box>
-        <Typography
-          gutterBottom
-          variant="h4"
-          align="center"
+      <Typography gutterBottom variant="h4" align="center" 
           sx={{
-            fontFamily: "Fira Sans Condensed",
-            fontSize: "20px",
-            lineHeight: "24px",
-            color: "#FFFFFF",
-            marginTop: "32px",
-            marginLeft: "139dp",
+            fontFamily: 'Fira Sans Condensed',
+            fontSize: '20px', 
+            lineHeight: '24px', 
+            color: '#FFFFFF', 
+            marginTop: '32px',
+            marginLeft: '139dp',
           }}
         >
-          {"Search Events"}
+            {"Search Events"}
         </Typography>
+
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
+              sx={{
+                width: "350px",
+                height: "56px",
+                marginLeft: "20px",
+                fontSize: 12,
+                backgroundColor: "white",
+                borderRadius: "8px",
+                marginTop: "16px",
+                color: theme => `${theme.palette.primary.contrastText} !important`,
+                "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  underline: "none",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  underline: "none",
+                },
+              }}
               value={selectedDate}
               inputFormat="MM-DD-YYYY"
               onChange={(d) => {
                 setSelectedDate(d.format("MM/DD/YYYY"));
-                setIsLoading(true);
+                setCity("");
+                setMiles(5);
+                setZipCode("");
+                setType("");
+                setRegistionCode("");
               }}
-              sx={{ width: "350px" }}
             />
           </DemoContainer>
         </LocalizationProvider>
 
-        <Grid item sx={{ pl: "0 !important" }}>
+        
+      <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               placeholder="Location"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
+              startAdornment={<InputAdornment position="start"></InputAdornment>}
               endAdornment={
                 <InputAdornment position="end">
                   <Location />
                 </InputAdornment>
               }
-              value={location}
+              value = {city}
               onChange={(e) => {
-                setIsLoading(true);
-                setLocation(e.target.value);
+                setCity(e.target.value);
+                setSelectedDate("");
+                setMiles(5);
+                setZipCode("");
+                setType("");
+                setRegistionCode("");
               }}
               sx={{
                 width: "350px",
                 height: "56px",
+                marginLeft: '20px',
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                marginTop: "16px",
+                marginTop: '16px',
               }}
             />
           </FormControl>
-        </Grid>
+      </Grid>
 
-        <Grid item sx={{ pl: "0 !important" }}>
+      <Typography gutterBottom variant="h4" align="center" 
+          sx={{
+            fontFamily: 'Fira Sans Condensed',
+            fontSize: '15px', 
+            lineHeight: '24px', 
+            color: '#FFFFFF', 
+            marginLeft: '139dp',
+          }}
+        >
+            {"Or"}
+      </Typography>
+
+      <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
-            <Select
-              value={type}
-              onChange={(e) => {
-                setIsLoading(true);
-                setType(e.target.value);
-              }}
+            <OutlinedInput
+              endAdornment={
+                <InputAdornment position="end">
+                  {"Miles From"}
+                </InputAdornment>
+              }
+              value = {miles}
+              onChange={(e) => setMiles(e.target.value)}
               sx={{
-                width: "350px",
+                width: "120px",
                 height: "56px",
+                marginLeft: '20px',
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                marginTop: "16px",
+                // marginTop: '16px',
               }}
-              displayEmpty
-            >
-              <MenuItem disabled value="">
-                <em>Select by Type</em>
-              </MenuItem>
-              <MenuItem value="Business Marketing">Business Marketing</MenuItem>
-              <MenuItem value="Party">Party</MenuItem>
-              <MenuItem value="Social Mixer">Social Mixer</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </Select>
+            />
           </FormControl>
-        </Grid>
+          
+          <FormControl sx={{ width: "129px" }} variant="outlined">
+            <OutlinedInput
+              placeholder="Zip Code"
+              startAdornment={<InputAdornment position="start"></InputAdornment>}
+              value = {zipCode}
+              onChange={(e) => {
+                setZipCode(e.target.value);
+                setSelectedDate("");
+                setMiles(5);
+                setCity("");
+                setType("");
+                setRegistionCode("");
+              }}
+              sx={{
+                width: "150px",
+                height: "56px",
+                marginLeft: '90px',
+                fontSize: 12,
+                backgroundColor: "white",
+                borderRadius: "8px",
+                // marginTop: '16px',
+              }}
+            />
+          </FormControl>
+      </Grid>
 
-        <Grid item sx={{ pl: "0 !important" }}>
+      
+      <Grid item sx={{ pl: "0 !important" }}>
+        <FormControl sx={{ width: "129px" }} variant="outlined">
+          <Select
+            value={type}
+            onChange={(e) => {
+              setType(e.target.value);
+              setSelectedDate("");
+              setMiles(5);
+              setCity("");
+              setZipCode("");
+              setRegistionCode("");
+            }}
+            sx={{
+              width: "350px",
+              height: "56px",
+              marginLeft: '20px',
+              fontSize: 12,
+              backgroundColor: "white",
+              borderRadius: "8px",
+              marginTop: '16px',
+            }}
+            displayEmpty
+          >
+            <MenuItem disabled value="">
+              <em>Select by Type</em>
+            </MenuItem>
+            <MenuItem value="Business Marketing">Business Marketing</MenuItem>
+            <MenuItem value="Party">Party</MenuItem>
+            <MenuItem value="Social Mixer">Social Mixer</MenuItem>
+            <MenuItem value="Other">Other</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               placeholder="Search by Registration Code"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
+              startAdornment={<InputAdornment position="start"></InputAdornment>}
+              endAdornment={
+                <InputAdornment position="end">
+                </InputAdornment>
               }
-              endAdornment={<InputAdornment position="end"></InputAdornment>}
-              value={registionCode}
+              value = {registionCode}
               onChange={(e) => {
-                setIsLoading(true);
                 setRegistionCode(e.target.value);
+                setSelectedDate("");
+                setMiles(5);
+                setCity("");
+                setZipCode("");
+                setType("");
               }}
               sx={{
                 width: "350px",
                 height: "56px",
+                marginLeft: '20px',
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                mt: "16px",
+                mt: '16px',
               }}
             />
           </FormControl>
-        </Grid>
+      </Grid>
 
-        <Button
-          variant="contained"
-          sx={{
-            width: "352.5px",
-            height: "56px",
-            mt: "16px",
-          }}
+      <Button
+        variant="contained"
+        sx={{ 
+          width: "352.5px",
+          height: "56px",
+          marginLeft: '20px',
+          mt: "16px" }}
           onClick={getEvents}
-        >
-          {"Get Events"}
-        </Button>
+      >
+        {"Get Events"}
+      </Button>
       </Box>
 
       <Grid container>
@@ -266,84 +406,14 @@ export default function FindBy() {
 
                 {events.map((event) => {
                   return (
-                    <Card sx={{ minWidth: 275 }}>
-                      <Box bgcolor={"#3a8d75"}>
-                        <CardContent>
-                          <Typography
-                            variant="h2"
-                            color="secondary"
-                            mb={1}
-                            align="end"
-                          >
-                            {dayjs(event.event_start_date).format("MMMM DD")}
-                          </Typography>
-                          <Typography variant="h2" color="secondary" mb={1}>
-                            {event.event_title}
-                          </Typography>
-                          <Stack direction="row" spacing={1}>
-                            <Box>
-                              {JSON.parse(event.event_photo).length === 0 ? (
-                                <CardMedia
-                                  component="img"
-                                  height="174px"
-                                  image={NoImage}
-                                  alt="default"
-                                  sx={{ borderRadius: 3 }}
-                                />
-                              ) : (
-                                <CardMedia
-                                  component="img"
-                                  height="174px"
-                                  image={`${JSON.parse(
-                                    event.event_photo
-                                  )}?${Date.now()}`}
-                                  alt="event"
-                                  sx={{ borderRadius: 3 }}
-                                />
-                              )}
-                            </Box>
-                            <Stack spacing={1}>
-                              <Typography
-                                display={"flex"}
-                                alignItems={"center"}
-                                gap={0.5}
-                                color="secondary"
-                                variant="body2"
-                              >
-                                <ClockIcon mr={1} />
-                                <span>
-                                  {event.event_start_time} -{" "}
-                                  {event.event_end_time}
-                                </span>
-                              </Typography>
-                              <Typography
-                                display={"flex"}
-                                alignItems={"center"}
-                                gap={0.5}
-                                color="secondary"
-                                variant="body2"
-                              >
-                                <MarkerIcon mr={1} />
-                                <span> {event.event_location}</span>
-                              </Typography>
-                              <Button
-                                variant="contained"
-                                color="buttonAlternative"
-                                size="small"
-                                sx={{ height: 40 }}
-                                onClick={() => {
-                                  navigate("/eventInfo", {
-                                    state: { event: event },
-                                  });
-                                }}
-                              >
-                                Register
-                              </Button>
-                            </Stack>
-                          </Stack>
-                        </CardContent>
-                      </Box>
-                    </Card>
+                    <EventCard
+                      event={event}
+                      onRegisterClick={() => {
+                        navigate("/eventInfo", {
+                          state: { event: event },
+                        });
+                      }}
+                    />
                   );
                 })}
               </Stack>
