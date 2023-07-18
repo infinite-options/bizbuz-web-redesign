@@ -9,11 +9,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
-import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
-import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -72,57 +70,7 @@ const EventRegistrants = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h2" component="div">
-                {eventObj.event_title}
-              </Typography>
-              <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <CalendarIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {new Date().toLocaleString("default", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} />
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <ClockIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <MarkerIcon />
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12, maxWidth: "80%" }}
-                  >
-                    {eventObj.event_location}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+        <RegisteredCardComponent event={eventObj} />
       </Stack>
 
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
