@@ -37,10 +37,12 @@ const CurrentEvents = () => {
                 .split("; ")
                 .find((row) => row.startsWith("user_email="))
                 .split("=")[1],
-              user: document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("user_details="))
-                .split("=")[1],
+              user: JSON.parse(
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("user_details="))
+                  .split("=")[1]
+              ),
               eventObj: event,
             },
           })
@@ -56,10 +58,9 @@ const CurrentEvents = () => {
 
   const getEventsByUser = async () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    // const response = await axios.get(
-    //   `${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
-    // );
-    const response = await axios.get(`${BASE_URL}/GetEvents`);
+    const response = await axios.get(
+      `${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
+    );
     setEvents(response.data.result);
   };
 

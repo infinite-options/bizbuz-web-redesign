@@ -1,9 +1,12 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import * as React from "react";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Typography from "@mui/material/Typography";
+import useAbly from "../../util/ably";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
@@ -11,102 +14,83 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
-import NoImage from "../../assets/NoImage.png";
-import Highcharts from "../../util/networking";
-import HighchartsReact from "highcharts-react-official";
+import Avatar from "@mui/material/Avatar";
+import Snackbar from "@mui/material/Snackbar";
+import MUIAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+
+const SlideTransition = (props) => {
+  return <Slide {...props} direction="down" />;
+};
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MUIAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const EventAttendees = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
-  const [options, setOptions] = useState({
-    chart: {
-      type: "networkgraph",
-      height: 400,
-      backgroundColor: "transparent",
-      margin: 25,
-      reflow: false,
-    },
-    title: {
-      text: null,
-    },
-    plotOptions: {
-      networkgraph: {
-        turboThreshold: 0,
-        keys: ["from", "to"],
-        layoutAlgorithm: {
-          enableSimulation: false,
-          linkLength: 50,
-          initialPositions: "circle",
-        },
-        point: {
-          events: {
-            click(e) {
-              // handleNodeClick(e.point);
-            },
-          },
-        },
-      },
-    },
-    series: [
-      {
-        link: {
-          width: 2,
-          color: "white",
-        },
-        dataLabels: {
-          enabled: false,
-          linkFormat: "",
-          allowOverlap: true,
-        },
-        id: "networking",
-        data: [],
-        nodes: [],
-      },
-    ],
-    credits: {
-      enabled: false,
-    },
-  });
+  const [eventHost, setEventHost] = useState();
+  const [attendees, setAttendees] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState("");
+  const { onAttendeeUpdate, subscribe, unSubscribe } = useAbly(
+    eventObj.event_uid
+  );
 
-  const handleUserImage = (images) => {
-    const imagesArr = JSON.parse(images);
-    return imagesArr.length > 0 ? imagesArr[0] : NoImage;
-  };
-
-  const refreshGraph = async () => {
+  const fetchAttendees = async () => {
     const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=200-000098&userId=100-000038`
+      `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}&attendFlag=1`
     );
     const data = response["data"];
-    let nodesArr = [];
-    data["users"].forEach((u) => {
-      nodesArr.push({
-        id: u.user_uid,
-        marker: {
-          symbol: `url(${handleUserImage(u.images)})`,
-          width: 50,
-          height: 50,
-        },
-        name: `${u.first_name} is ${u.role}`,
-      });
+    setAttendees(data["attendees"]);
+  };
+
+  // const fetchOrganizers = async () => {
+  //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
+  //   const organizersData = response.data.result;
+  //   const eventHost = organizersData.find(
+  //     (organizer) => organizer.event_uid === eventObj.event_uid
+  //   );
+  //   setEventHost(eventHost);
+  // };
+
+  const fetchOrganizerProfile = async () => {
+    const response = await axios.get(
+      `${BASE_URL}/profileByUserUID?userId=${eventObj.event_organizer_uid}`
+    );
+    setEventHost(response.data.profile);
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowAlert(false);
+  };
+
+  const joinSubscribe = () => {
+    onAttendeeUpdate((m) => {
+      fetchAttendees();
     });
-    setOptions({
-      series: [
-        {
-          data: data["links"],
-          nodes: nodesArr,
-        },
-      ],
+    subscribe((e) => {
+      if (e.data === "Event started") {
+        navigate("/networkingActivity", { state: { eventObj, userObj } });
+      } else {
+        setMessage(e.data);
+        setShowAlert(true);
+      }
     });
   };
 
   useEffect(() => {
-    refreshGraph();
+    fetchOrganizerProfile();
+    fetchAttendees();
+    joinSubscribe();
+    return () => unSubscribe();
   }, []);
 
   return (
@@ -117,6 +101,17 @@ const EventAttendees = () => {
           navigate("/");
         }}
       />
+      <Snackbar
+        open={showAlert}
+        autoHideDuration={15000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        TransitionComponent={SlideTransition}
+      >
+        <Alert onClose={handleAlertClose} severity="info">
+          {message}
+        </Alert>
+      </Snackbar>
       <Stack
         direction="column"
         justifyContent="center"
@@ -175,19 +170,68 @@ const EventAttendees = () => {
           </CardActionArea>
         </Card>
       </Stack>
-
-      <Stack spacing={2} direction="column">
-        <HighchartsReact highcharts={Highcharts} options={options} />
-      </Stack>
-
-      <Button
-        variant="contained"
-        sx={{ mt: "16px" }}
-        color="primary"
-        onClick={() => navigate("/")}
-      >
-        Leave Event
-      </Button>
+      <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
+        <CardActionArea>
+          <CardContent sx={{ display: "flex", alignItems: "center" }}>
+            <Typography
+              gutterBottom
+              variant="h2"
+              component="div"
+              sx={{ flexGrow: 1 }}
+            >
+              {"Event Host"}
+            </Typography>
+            {eventHost && (
+              <Grid key={eventHost.user_uid} item xs={4}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Avatar
+                    src={JSON.parse(eventHost.images)}
+                    sx={{
+                      width: "80px",
+                      height: "80px",
+                      bgcolor: "#ff5722",
+                      alignSelf: "center",
+                    }}
+                    alt={eventHost.first_name}
+                  />
+                  <Typography align="center">{eventHost.first_name}</Typography>
+                </Box>
+              </Grid>
+            )}
+          </CardContent>
+        </CardActionArea>
+      </Card>
+      <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
+        <CardActionArea>
+          <CardContent>
+            <Typography gutterBottom variant="h2" component="div">
+              {"Current Registrants"}
+            </Typography>
+            <Grid container spacing={2}>
+              {attendees.map((attendee) => (
+                <Grid key={attendee.user_uid} item xs={4}>
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                    <Avatar
+                      src={JSON.parse(attendee.images)}
+                      sx={{
+                        width: "80px",
+                        height: "80px",
+                        bgcolor: "#ff5722",
+                        alignSelf: "center",
+                      }}
+                      alt={attendee.first_name}
+                      // onClick={() => handleClickRegistrant(registrant)}
+                    />
+                    <Typography align="center">
+                      {attendee.first_name}
+                    </Typography>
+                  </Box>
+                </Grid>
+              ))}
+            </Grid>
+          </CardContent>
+        </CardActionArea>
+      </Card>
     </Box>
   );
 };

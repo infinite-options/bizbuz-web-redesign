@@ -12,7 +12,7 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -20,41 +20,36 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const EventRegistrants = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { eventObj, userObj } = location.state;
+  const { eventObj } = location.state;
   const [registrants, setRegistrants] = useState([]);
-  const [eventHost, setEventHost] = useState({
-    user_uid: "7",
-    images: '["https://img.freepik.com/free-icon/user_318-159711.jpg"]',
-    first_name: "Mike",
-  });
+  const [eventHost, setEventHost] = useState();
 
-  const handleAttendEvent = async () => {
-    navigate("/eventAttendees", {
-      state: { eventObj, userObj },
-    });
-  };
   const fetchRegistrants = async () => {
     const response = await axios.get(
       `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
     );
     const data = response["data"];
-
     setRegistrants(data["attendees"]);
   };
 
-  const fetchOrganizers = async () => {
-    const response = await axios.get(`${BASE_URL}/GetOrganizers`);
-    const organizersData = response.data.result;
-    console.log("Organizers Data:", organizersData);
-    const eventHost = organizersData.find(
-      (organizer) => organizer.event_uid === eventObj.event_uid
+  // const fetchOrganizers = async () => {
+  //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
+  //   const organizersData = response.data.result;
+  //   const eventHost = organizersData.find(
+  //     (organizer) => organizer.event_uid === eventObj.event_uid
+  //   );
+  //   setEventHost(eventHost);
+  // };
+
+  const fetchOrganizerProfile = async () => {
+    const response = await axios.get(
+      `${BASE_URL}/profileByUserUID?userId=${eventObj.event_organizer_uid}`
     );
-    console.log("Event Host:", eventHost);
-    setEventHost(eventHost);
+    setEventHost(response.data.profile);
   };
 
   useEffect(() => {
-    fetchOrganizers();
+    fetchOrganizerProfile();
     fetchRegistrants();
   }, []);
 
@@ -136,21 +131,23 @@ const EventRegistrants = () => {
             >
               {"Event Host"}
             </Typography>
-            <Grid key={eventHost.user_uid} item xs={4}>
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Avatar
-                  src={JSON.parse(eventHost.images)[0]}
-                  sx={{
-                    width: "80px",
-                    height: "80px",
-                    bgcolor: "#ff5722",
-                    alignSelf: "center",
-                  }}
-                  alt={eventHost.first_name}
-                />
-                <Typography align="center">{eventHost.first_name}</Typography>
-              </Box>
-            </Grid>
+            {eventHost && (
+              <Grid key={eventHost.user_uid} item xs={4}>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Avatar
+                    src={JSON.parse(eventHost.images)}
+                    sx={{
+                      width: "80px",
+                      height: "80px",
+                      bgcolor: "#ff5722",
+                      alignSelf: "center",
+                    }}
+                    alt={eventHost.first_name}
+                  />
+                  <Typography align="center">{eventHost.first_name}</Typography>
+                </Box>
+              </Grid>
+            )}
           </CardContent>
         </CardActionArea>
       </Card>
@@ -187,7 +184,7 @@ const EventRegistrants = () => {
         </CardActionArea>
       </Card>
 
-      <Button
+      {/* <Button
         variant="contained"
         sx={{
           display: "flex",
@@ -208,8 +205,8 @@ const EventRegistrants = () => {
         color="secondary"
         onClick={handleAttendEvent}
       >
-        Attend Event
-      </Button>
+        {"Attend Event"}
+      </Button> */}
     </Box>
   );
 };

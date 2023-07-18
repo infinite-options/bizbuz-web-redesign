@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Typography, TextField } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -39,17 +39,17 @@ export default function FindBy() {
     if (selectedDate) {
       query += `&event_start_date=${selectedDate}`;
       axios
-      .get(query)
-      .then((response) => {
-        setEvents(response.data.result);
-        if (!showList) setShowList(!showList);
-        setSelectedDate("");
-        console.log(query);
-        console.log(response.data.result);
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+        .get(query)
+        .then((response) => {
+          setEvents(response.data.result);
+          if (!showList) setShowList(!showList);
+          setSelectedDate("");
+          console.log(query);
+          console.log(response.data.result);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
     }
 
     if (city) {
@@ -64,8 +64,8 @@ export default function FindBy() {
           setCity("");
         });
       console.log(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj);
-    } 
-    if(miles && zipCode){
+    }
+    if (miles && zipCode) {
       let obj = {
         miles: miles,
         zip_code: zipCode,
@@ -78,47 +78,50 @@ export default function FindBy() {
           setMiles(5);
           setZipCode("");
         });
-      console.log(BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`, obj);
+      console.log(
+        BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`,
+        obj
+      );
     }
 
     if (type) {
       query += `&event_type=${type}`;
       axios
-      .get(query)
-      .then((response) => {
-        setEvents(response.data.result);
-        if (!showList) setShowList(!showList);
-        setType("");
-        console.log(query);
-        console.log(response.data.result);
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+        .get(query)
+        .then((response) => {
+          setEvents(response.data.result);
+          if (!showList) setShowList(!showList);
+          setType("");
+          console.log(query);
+          console.log(response.data.result);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
     }
 
     if (registionCode) {
       query = BASE_URL + `/verifyRegCode/${registionCode}`;
       axios
-      .get(query)
-      .then((response) => {
-        setEvents(response.data.result.result);
-        if (!showList) setShowList(!showList);
-        setRegistionCode("");
-        console.log(query);
-        console.log(response.data.result.result);
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+        .get(query)
+        .then((response) => {
+          setEvents(response.data.result.result);
+          if (!showList) setShowList(!showList);
+          setRegistionCode("");
+          console.log(query);
+          console.log(response.data.result.result);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
     }
-    if(!selectedDate && !city && !type && !registionCode && !zipCode) {
+    if (!selectedDate && !city && !type && !registionCode && !zipCode) {
       axios
-      .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
-      .then((response) => {
-        setEvents(response.data.result);
-        if (!showList) setShowList(!showList);
-      });
+        .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
+        .then((response) => {
+          setEvents(response.data.result);
+          if (!showList) setShowList(!showList);
+        });
     }
   };
 
@@ -130,19 +133,21 @@ export default function FindBy() {
       </Box>
 
       <Box>
-      <Typography gutterBottom variant="h4" align="center" 
+        <Typography
+          gutterBottom
+          variant="h4"
+          align="center"
           sx={{
-            fontFamily: 'Fira Sans Condensed',
-            fontSize: '20px', 
-            lineHeight: '24px', 
-            color: '#FFFFFF', 
-            marginTop: '32px',
-            marginLeft: '139dp',
+            fontFamily: "Fira Sans Condensed",
+            fontSize: "20px",
+            lineHeight: "24px",
+            color: "#FFFFFF",
+            marginTop: "32px",
+            marginLeft: "139dp",
           }}
         >
-            {"Search Events"}
+          {"Search Events"}
         </Typography>
-
 
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
@@ -155,7 +160,8 @@ export default function FindBy() {
                 backgroundColor: "white",
                 borderRadius: "8px",
                 marginTop: "16px",
-                color: theme => `${theme.palette.primary.contrastText} !important`,
+                color: (theme) =>
+                  `${theme.palette.primary.contrastText} !important`,
                 "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
                   border: "none",
                   underline: "none",
@@ -179,18 +185,19 @@ export default function FindBy() {
           </DemoContainer>
         </LocalizationProvider>
 
-        
-      <Grid item sx={{ pl: "0 !important" }}>
+        <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               placeholder="Location"
-              startAdornment={<InputAdornment position="start"></InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start"></InputAdornment>
+              }
               endAdornment={
                 <InputAdornment position="end">
                   <Location />
                 </InputAdornment>
               }
-              value = {city}
+              value={city}
               onChange={(e) => {
                 setCity(e.target.value);
                 setSelectedDate("");
@@ -202,42 +209,43 @@ export default function FindBy() {
               sx={{
                 width: "350px",
                 height: "56px",
-                marginLeft: '20px',
+                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                marginTop: '16px',
+                marginTop: "16px",
               }}
             />
           </FormControl>
-      </Grid>
+        </Grid>
 
-      <Typography gutterBottom variant="h4" align="center" 
+        <Typography
+          gutterBottom
+          variant="h4"
+          align="center"
           sx={{
-            fontFamily: 'Fira Sans Condensed',
-            fontSize: '15px', 
-            lineHeight: '24px', 
-            color: '#FFFFFF', 
-            marginLeft: '139dp',
+            fontFamily: "Fira Sans Condensed",
+            fontSize: "15px",
+            lineHeight: "24px",
+            color: "#FFFFFF",
+            marginLeft: "139dp",
           }}
         >
-            {"Or"}
-      </Typography>
+          {"Or"}
+        </Typography>
 
-      <Grid item sx={{ pl: "0 !important" }}>
+        <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               endAdornment={
-                <InputAdornment position="end">
-                  {"Miles From"}
-                </InputAdornment>
+                <InputAdornment position="end">{"Miles From"}</InputAdornment>
               }
-              value = {miles}
+              value={miles}
               onChange={(e) => setMiles(e.target.value)}
               sx={{
                 width: "120px",
                 height: "56px",
-                marginLeft: '20px',
+                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -245,12 +253,14 @@ export default function FindBy() {
               }}
             />
           </FormControl>
-          
+
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               placeholder="Zip Code"
-              startAdornment={<InputAdornment position="start"></InputAdornment>}
-              value = {zipCode}
+              startAdornment={
+                <InputAdornment position="start"></InputAdornment>
+              }
+              value={zipCode}
               onChange={(e) => {
                 setZipCode(e.target.value);
                 setSelectedDate("");
@@ -262,7 +272,7 @@ export default function FindBy() {
               sx={{
                 width: "150px",
                 height: "56px",
-                marginLeft: '90px',
+                marginLeft: "90px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -270,53 +280,51 @@ export default function FindBy() {
               }}
             />
           </FormControl>
-      </Grid>
+        </Grid>
 
-      
-      <Grid item sx={{ pl: "0 !important" }}>
-        <FormControl sx={{ width: "129px" }} variant="outlined">
-          <Select
-            value={type}
-            onChange={(e) => {
-              setType(e.target.value);
-              setSelectedDate("");
-              setMiles(5);
-              setCity("");
-              setZipCode("");
-              setRegistionCode("");
-            }}
-            sx={{
-              width: "350px",
-              height: "56px",
-              marginLeft: '20px',
-              fontSize: 12,
-              backgroundColor: "white",
-              borderRadius: "8px",
-              marginTop: '16px',
-            }}
-            displayEmpty
-          >
-            <MenuItem disabled value="">
-              <em>Select by Type</em>
-            </MenuItem>
-            <MenuItem value="Business Marketing">Business Marketing</MenuItem>
-            <MenuItem value="Party">Party</MenuItem>
-            <MenuItem value="Social Mixer">Social Mixer</MenuItem>
-            <MenuItem value="Other">Other</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
+        <Grid item sx={{ pl: "0 !important" }}>
+          <FormControl sx={{ width: "129px" }} variant="outlined">
+            <Select
+              value={type}
+              onChange={(e) => {
+                setType(e.target.value);
+                setSelectedDate("");
+                setMiles(5);
+                setCity("");
+                setZipCode("");
+                setRegistionCode("");
+              }}
+              sx={{
+                width: "350px",
+                height: "56px",
+                marginLeft: "20px",
+                fontSize: 12,
+                backgroundColor: "white",
+                borderRadius: "8px",
+                marginTop: "16px",
+              }}
+              displayEmpty
+            >
+              <MenuItem disabled value="">
+                <em>Select by Type</em>
+              </MenuItem>
+              <MenuItem value="Business Marketing">Business Marketing</MenuItem>
+              <MenuItem value="Party">Party</MenuItem>
+              <MenuItem value="Social Mixer">Social Mixer</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
 
-      <Grid item sx={{ pl: "0 !important" }}>
+        <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
               placeholder="Search by Registration Code"
-              startAdornment={<InputAdornment position="start"></InputAdornment>}
-              endAdornment={
-                <InputAdornment position="end">
-                </InputAdornment>
+              startAdornment={
+                <InputAdornment position="start"></InputAdornment>
               }
-              value = {registionCode}
+              endAdornment={<InputAdornment position="end"></InputAdornment>}
+              value={registionCode}
               onChange={(e) => {
                 setRegistionCode(e.target.value);
                 setSelectedDate("");
@@ -328,27 +336,28 @@ export default function FindBy() {
               sx={{
                 width: "350px",
                 height: "56px",
-                marginLeft: '20px',
+                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                mt: '16px',
+                mt: "16px",
               }}
             />
           </FormControl>
-      </Grid>
+        </Grid>
 
-      <Button
-        variant="contained"
-        sx={{ 
-          width: "352.5px",
-          height: "56px",
-          marginLeft: '20px',
-          mt: "16px" }}
+        <Button
+          variant="contained"
+          sx={{
+            width: "352.5px",
+            height: "56px",
+            marginLeft: "20px",
+            mt: "16px",
+          }}
           onClick={getEvents}
-      >
-        {"Get Events"}
-      </Button>
+        >
+          {"Get Events"}
+        </Button>
       </Box>
 
       <Grid container>

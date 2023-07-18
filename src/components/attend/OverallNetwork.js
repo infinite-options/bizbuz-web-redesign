@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -13,9 +14,9 @@ import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import NoImage from "../../assets/NoImage.png";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
+import NoUserImage from "../../assets/NoUserImage.png";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -23,6 +24,7 @@ const OverallNetwork = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
+  const { onAttendeeUpdate, unSubscribe } = useAbly(eventObj.event_uid);
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -76,24 +78,28 @@ const OverallNetwork = () => {
 
   const handleUserImage = (images) => {
     const imagesArr = JSON.parse(images);
-    return imagesArr.length > 0 ? imagesArr[0] : NoImage;
+    return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
   };
 
   const refreshGraph = async () => {
     const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=200-000098&userId=100-000038`
+      `${BASE_URL}/overallGraph?eventId=${eventObj.event_uid}`
     );
     const data = response["data"];
     let nodesArr = [];
     data["users"].forEach((u) => {
       nodesArr.push({
         id: u.user_uid,
+        mass: 1,
         marker: {
           symbol: `url(${handleUserImage(u.images)})`,
           width: 50,
           height: 50,
         },
         name: `${u.first_name} is ${u.role}`,
+        className: {
+          clipPath: "circle()",
+        },
       });
     });
     setOptions({
@@ -108,6 +114,10 @@ const OverallNetwork = () => {
 
   useEffect(() => {
     refreshGraph();
+    onAttendeeUpdate((m) => {
+      refreshGraph();
+    });
+    return () => unSubscribe();
   }, []);
 
   return (

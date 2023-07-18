@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import useAbly from "../../util/ably";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
@@ -20,33 +21,63 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EarlyArrival = () => {
   const location = useLocation();
-  const { eventObj, userObj } = location.state;
+  const { eventObj, user: userObj } = location.state;
   const navigate = useNavigate();
+  const { addAttendee, isAttendeePresent } = useAbly(eventObj.event_uid);
 
   const handleEnterWaitingRoom = async () => {
-    navigate("/eventRegistrants", {
-      state: { eventObj, userObj },
-    });
+    const response = await axios.get(
+      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+    );
+    if (response.data.eventStarted === "1") {
+      navigate("/networkingActivity", {
+        state: { eventObj, userObj },
+      });
+    } else {
+      navigate("/eventAttendees", {
+        state: { eventObj, userObj },
+      });
+    }
   };
 
-  // const handleNewAttendee = async () => {
-  //   await axios.put(
-  //     `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
-  //   );
-  //   addAttendee(userObj.user_uid);
-  // };
+  const handleNewAttendee = async () => {
+    await axios.put(
+      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
+    );
+    addAttendee(userObj.user_uid);
+  };
 
   const validateAndRoute = async () => {
     const response = await axios.get(
-      `${BASE_URL}/isOrganizer?userId=100-000038&eventId=200-000098`
+      `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
     );
     if (response.data.isOrganizer) {
+      handleNewAttendee();
       navigate("/eventDashboard", {
         state: { eventObj, userObj },
       });
     } else {
-      navigate("/earlyArrival", {
-        state: { eventObj, userObj },
+      const response = await axios.get(
+        `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+      );
+      if (!response.data.hasRegistered) {
+        navigate("/preregistration-event/" + eventObj.event_registration_code, {
+          state: { event: eventObj },
+        });
+        return;
+      }
+      handleNewAttendee();
+      isAttendeePresent(eventObj.event_organizer_uid, () => {
+        if (response.data.eventStarted === "1") {
+          navigate("/networkingActivity", {
+            state: { eventObj, userObj },
+          });
+        }
+        // } else {
+        //   navigate("/waiting", {
+        //     state: { eventObj, userObj },
+        //   });
+        // }
       });
     }
   };
@@ -140,7 +171,7 @@ const EarlyArrival = () => {
         </Card>
       </Stack>
       <Typography variant="h1" sx={{ mt: "35px" }}>
-        Event has not started
+        {"Event has not started"}
       </Typography>
       <Button
         variant="contained"
@@ -148,7 +179,7 @@ const EarlyArrival = () => {
         color="secondary"
         onClick={handleEnterWaitingRoom}
       >
-        Go to the Waiting Room
+        {"Go to the Waiting Room"}
       </Button>
     </Box>
   );

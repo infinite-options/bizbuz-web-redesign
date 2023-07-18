@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
@@ -21,58 +23,53 @@ const EventDashboard = () => {
   );
   const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState("");
+  const { publish } = useAbly(eventObj.event_uid);
 
-  const handleShowRegistrationCode = () => {
-    navigate("/showRegistrationCode", {
-      state: { eventObj, userObj },
-    });
+  const handleBroadcast = () => {
+    publish(message);
+    setShowDialog(false);
   };
-
-  //   const handleBroadcast = () => {
-  //     publish(message);
-  //     setShowDialog(false);
-  //   };
 
   const handleMessageChange = (e) => {
     setMessage(e.target.value);
   };
 
-  //   const handleStartEvent = async () => {
-  //     const response = await axios.get(
-  //       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
-  //     );
-  //     if (!response.data.hasRegistered) {
-  //       navigate("/preregistration-event/" + eventObj.event_registration_code, {
-  //         state: { event: eventObj },
-  //       });
-  //       return;
-  //     }
-  //     await axios.put(
-  //       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=1`
-  //     );
-  //     eventObj.event_status = "1";
-  //     setEventStarted(true);
-  //     handleClearStorage(["event", "user"]);
-  //     localStorage.setItem("event", JSON.stringify(eventObj));
-  //     localStorage.setItem("user", JSON.stringify(userObj));
-  //     window.open("/networkingActivity", "_blank");
-  //     publish("Event started");
-  //     navigate(".", {
-  //       state: { eventObj, userObj },
-  //     });
-  //   };
+  const handleStartEvent = async () => {
+    const response = await axios.get(
+      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+    );
+    if (!response.data.hasRegistered) {
+      navigate("/preregistration-event/" + eventObj.event_registration_code, {
+        state: { event: eventObj },
+      });
+      return;
+    }
+    await axios.put(
+      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=1`
+    );
+    eventObj.event_status = "1";
+    setEventStarted(true);
+    handleClearStorage(["event", "user"]);
+    localStorage.setItem("event", JSON.stringify(eventObj));
+    localStorage.setItem("user", JSON.stringify(userObj));
+    window.open("/networkingActivity", "_blank");
+    publish("Event started");
+    navigate(".", {
+      state: { eventObj, userObj },
+    });
+  };
 
-  //   const handleStopEvent = () => {
-  //     setEventStarted(false);
-  //     publish("Event ended");
-  //     axios.put(
-  //       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=0`
-  //     );
-  //     eventObj.event_status = "0";
-  //     navigate(".", {
-  //       state: { eventObj, userObj },
-  //     });
-  //   };
+  const handleStopEvent = () => {
+    setEventStarted(false);
+    publish("Event ended");
+    axios.put(
+      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=0`
+    );
+    eventObj.event_status = "0";
+    navigate(".", {
+      state: { eventObj, userObj },
+    });
+  };
 
   const handleClearStorage = (items) => {
     items.forEach((item) => {
@@ -119,10 +116,7 @@ const EventDashboard = () => {
           py: 5,
         }}
       >
-        <Stack spacing={5}>
-          <Button size="large" color="secondary" variant="contained">
-            {"Registration code"}
-          </Button>
+        <Stack spacing={3}>
           <Button
             size="large"
             color="secondary"
@@ -133,7 +127,14 @@ const EventDashboard = () => {
           >
             {"View Registrants"}
           </Button>
-          <Button size="large" color="secondary" variant="contained">
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={() =>
+              navigate("/eventAttendees", { state: { eventObj, userObj } })
+            }
+          >
             {"View Attendees"}
           </Button>
           <Button
@@ -146,19 +147,34 @@ const EventDashboard = () => {
           >
             {"View Network"}
           </Button>
-          <Button size="large" color="secondary" variant="contained">
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={() => setShowDialog(true)}
+          >
             {"Broadcast"}
           </Button>
           {eventStarted && (
             <Box sx={{ my: 5 }}>
-              <Button size="large" color="secondary" variant="contained">
+              <Button
+                size="large"
+                color="secondary"
+                variant="contained"
+                onClick={handleStopEvent}
+              >
                 {"Stop Event"}
               </Button>
             </Box>
           )}
         </Stack>
         {!eventStarted && (
-          <Button size="large" color="secondary" variant="contained">
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={handleStartEvent}
+          >
             {"Start Event"}
           </Button>
         )}

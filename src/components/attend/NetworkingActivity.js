@@ -1,6 +1,8 @@
+import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -13,16 +15,32 @@ import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import NoImage from "../../assets/NoImage.png";
+import Snackbar from "@mui/material/Snackbar";
+import MUIAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+import NoUserImage from "../../assets/NoUserImage.png";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
+const SlideTransition = (props) => {
+  return <Slide {...props} direction="down" />;
+};
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MUIAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const NetworkingActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
+  const { onAttendeeUpdate, subscribe, unSubscribe, detach } = useAbly(
+    eventObj.event_uid
+  );
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState("");
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -36,7 +54,6 @@ const NetworkingActivity = () => {
     },
     plotOptions: {
       networkgraph: {
-        turboThreshold: 0,
         keys: ["from", "to"],
         layoutAlgorithm: {
           enableSimulation: false,
@@ -75,12 +92,12 @@ const NetworkingActivity = () => {
 
   const handleUserImage = (images) => {
     const imagesArr = JSON.parse(images);
-    return imagesArr.length > 0 ? imagesArr[0] : NoImage;
+    return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
   };
 
   const refreshGraph = async () => {
     const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=200-000098&userId=100-000038`
+      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
     );
     const data = response["data"];
     let nodesArr = [];
@@ -93,6 +110,9 @@ const NetworkingActivity = () => {
           height: 50,
         },
         name: `${u.first_name} is ${u.role}`,
+        className: {
+          clipPath: "circle()",
+        },
       });
     });
     setOptions({
@@ -105,8 +125,39 @@ const NetworkingActivity = () => {
     });
   };
 
+  const handleExitEvent = () => {
+    axios.put(
+      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
+    );
+  };
+
+  const broadcastAndExitSubscribe = () => {
+    onAttendeeUpdate((m) => {
+      refreshGraph();
+    });
+    subscribe((e) => {
+      if (e.data === "Event ended") {
+        handleExitEvent();
+        detach();
+        navigate("/");
+      } else {
+        setMessage(e.data);
+        setShowAlert(true);
+      }
+    });
+  };
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowAlert(false);
+  };
+
   useEffect(() => {
     refreshGraph();
+    broadcastAndExitSubscribe();
+    return () => unSubscribe();
   }, []);
 
   return (
@@ -117,6 +168,17 @@ const NetworkingActivity = () => {
           navigate("/");
         }}
       />
+      <Snackbar
+        open={showAlert}
+        autoHideDuration={15000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        TransitionComponent={SlideTransition}
+      >
+        <Alert onClose={handleAlertClose} severity="info">
+          {message}
+        </Alert>
+      </Snackbar>
       <Stack
         direction="column"
         justifyContent="center"
@@ -186,7 +248,7 @@ const NetworkingActivity = () => {
         color="primary"
         onClick={() => navigate("/")}
       >
-        Leave Event
+        {"Leave Event"}
       </Button>
     </Box>
   );
