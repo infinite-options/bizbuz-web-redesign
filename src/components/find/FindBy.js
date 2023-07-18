@@ -16,10 +16,10 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as Location } from "../../assets/marker-black.svg";
-import EventCard from "../common/EventCard";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Down } from "../../assets/down.svg";
 import { Select, MenuItem } from "@mui/material";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
@@ -123,6 +123,10 @@ export default function FindBy() {
           if (!showList) setShowList(!showList);
         });
     }
+  };
+
+  const handleRegisterClick = (event) => {
+    navigate("/eventInfo", { state: { event } });
   };
 
   return (
@@ -415,13 +419,9 @@ export default function FindBy() {
 
                 {events.map((event) => {
                   return (
-                    <EventCard
+                    <NewCardComponent
                       event={event}
-                      onRegisterClick={() => {
-                        navigate("/eventInfo", {
-                          state: { event: event },
-                        });
-                      }}
+                      onRegisterClick={handleRegisterClick}
                     />
                   );
                 })}

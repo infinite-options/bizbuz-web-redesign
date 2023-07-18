@@ -3,16 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useAbly from "../../util/ably";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
-import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
-import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
@@ -21,6 +13,7 @@ import Slide from "@mui/material/Slide";
 import NoUserImage from "../../assets/NoUserImage.png";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
+import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -185,7 +178,7 @@ const NetworkingActivity = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <Card>
+        {/* <Card>
           <CardActionArea>
             <CardContent>
               <Typography gutterBottom variant="h2" component="div">
@@ -235,7 +228,8 @@ const NetworkingActivity = () => {
               </Grid>
             </CardContent>
           </CardActionArea>
-        </Card>
+        </Card> */}
+        <RegisteredCardComponent event={eventObj} />
       </Stack>
 
       <Stack spacing={2} direction="column">

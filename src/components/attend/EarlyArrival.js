@@ -16,6 +16,7 @@ import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import Button from "@mui/material/Button";
 import NoImage from "../../assets/NoImage.png";
+import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -100,7 +101,7 @@ const EarlyArrival = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <Card>
+        {/* <Card>
           <CardActionArea>
             <CardContent>
               <Typography gutterBottom variant="h2" component="div">
@@ -168,7 +169,9 @@ const EarlyArrival = () => {
               />
             )}
           </CardActionArea>
-        </Card>
+        </Card> */}
+
+        <RegisteredCardComponent event={eventObj} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "35px" }}>
         {"Event has not started"}

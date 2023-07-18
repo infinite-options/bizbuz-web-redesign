@@ -203,7 +203,12 @@ const EventDashboard = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button size="large" color="secondary" variant="contained">
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={handleBroadcast}
+          >
             {"Send"}
           </Button>
           <Button

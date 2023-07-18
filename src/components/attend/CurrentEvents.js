@@ -14,6 +14,7 @@ import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import NoImage from "../../assets/NoImage.png";
+import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -85,79 +86,10 @@ const CurrentEvents = () => {
         {events.length > 0 ? (
           events.map((event) => {
             return (
-              <Card>
-                <CardActionArea
-                  onClick={() => {
-                    handleEventClick(event);
-                  }}
-                >
-                  <CardContent>
-                    <Typography gutterBottom variant="h2" component="div">
-                      {event.event_title}
-                    </Typography>
-                    <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
-                      <Grid
-                        item
-                        xs={6}
-                        sx={{ display: "flex", flexDirection: "row" }}
-                      >
-                        <CalendarIcon />
-                        &nbsp;
-                        <Typography variant="body1">
-                          {new Date(event.event_start_date).toLocaleString(
-                            "default",
-                            {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            }
-                          )}
-                        </Typography>
-                      </Grid>
-                      <Grid item xs={6} />
-                      <Grid
-                        item
-                        xs={6}
-                        sx={{ display: "flex", flexDirection: "row" }}
-                      >
-                        <ClockIcon />
-                        &nbsp;
-                        <Typography variant="body1">
-                          {`${event.event_start_time} - ${event.event_end_time}`}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={6}
-                        sx={{ display: "flex", flexDirection: "row" }}
-                      >
-                        <MarkerIcon />
-                        <Typography
-                          variant="body1"
-                          sx={{ fontSize: 12, maxWidth: "80%" }}
-                        >
-                          {event.event_location}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  {JSON.parse(event.event_photo).length === 0 ? (
-                    <CardMedia
-                      component="img"
-                      height="174px"
-                      image={NoImage}
-                      alt="default"
-                    />
-                  ) : (
-                    <CardMedia
-                      component="img"
-                      height="174px"
-                      image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
-                      alt="event"
-                    />
-                  )}
-                </CardActionArea>
-              </Card>
+              <RegisteredCardComponent
+                event={event}
+                onCardClick={handleEventClick}
+              />
             );
           })
         ) : (
