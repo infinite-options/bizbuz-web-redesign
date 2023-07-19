@@ -23,7 +23,7 @@ const CurrentRsvp = () => {
     axios
       .get(
         BASE_URL +
-          `/GetEventUser?timeZone=${user_timezone}&eu_user_id=100-000038`
+          `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user_uid}`
       )
       .then((response) => {
         setEvents(response.data.result);
