@@ -53,7 +53,7 @@ const EarlyArrival = () => {
         `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
       );
       if (!response.data.hasRegistered) {
-        navigate("/preregistration-event/" + eventObj.event_registration_code, {
+        navigate("/eventQuestionnaire", {
           state: { event: eventObj },
         });
         return;

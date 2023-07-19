@@ -39,7 +39,7 @@ const EventQuestionnaire = () => {
       eu_user_id: "",
       eu_event_id: event.event_uid,
       eu_qas: JSON.stringify(questions),
-      eu_event: event
+      eu_event: event,
     };
     if (
       document.cookie !== "" &&
@@ -127,13 +127,13 @@ const EventQuestionnaire = () => {
         >
           {JSON.parse(event.pre_event_questionnaire).map((question, index) => (
             <Box key={question.id} sx={{ marginBottom: "16px" }}>
-              <Typography variant="body1">{`${index + 1}. ${
-                question.question
-              }`}
+              <Typography variant="body1">
+                {`${index + 1}. ${question.question}`}
               </Typography>
               <Grid item sx={{ pl: "0 !important" }}>
                 <FormControl sx={{ width: "129px" }} variant="outlined">
                   <OutlinedInput
+                    name="answer"
                     value={question.answer}
                     onChange={(e) => handleChange(e, index)}
                     sx={{

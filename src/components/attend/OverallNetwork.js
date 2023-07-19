@@ -91,9 +91,6 @@ const OverallNetwork = () => {
           height: 50,
         },
         name: `${u.first_name} is ${u.role}`,
-        className: {
-          clipPath: "circle()",
-        },
       });
     });
     setOptions({
@@ -131,7 +128,15 @@ const OverallNetwork = () => {
         <RegisteredCardComponent event={eventObj} />
       </Stack>
 
-      <Stack spacing={2} direction="column">
+      <Stack
+        spacing={2}
+        direction="column"
+        sx={{
+          circular: {
+            clipPath: "circle()",
+          },
+        }}
+      >
         <Typography align="center" variant="h5" gutterBottom>
           {eventObj.name}
         </Typography>

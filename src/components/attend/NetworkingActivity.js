@@ -28,7 +28,12 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const NetworkingActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { eventObj, userObj } = location.state;
+  const eventObj = location.state
+    ? location.state.eventObj
+    : JSON.parse(localStorage.getItem("event"));
+  const userObj = location.state
+    ? location.state.userObj
+    : JSON.parse(localStorage.getItem("user"));
   const { onAttendeeUpdate, subscribe, unSubscribe, detach } = useAbly(
     eventObj.event_uid
   );

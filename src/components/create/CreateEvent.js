@@ -5,8 +5,8 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import EventCard from "../common/EventCard";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -52,11 +52,11 @@ const CreateEvent = () => {
         sx={{ mt: 2 }}
       >
         {events.map((event) => (
-          <EventCard
+          <NewCardComponent
             event={event}
             onRegisterClick={() => {
-              navigate("/eventInfo", {
-                state: { event: event },
+              navigate("/eventQuestionnaire", {
+                state: { event },
               });
             }}
           />

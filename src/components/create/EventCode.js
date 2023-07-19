@@ -29,7 +29,7 @@ const EventCode = () => {
             sx={{ justifyContent: "center", alignItems: "center" }}
           >
             <QRCode
-              route={"/preregistration-event/"}
+              route={"/eventQuestionnaire"}
               eventRegistrationCode={event.event_registration_code}
             />
             <Typography sx={{ color: "#FFFFFF", fontSize: 24 }}>

@@ -7,12 +7,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Map from "./Map";
-import { Card, CardContent, CardMedia } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import EventDefaultImage from "../../assets/event-default.svg";
+import { Card, CardContent, CardMedia, Icon } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
+import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
+import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
+import DefaultEventImage from "../../assets/event-default.png";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -60,6 +62,44 @@ const EventReview = () => {
     return new File([u8arr], "cover.jpeg", { type: mime });
   };
 
+  const getEventTypeColor = () => {
+    const eventTypeColors = {
+      Party: {
+        backgroundColor: "#3A8D75",
+        textColor: "secondary",
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
+      },
+      "Business Marketing": {
+        backgroundColor: "#90CAED",
+        textColor: "#222222",
+        clockIcon: <ClockBlackIcon />,
+        markerIcon: <MarkerBlackIcon />,
+      },
+      "Social Mixer": {
+        backgroundColor: "#F2ABA5",
+        textColor: "#222222",
+        clockIcon: <ClockBlackIcon />,
+        markerIcon: <MarkerBlackIcon />,
+      },
+      Other: {
+        backgroundColor: "#CE807A",
+        textColor: "#222222",
+        clockIcon: <ClockBlackIcon />,
+        markerIcon: <MarkerBlackIcon />,
+      },
+    };
+    return (
+      eventTypeColors[event.eventType] || {
+        backgroundColor: "#3a8d75",
+        textColor: "secondary",
+        clockIcon: <ClockBlackIcon />,
+        markerIcon: <MarkerBlackIcon />,
+      }
+    );
+  };
+  const eventTypeColor = getEventTypeColor();
+
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
@@ -74,43 +114,58 @@ const EventReview = () => {
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
             <Card sx={{ minWidth: 275 }}>
-              <Box bgcolor={"#3a8d75"}>
+              <Box
+                bgcolor={eventTypeColor.backgroundColor}
+                justifyContent="flex-end"
+                alignItems="flex-start"
+              >
                 <CardContent>
-                  <Typography variant="h2" color="secondary" mb={1} align="end">
+                  <Typography
+                    variant="h2"
+                    color={eventTypeColor.textColor}
+                    mb={1}
+                    align="right"
+                  >
                     {dayjs(event.eventStartDate).format("MMMM DD")}
                   </Typography>
-                  <Typography variant="h2" color="secondary" mb={1}>
+
+                  <Typography
+                    variant="h2"
+                    color={eventTypeColor.textColor}
+                    mb={1}
+                  >
                     {event.eventTitle}
                   </Typography>
                   <Stack direction="row" spacing={1}>
-                    <Box>
+                    <Box width="50%" mt={1}>
                       {!event.img_cover ? (
                         <CardMedia
                           component="img"
-                          height="174px"
-                          image={EventDefaultImage}
+                          height="120rem"
+                          image={DefaultEventImage}
                           alt="default"
                           sx={{ borderRadius: 3 }}
                         />
                       ) : (
                         <CardMedia
                           component="img"
-                          height="174px"
+                          height="120rem"
                           image={event.img_cover}
                           alt="event"
                           sx={{ borderRadius: 3 }}
                         />
                       )}
                     </Box>
-                    <Stack spacing={1}>
+                    <Box width="50%" gap={1}>
                       <Typography
                         display={"flex"}
                         alignItems={"center"}
                         gap={0.5}
-                        color="secondary"
+                        color={eventTypeColor.textColor}
                         variant="body2"
+                        my={1}
                       >
-                        <ClockIcon mr={1} />
+                        {eventTypeColor.clockIcon}
                         <span>
                           {event.eventStartTime} - {event.eventEndTime}
                         </span>
@@ -119,26 +174,27 @@ const EventReview = () => {
                         display={"flex"}
                         alignItems={"center"}
                         gap={0.5}
-                        color="secondary"
+                        color={eventTypeColor.textColor}
                         variant="body2"
+                        mb={1}
                       >
-                        <MarkerIcon mr={1} />
+                        <Icon>{eventTypeColor.markerIcon}</Icon>
                         <span> {event.eventLocation}</span>
                       </Typography>
                       <Button
                         variant="contained"
                         color="buttonAlternative"
-                        size="small"
-                        sx={{ height: 40 }}
+                        size="large"
+                        sx={{ width: "90%", height: 40 }}
                         onClick={() => {
-                          navigate("/eventInfo", {
-                            state: { event: event },
+                          navigate("/eventQuestionnaire", {
+                            state: { event },
                           });
                         }}
                       >
                         {"Register"}
                       </Button>
-                    </Stack>
+                    </Box>
                   </Stack>
                 </CardContent>
               </Box>

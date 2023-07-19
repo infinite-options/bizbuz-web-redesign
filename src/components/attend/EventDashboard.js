@@ -39,7 +39,7 @@ const EventDashboard = () => {
       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
     );
     if (!response.data.hasRegistered) {
-      navigate("/preregistration-event/" + eventObj.event_registration_code, {
+      navigate("/eventQuestionnaire", {
         state: { event: eventObj },
       });
       return;
@@ -156,16 +156,14 @@ const EventDashboard = () => {
             {"Broadcast"}
           </Button>
           {eventStarted && (
-            <Box sx={{ my: 5 }}>
-              <Button
-                size="large"
-                color="secondary"
-                variant="contained"
-                onClick={handleStopEvent}
-              >
-                {"Stop Event"}
-              </Button>
-            </Box>
+            <Button
+              size="large"
+              color="secondary"
+              variant="contained"
+              onClick={handleStopEvent}
+            >
+              {"Stop Event"}
+            </Button>
           )}
         </Stack>
         {!eventStarted && (
