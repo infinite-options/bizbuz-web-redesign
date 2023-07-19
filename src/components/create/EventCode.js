@@ -65,8 +65,13 @@ const EventCode = () => {
             maxWidth: "550px",
           }}
         >
-          <Button variant="contained" onClick={() => navigate("/")} fullWidth>
-            {"Go to Main menu"}
+          <Button
+            color="info"
+            variant="contained"
+            onClick={() => navigate("/")}
+            fullWidth
+          >
+            {"Return to Home Page"}
           </Button>
         </Stack>
       </Stack>

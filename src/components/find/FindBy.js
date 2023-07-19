@@ -35,86 +35,8 @@ export default function FindBy() {
 
   const getEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    let query = BASE_URL + `/GetEvents?timeZone=${user_timezone}`;
-    if (selectedDate) {
-      query += `&event_start_date=${selectedDate}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setSelectedDate("");
-          console.log(query);
-          console.log(response.data.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
+    let queries = [];
 
-    if (city) {
-      let obj = {
-        city: city,
-      };
-      axios
-        .post(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setCity("");
-        });
-      console.log(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj);
-    }
-    if (miles && zipCode) {
-      let obj = {
-        miles: miles,
-        zip_code: zipCode,
-      };
-      axios
-        .post(BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`, obj)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setMiles(5);
-          setZipCode("");
-        });
-      console.log(
-        BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`,
-        obj
-      );
-    }
-
-    if (type) {
-      query += `&event_type=${type}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setType("");
-          console.log(query);
-          console.log(response.data.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
-
-    if (registionCode) {
-      query = BASE_URL + `/verifyRegCode/${registionCode}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result.result);
-          if (!showList) setShowList(!showList);
-          setRegistionCode("");
-          console.log(query);
-          console.log(response.data.result.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
     if (!selectedDate && !city && !type && !registionCode && !zipCode) {
       axios
         .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
@@ -122,7 +44,69 @@ export default function FindBy() {
           setEvents(response.data.result);
           if (!showList) setShowList(!showList);
         });
+    } else {
+      if (selectedDate) {
+        queries.push(
+          axios.get(
+            BASE_URL +
+              `/GetEvents?timeZone=${user_timezone}&event_start_date=${selectedDate}`
+          )
+        );
+      }
+
+      if (city) {
+        let obj = {
+          city: city,
+        };
+        queries.push(
+          axios.post(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj)
+        );
+      }
+
+      if (miles && zipCode) {
+        let obj = {
+          miles: miles,
+          zip_code: zipCode,
+        };
+        queries.push(
+          axios.post(
+            BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`,
+            obj
+          )
+        );
+      }
+
+      if (type) {
+        queries.push(
+          axios.get(
+            BASE_URL + `/GetEvents?timeZone=${user_timezone}&event_type=${type}`
+          )
+        );
+      }
+
+      if (registionCode) {
+        queries.push(axios.get(BASE_URL + `/verifyRegCode/${registionCode}`));
+      }
+
+      Promise.all(queries)
+        .then((responses) => {
+          const results = responses.map((response) => response.data.result);
+          const mergedResults = results.reduce((intersection, arr) => {
+            const eventUids = arr.map((item) => item.event_uid);
+            return intersection.filter((item) =>
+              eventUids.includes(item.event_uid)
+            );
+          });
+
+          setEvents(mergedResults);
+          if (!showList) setShowList(!showList);
+          console.log(mergedResults);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
     }
+    setSelectedDate("");
   };
 
   const handleRegisterClick = (event) => {
