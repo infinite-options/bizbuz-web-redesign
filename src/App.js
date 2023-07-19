@@ -28,6 +28,8 @@ import EventAttendees from "./components/attend/EventAttendees";
 import EventDashboard from "./components/attend/EventDashboard";
 import OverallNetwork from "./components/attend/OverallNetwork";
 import NetworkingActivity from "./components/attend/NetworkingActivity";
+import CurrentRsvp from "./components/rsvp/current-rsvp";
+import RsvpEventInfo from "./components/rsvp/rsvp-event-info";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -93,6 +95,8 @@ const App = () => {
             path="/registrationConfirmation"
             element={<RegistrationConfirmation />}
           />
+          <Route path="/currentRsvp" element={<CurrentRsvp />} />
+          <Route path="/rsvpEventInfo" element={<RsvpEventInfo />} />
         </Routes>
       </LoginContext.Provider>
     </Container>
