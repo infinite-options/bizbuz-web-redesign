@@ -7,18 +7,11 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import NewCardComponent from "../new-card-component";
 
-const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
 const EventInfo = () => {
   const location = useLocation();
   const { event } = location.state;
   const navigate = useNavigate();
 
-  const handleRegisterClick = () => {
-    navigate("/eventQuestionnaire", {
-      state: { event: event },
-    });
-  };
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -31,7 +24,14 @@ const EventInfo = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <NewCardComponent event={event} onRegisterClick={handleRegisterClick} />
+        <NewCardComponent
+          event={event}
+          onRegisterClick={() => {
+            navigate("/eventQuestionnaire", {
+              state: { event: event },
+            });
+          }}
+        />
       </Stack>
       <Typography
         variant="h1"

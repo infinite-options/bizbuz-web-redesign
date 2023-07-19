@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -12,6 +13,71 @@ const EventQuestionnaire = () => {
   const location = useLocation();
   const { event } = location.state;
   const navigate = useNavigate();
+  const [questions, setQuestions] = useState(
+    JSON.parse(event.pre_event_questionnaire)
+  );
+
+  const handleChange = (e, ind) => {
+    // console.log(ind);
+    setQuestions((prevCards) =>
+      prevCards.map((card, i) => {
+        // console.log(i, ind);
+        if (i === ind) {
+          // console.log("===");
+          // console.log(e.target.name, e.target.value);
+          return { ...card, [e.target.name]: e.target.value };
+        } else {
+          return card;
+        }
+        // console.log(card);
+      })
+    );
+  };
+
+  const CreateEventReg = () => {
+    let eventObj = {
+      eu_user_id: "",
+      eu_event_id: event.event_uid,
+      eu_qas: JSON.stringify(questions),
+      eu_event: event
+    };
+    if (
+      document.cookie !== "" &&
+      document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
+        undefined
+    ) {
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("loggedIn="))
+        .split("=")[1] === "true"
+        ? navigate("/registrationConfirmation", {
+            state: {
+              email: document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("user_email="))
+                .split("=")[1],
+              user: document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("user_details="))
+                .split("=")[1],
+              eventObj: eventObj,
+            },
+          })
+        : navigate("/login", {
+            state: {
+              path: "/registrationConfirmation",
+              eventObj: eventObj,
+            },
+          });
+    } else {
+      navigate("/login", {
+        state: {
+          path: "/registrationConfirmation",
+          eventObj: eventObj,
+        },
+      });
+    }
+  };
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
@@ -63,15 +129,13 @@ const EventQuestionnaire = () => {
             <Box key={question.id} sx={{ marginBottom: "16px" }}>
               <Typography variant="body1">{`${index + 1}. ${
                 question.question
-              }`}</Typography>
+              }`}
+              </Typography>
               <Grid item sx={{ pl: "0 !important" }}>
                 <FormControl sx={{ width: "129px" }} variant="outlined">
                   <OutlinedInput
-                    // value={location}
-                    // onChange={(e) => {
-                    //     setIsLoading(true);
-                    //     setLocation(e.target.value);
-                    // }}
+                    value={question.answer}
+                    onChange={(e) => handleChange(e, index)}
                     sx={{
                       width: "350px",
                       height: "56px",
@@ -112,9 +176,7 @@ const EventQuestionnaire = () => {
           right: "0",
         }}
         color="secondary"
-        onClick={() => {
-          navigate("/registrationConfirmation", { state: { event: event } });
-        }}
+        onClick={() => CreateEventReg()}
       >
         Finish Registration
       </Button>
