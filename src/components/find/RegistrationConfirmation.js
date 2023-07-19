@@ -2,17 +2,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
-import { ReactComponent as CalendarIcon } from "../../assets/calendar.svg";
-import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import NoImage from "../../assets/NoImage.png";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
+import RegisteredCardComponent from "../registered-card-component";
 // import { ReactComponent as Done } from "../../assets/done.svg";
 const RegistrationConfirmation = () => {
   const location = useLocation();
@@ -30,75 +22,7 @@ const RegistrationConfirmation = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <Card key={event.event_uid}>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h2" component="div">
-                {event.event_title}
-              </Typography>
-              <Grid container rowSpacing={1}>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <Stack spacing={2}>
-                    <Stack direction="row">
-                      <CalendarIcon />
-                      &nbsp;
-                      <Typography variant="body1">
-                        {new Date(event.event_start_date).toLocaleString(
-                          "default",
-                          {
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          }
-                        )}
-                      </Typography>
-                    </Stack>
-                    <Stack direction="row">
-                      <ClockIcon />
-                      &nbsp;
-                      <Typography variant="body1">
-                        {`${event.event_start_time} - ${event.event_end_time}`}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <MarkerIcon />
-                  &nbsp;
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12, maxWidth: "80%" }}
-                  >
-                    {event.event_location}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-            {JSON.parse(event.event_photo).length === 0 ? (
-              <CardMedia
-                component="img"
-                height="174px"
-                image={NoImage}
-                alt="default"
-              />
-            ) : (
-              <CardMedia
-                component="img"
-                height="174px"
-                image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
-                alt="event"
-              />
-            )}
-          </CardActionArea>
-        </Card>
+        <RegisteredCardComponent event={event} />
       </Stack>
       <Typography
         variant="h1"
