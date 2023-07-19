@@ -3,15 +3,9 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
-import NoImage from "../../assets/NoImage.png";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
-import dayjs from "dayjs";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -31,76 +25,14 @@ const EventInfo = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <Card sx={{ minWidth: 275 }}>
-          <Box bgcolor={"#3a8d75"}>
-            <CardContent>
-              <Typography variant="h2" color="secondary" mb={1} align="end">
-                {dayjs(event.event_start_date).format("MMMM DD")}
-              </Typography>
-              <Typography variant="h2" color="secondary" mb={1}>
-                {event.event_title}
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                <Box>
-                  {JSON.parse(event.event_photo).length === 0 ? (
-                    <CardMedia
-                      component="img"
-                      height="174px"
-                      image={NoImage}
-                      alt="default"
-                      sx={{ borderRadius: 3 }}
-                    />
-                  ) : (
-                    <CardMedia
-                      component="img"
-                      height="174px"
-                      image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
-                      alt="event"
-                      sx={{ borderRadius: 3 }}
-                    />
-                  )}
-                </Box>
-                <Stack spacing={1}>
-                  <Typography
-                    display={"flex"}
-                    alignItems={"center"}
-                    gap={0.5}
-                    color="secondary"
-                    variant="body2"
-                  >
-                    <ClockIcon mr={1} />
-                    <span>
-                      {event.event_start_time} - {event.event_end_time}
-                    </span>
-                  </Typography>
-                  <Typography
-                    display={"flex"}
-                    alignItems={"center"}
-                    gap={0.5}
-                    color="secondary"
-                    variant="body2"
-                  >
-                    <MarkerIcon mr={1} />
-                    <span> {event.event_location}</span>
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="buttonAlternative"
-                    size="small"
-                    sx={{ height: 40 }}
-                    onClick={() => {
-                      navigate("/eventQuestionnaire", {
-                        state: { event: event },
-                      });
-                    }}
-                  >
-                    Register
-                  </Button>
-                </Stack>
-              </Stack>
-            </CardContent>
-          </Box>
-        </Card>
+        <NewCardComponent
+          event={event}
+          onRegisterClick={() => {
+            navigate("/eventQuestionnaire", {
+              state: { event: event },
+            });
+          }}
+        />
       </Stack>
       <Typography
         variant="h1"
