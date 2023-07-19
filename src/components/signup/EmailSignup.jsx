@@ -1,24 +1,19 @@
 import React, { useState } from "react";
 import axios from "axios";
-import * as ReactBootStrap from "react-bootstrap";
 import {
-  Grid,
   Button,
   FormControl,
   FormGroup,
   Typography,
   Box,
   Stack,
-  FormControlLabel,
   TextField,
-  FormLabel,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserAlreadyExistsModal from "./UserAlreadyExistsModal";
 import { hidden } from "../../styles";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
-import Back from "../../assets/Back.png";
 
 export default function EmailSignup() {
   const navigate = useNavigate();

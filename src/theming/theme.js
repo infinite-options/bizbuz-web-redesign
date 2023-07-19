@@ -104,6 +104,14 @@ const theme = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+          borderRadius: "8px",
+        },
+      },
+    },
     MuiDialog: {
       styleOverrides: {
         root: {
@@ -159,14 +167,6 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: "#FFFFFF",
-        },
-      },
-    },
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "white",
-          borderRadius: "8px",
         },
       },
     },

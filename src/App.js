@@ -6,7 +6,17 @@ import CreateEvent from "./components/create/CreateEvent";
 import EventDetails from "./components/create/EventDetails";
 import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
+import EventInfo from "./components/find/EventInfo";
+import EventQuestionnaire from "./components/find/EventQuestionnaire";
+import RegistrationConfirmation from "./components/find/RegistrationConfirmation";
+import CurrentEvents from "./components/attend/CurrentEvents";
+import EarlyArrival from "./components/attend/EarlyArrival";
+import EventRegistrants from "./components/attend/EventRegistrants";
+import EventAttendees from "./components/attend/EventAttendees";
 import EventTitle from "./components/create/EventTitle";
+import EventDashboard from "./components/attend/EventDashboard";
+import OverallNetwork from "./components/attend/OverallNetwork";
+import NetworkingActivity from "./components/attend/NetworkingActivity";
 import EventImage from "./components/create/EventImage";
 import EventQuestions from "./components/create/EventQuestions";
 import EventReview from "./components/create/EventReview";
@@ -18,16 +28,6 @@ import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
-import EventInfo from "./components/find/EventInfo";
-import EventQuestionnaire from "./components/find/EventQuestionnaire";
-import RegistrationConfirmation from "./components/find/RegistrationConfirmation";
-import CurrentEvents from "./components/attend/CurrentEvents";
-import EarlyArrival from "./components/attend/EarlyArrival";
-import EventRegistrants from "./components/attend/EventRegistrants";
-import EventAttendees from "./components/attend/EventAttendees";
-import EventDashboard from "./components/attend/EventDashboard";
-import OverallNetwork from "./components/attend/OverallNetwork";
-import NetworkingActivity from "./components/attend/NetworkingActivity";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -54,23 +54,14 @@ const App = () => {
           setLoginState: setLoginState,
         }}
       >
-        {" "}
         <Routes>
-          <Route path="/" element={<Landing />} />{" "}
-          <Route exact path="/login" element={<Login />} />{" "}
-          <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/email-signup" element={<EmailSignup />} />
-          <Route
-            exact
-            path="/google-signup-form"
-            element={<GoogleSignupForm />}
-          />
-          <Route
-            exact
-            path="/email-signup-form"
-            element={<EmailSignupForm />}
-          />
-          <Route exact path="/validate-code" element={<ValidationCode />} />
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/email-signup" element={<EmailSignup />} />
+          <Route path="/google-signup-form" element={<GoogleSignupForm />} />
+          <Route path="/email-signup-form" element={<EmailSignupForm />} />
+          <Route path="/validate-code" element={<ValidationCode />} />
           <Route path="/createEvent" element={<CreateEvent />} />
           <Route path="/eventDetails" element={<EventDetails />} />
           <Route path="/eventLocation" element={<EventLocation />} />
