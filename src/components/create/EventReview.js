@@ -14,13 +14,11 @@ import EventDefaultImage from "../../assets/event-default.svg";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 
-const BASE_URL =
-  "https://qlw29nnkwh.execute-api.us-west-1.amazonaws.com/dev/api/v2";
-// const BASE_URL = "http://localhost:4000/api/v2";
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EventReview = () => {
   const navigate = useNavigate();
-  const [getEvent] = useLocalStorage("event");
+  const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
   const event = getEvent();
   console.log(event);
 
@@ -45,6 +43,7 @@ const EventReview = () => {
       headers: headers,
       body: requestBody,
     });
+    removeEvent();
     const data = await response.json();
     navigate("/eventCode", { state: { event: data.result[0] } });
   };
