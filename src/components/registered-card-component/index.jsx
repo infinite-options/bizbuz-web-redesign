@@ -118,8 +118,8 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                 {JSON.parse(event.event_photo).length === 0 ? (
                   <CardMedia
                     component="img"
-                    height="100%"
-                    width="50%"
+                    height="122px"
+                    width="154px"
                     image={DefaultEventImage}
                     alt="default"
                     sx={{ borderRadius: 3, objectFit: "cover" }}
@@ -127,8 +127,8 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                 ) : (
                   <CardMedia
                     component="img"
-                    height="100%"
-                    width="100%"
+                    height="122px"
+                    width="154px"
                     image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                     alt="event"
                     sx={{ borderRadius: 3, objectFit: "cover" }}

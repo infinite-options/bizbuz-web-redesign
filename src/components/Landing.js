@@ -19,7 +19,42 @@ const Landing = () => {
           <Search onClick={() => navigate("/findEvent")} />
         </Grid>
         <Grid item xs={6} align="center">
-          <RSVPs />
+          <RSVPs
+            onClick={() => {
+              if (
+                document.cookie !== "" &&
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn=")) !== undefined
+              ) {
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn="))
+                  .split("=")[1] === "true"
+                  ? navigate("/currentRsvp", {
+                      state: {
+                        email: document.cookie
+                          .split("; ")
+                          .find((row) => row.startsWith("user_email="))
+                          .split("=")[1],
+                        user: JSON.parse(
+                          document.cookie
+                            .split("; ")
+                            .find((row) => row.startsWith("user_details="))
+                            .split("=")[1]
+                        ),
+                      },
+                    })
+                  : navigate("/login", {
+                      state: { path: "/currentRsvp" },
+                    });
+              } else {
+                navigate("/login", {
+                  state: { path: "/currentRsvp" },
+                });
+              }
+            }}
+          />
         </Grid>
         <Grid item xs={6} align="center">
           <Attend onClick={() => navigate("/currentEvents")} />

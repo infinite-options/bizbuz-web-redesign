@@ -86,7 +86,8 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
               {JSON.parse(event.event_photo).length === 0 ? (
                 <CardMedia
                   component="img"
-                  height="120rem"
+                  height="122px"
+                  width="154px"
                   image={DefaultEventImage}
                   alt="default"
                   sx={{ borderRadius: 3 }}
@@ -94,7 +95,8 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
               ) : (
                 <CardMedia
                   component="img"
-                  height="120rem"
+                  height="122px"
+                  width="154px"
                   image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                   alt="event"
                   sx={{ borderRadius: 3 }}

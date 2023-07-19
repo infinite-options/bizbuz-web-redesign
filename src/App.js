@@ -28,6 +28,8 @@ import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./LoginContext";
+import CurrentRsvp from "./components/rsvp/current-rsvp";
+import RsvpEventInfo from "./components/rsvp/rsvp-event-info";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -84,6 +86,8 @@ const App = () => {
             path="/registrationConfirmation"
             element={<RegistrationConfirmation />}
           />
+          <Route path="/currentRsvp" element={<CurrentRsvp />} />
+          <Route path="/rsvpEventInfo" element={<RsvpEventInfo />} />
         </Routes>
       </LoginContext.Provider>
     </Container>
