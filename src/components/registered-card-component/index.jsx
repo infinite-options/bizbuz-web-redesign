@@ -30,7 +30,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
 
   const getEventTypeColor = () => {
     const eventTypeColors = {
-      Party: {
+      "Business Marketing": {
         backgroundColor: "#3A8D75",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
@@ -38,7 +38,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         userAltIcon: <UserAltIcon />,
         doneRingIcon: <DoneRingIcon />,
       },
-      "Business Marketing": {
+      Party: {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
@@ -47,7 +47,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         doneRingIcon: <DoneRingBlackIcon />,
       },
       "Social Mixer": {
-        backgroundColor: "#F2ABA5",
+        backgroundColor: "#F26457",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
@@ -55,12 +55,12 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         doneRingIcon: <DoneRingBlackIcon />,
       },
       Other: {
-        backgroundColor: "#CE807A",
-        textColor: "#222222",
-        clockIcon: <ClockBlackIcon />,
-        markerIcon: <MarkerBlackIcon />,
-        userAltIcon: <UserAltBlackIcon />,
-        doneRingIcon: <DoneRingBlackIcon />,
+        backgroundColor: "#AA0E00",
+        textColor: "secondary",
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
+        userAltIcon: <UserAltIcon />,
+        doneRingIcon: <DoneRingIcon />,
       },
     };
 
@@ -83,12 +83,14 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
       <CardActionArea onClick={handleCardClick}>
         <Box bgcolor={eventTypeColor.backgroundColor}>
           <CardContent>
-            <Stack direction="row" spacing={1} mb={1}>
+            <Stack direction="row" spacing={1} mb={1} alignItems="center">
               <Box width="50%">
                 <Typography
                   color={eventTypeColor.textColor}
-                  align="left"
                   variant="b"
+                  display={"flex"}
+                  alignItems={"center"}
+                  gap={0.5}
                 >
                   <Icon>{eventTypeColor.doneRingIcon}</Icon>
                   <span> Attending</span>
@@ -118,8 +120,8 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                 {JSON.parse(event.event_photo).length === 0 ? (
                   <CardMedia
                     component="img"
-                    height="100%"
-                    width="50%"
+                    height="134px"
+                    width="100%"
                     image={DefaultEventImage}
                     alt="default"
                     sx={{ borderRadius: 3, objectFit: "cover" }}
@@ -127,7 +129,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                 ) : (
                   <CardMedia
                     component="img"
-                    height="100%"
+                    height="134px"
                     width="100%"
                     image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                     alt="event"
@@ -143,6 +145,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   color={eventTypeColor.textColor}
                   variant="body2"
                   my={1}
+                  noWrap
                 >
                   {eventTypeColor.clockIcon}
                   <span>
