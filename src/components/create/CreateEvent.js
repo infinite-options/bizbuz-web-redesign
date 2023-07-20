@@ -7,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import NewCardComponent from "../new-card-component";
+import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -22,6 +23,10 @@ const CreateEvent = () => {
       BASE_URL +
         `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
     );
+    // const response = await axios.get(
+    //   BASE_URL +
+    //     `/GetEvents?timeZone=${user_timezone}`
+    // );
     setEvents(response.data.result);
   };
 
@@ -52,11 +57,11 @@ const CreateEvent = () => {
         sx={{ mt: 2 }}
       >
         {events.map((event) => (
-          <NewCardComponent
+          <RegisteredCardComponent
             event={event}
-            onRegisterClick={() => {
-              navigate("/eventQuestionnaire", {
-                state: { event },
+            onCardClick={() => {
+              navigate("/editEvent", {
+                state: { event, user},
               });
             }}
           />

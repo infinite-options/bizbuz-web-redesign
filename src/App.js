@@ -3,6 +3,10 @@ import { Route, Routes } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Landing from "./components/Landing";
 import CreateEvent from "./components/create/CreateEvent";
+import EditEvent from "./components/edit/EditEvent";
+import BroadcastMessage from "./components/edit/BroadcastMessage";
+import ViewRegistrants from "./components/edit/ViewRegistrants";
+import AttendeeDetails from "./components/edit/AttendeeDetails";
 import EventDetails from "./components/create/EventDetails";
 import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
@@ -65,6 +69,10 @@ const App = () => {
           <Route path="/email-signup-form" element={<EmailSignupForm />} />
           <Route path="/validate-code" element={<ValidationCode />} />
           <Route path="/createEvent" element={<CreateEvent />} />
+          <Route path="/editEvent" element={<EditEvent />} />
+          <Route path="/viewRegistrants" element={<ViewRegistrants />} />
+          <Route path="/broadcastMessage" element={<BroadcastMessage />} />
+          <Route path="/attendeeDetails" element={<AttendeeDetails />} />
           <Route path="/eventDetails" element={<EventDetails />} />
           <Route path="/eventLocation" element={<EventLocation />} />
           <Route path="/eventTitle" element={<EventTitle />} />
