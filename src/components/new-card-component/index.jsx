@@ -23,29 +23,29 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
 
   const getEventTypeColor = () => {
     const eventTypeColors = {
-      Party: {
+      "Business Marketing": {
         backgroundColor: "#3A8D75",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
         markerIcon: <MarkerIcon />,
       },
-      "Business Marketing": {
+      Party: {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
       "Social Mixer": {
-        backgroundColor: "#F2ABA5",
+        backgroundColor: "#F26457",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
       Other: {
-        backgroundColor: "#CE807A",
-        textColor: "#222222",
-        clockIcon: <ClockBlackIcon />,
-        markerIcon: <MarkerBlackIcon />,
+        backgroundColor: "#AA0E00",
+        textColor: "secondary",
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
       },
     };
 
@@ -86,20 +86,20 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
               {JSON.parse(event.event_photo).length === 0 ? (
                 <CardMedia
                   component="img"
-                  height="122px"
-                  width="154px"
+                  height="134px"
+                  width="100%"
                   image={DefaultEventImage}
                   alt="default"
-                  sx={{ borderRadius: 3 }}
+                  sx={{ borderRadius: 3, objectFit: "cover" }}
                 />
               ) : (
                 <CardMedia
                   component="img"
-                  height="122px"
-                  width="154px"
+                  height="134px"
+                  width="100%"
                   image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                   alt="event"
-                  sx={{ borderRadius: 3 }}
+                  sx={{ borderRadius: 3, objectFit: "cover" }}
                 />
               )}
             </Box>
@@ -111,8 +111,8 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
                 color={eventTypeColor.textColor}
                 variant="body2"
                 my={1}
+                noWrap
               >
-                {/* <ClockIcon mr={1} /> */}
                 {eventTypeColor.clockIcon}
                 <span>
                   {event.event_start_time} - {event.event_end_time}
