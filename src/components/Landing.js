@@ -95,11 +95,17 @@ const Landing = () => {
                 });
               }
             }}
-            // onClick={() => navigate("/createEvent")}
           />
         </Grid>
       </Grid>
-      <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0" }} />
+      <Footer
+        style={{
+          alignSelf: "center",
+          position: "fixed",
+          bottom: "0",
+          zIndex: "-1",
+        }}
+      />
     </Box>
   );
 };

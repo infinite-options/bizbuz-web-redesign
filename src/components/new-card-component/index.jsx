@@ -29,7 +29,7 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
         clockIcon: <ClockIcon />,
         markerIcon: <MarkerIcon />,
       },
-      Party: {
+      "Party or Event": {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
@@ -41,7 +41,7 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
-      Other: {
+      "Other": {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,

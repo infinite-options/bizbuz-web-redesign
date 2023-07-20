@@ -9,6 +9,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Avatar from "@mui/material/Avatar";
 import RegisteredCardComponent from "../registered-card-component";
 
@@ -17,7 +18,7 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const EventRegistrants = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { eventObj } = location.state;
+  const { eventObj, userObj } = location.state;
   const [registrants, setRegistrants] = useState([]);
   const [eventHost, setEventHost] = useState();
 
@@ -52,12 +53,13 @@ const EventRegistrants = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+        />
+      </Stack>
       <Stack
         direction="column"
         justifyContent="center"

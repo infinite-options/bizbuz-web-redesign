@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -63,12 +64,13 @@ const CurrentEvents = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
       <Stack
         direction="column"
         justifyContent="center"

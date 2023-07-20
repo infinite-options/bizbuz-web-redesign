@@ -5,6 +5,7 @@ import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -79,17 +80,18 @@ const EventDashboard = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
       <Typography
         gutterBottom
         variant="h4"
         align="center"
-        sx={{ color: "#ffffff" }}
+        sx={{ color: "#ffffff", mt: "20px" }}
       >
         {eventObj.event_title}
       </Typography>

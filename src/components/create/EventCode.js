@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -10,6 +11,15 @@ const EventCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { event } = location.state;
+  const [buttonText, setButtonText] = useState("Share");
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(event.event_registration_code);
+    setButtonText("Copied!");
+    setTimeout(() => {
+      setButtonText("Share");
+    }, 2000);
+  };
 
   return (
     <Box display="flex" flexDirection="column">
@@ -52,8 +62,9 @@ const EventCode = () => {
                 height: "40px",
                 backgroundColor: "#AF2304",
               }}
+              onClick={handleShare}
             >
-              {"Share"}
+              {buttonText}
             </Button>
           </Stack>
         </Box>

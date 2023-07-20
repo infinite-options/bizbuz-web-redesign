@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
 import RegisteredCardComponent from "../registered-card-component";
 
@@ -80,88 +81,19 @@ const EarlyArrival = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
       <Stack
         direction="column"
         justifyContent="center"
         spacing={2}
         sx={{ mt: 6 }}
       >
-        {/* <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h2" component="div">
-                {eventObj.event_title}
-              </Typography>
-              <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <CalendarIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {new Date(eventObj.event_start_date).toLocaleString(
-                      "default",
-                      {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      }
-                    )}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} />
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <ClockIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <MarkerIcon />
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12, maxWidth: "80%" }}
-                  >
-                    {eventObj.event_location}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-            {JSON.parse(eventObj.event_photo).length === 0 ? (
-              <CardMedia
-                component="img"
-                height="174px"
-                image={NoImage}
-                alt="default"
-              />
-            ) : (
-              <CardMedia
-                component="img"
-                height="174px"
-                image={`${JSON.parse(eventObj.event_photo)}?${Date.now()}`}
-                alt="event"
-              />
-            )}
-          </CardActionArea>
-        </Card> */}
-
         <RegisteredCardComponent event={eventObj} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "35px" }}>

@@ -90,7 +90,12 @@ export default function FindBy() {
 
       Promise.all(queries)
         .then((responses) => {
-          const results = responses.map((response) => response.data.result);
+          const results = responses.map((response) => {
+            const result = response.data.result;
+            if (typeof result === "object" && !Array.isArray(result))
+              return result.result;
+            else return result;
+          });
           const mergedResults = results.reduce((intersection, arr) => {
             const eventUids = arr.map((item) => item.event_uid);
             return intersection.filter((item) =>

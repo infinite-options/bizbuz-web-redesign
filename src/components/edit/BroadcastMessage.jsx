@@ -134,7 +134,7 @@ const BroadcastMessage = () => {
                 sx={{ backgroundColor: "white", borderRadius: "8px" }}
                 />
             </Stack>
-            <Box sx={{ display: "flex", gap: "52px", mt: "70px"}}>
+            <Box sx={{ display: "flex", gap: "30px", mt: "70px"}}>
                 <Button
                     variant="contained"
                     onClick={sendMessages}

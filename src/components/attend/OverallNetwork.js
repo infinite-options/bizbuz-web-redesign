@@ -5,8 +5,8 @@ import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../assets/NoUserImage.png";
@@ -36,7 +36,9 @@ const OverallNetwork = () => {
         keys: ["from", "to"],
         layoutAlgorithm: {
           enableSimulation: false,
+          maxIterations: 10,
           initialPositions: "circle",
+          initialPositionRadius: 150,
           attractiveForce: () => 0,
           repulsiveForce: () => 100,
         },
@@ -113,12 +115,13 @@ const OverallNetwork = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+        />
+      </Stack>
       <Stack
         direction="column"
         justifyContent="center"
@@ -142,32 +145,6 @@ const OverallNetwork = () => {
         </Typography>
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>
-
-      <Box sx={{ display: "flex", flexDirection: "column", my: 4 }}>
-        <Button
-          variant="contained"
-          sx={{
-            display: "flex",
-            width: "203px",
-            height: "48px",
-            padding: "8px 14px",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "8px",
-            flexShrink: 0,
-            borderRadius: "8px",
-            background: "#FFF",
-            boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-            mt: "16px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-          color="secondary"
-          onClick={() => navigate(-1, { state: { eventObj, userObj } })}
-        >
-          {"Back"}
-        </Button>
-      </Box>
     </Box>
   );
 };

@@ -38,7 +38,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         userAltIcon: <UserAltIcon />,
         doneRingIcon: <DoneRingIcon />,
       },
-      Party: {
+      "Party or Event": {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
@@ -54,7 +54,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         userAltIcon: <UserAltBlackIcon />,
         doneRingIcon: <DoneRingBlackIcon />,
       },
-      Other: {
+      "Other": {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,

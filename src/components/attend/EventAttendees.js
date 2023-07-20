@@ -11,6 +11,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Avatar from "@mui/material/Avatar";
 import Snackbar from "@mui/material/Snackbar";
 import MUIAlert from "@mui/material/Alert";
@@ -93,12 +94,13 @@ const EventAttendees = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
-      />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand />
+        <BackIcon
+          style={{ marginLeft: "auto" }}
+          onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+        />
+      </Stack>
       <Snackbar
         open={showAlert}
         autoHideDuration={15000}

@@ -64,33 +64,35 @@ const EventReview = () => {
 
   const getEventTypeColor = () => {
     const eventTypeColors = {
-      Party: {
+      "Business Marketing": {
         backgroundColor: "#3A8D75",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
         markerIcon: <MarkerIcon />,
       },
-      "Business Marketing": {
+      "Party or Event": {
         backgroundColor: "#90CAED",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
       "Social Mixer": {
-        backgroundColor: "#F2ABA5",
+        backgroundColor: "#F26457",
         textColor: "#222222",
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
-      Other: {
-        backgroundColor: "#CE807A",
-        textColor: "#222222",
-        clockIcon: <ClockBlackIcon />,
-        markerIcon: <MarkerBlackIcon />,
+      "Other": {
+        backgroundColor: "#AA0E00",
+        textColor: "secondary",
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
       },
     };
+
+    // Return the color based on event_type
     return (
-      eventTypeColors[event.eventType] || {
+      eventTypeColors[event.event_type] || {
         backgroundColor: "#3a8d75",
         textColor: "secondary",
         clockIcon: <ClockBlackIcon />,
@@ -181,19 +183,6 @@ const EventReview = () => {
                         <Icon>{eventTypeColor.markerIcon}</Icon>
                         <span> {event.eventLocation}</span>
                       </Typography>
-                      <Button
-                        variant="contained"
-                        color="buttonAlternative"
-                        size="large"
-                        sx={{ width: "90%", height: 40 }}
-                        onClick={() => {
-                          navigate("/eventQuestionnaire", {
-                            state: { event },
-                          });
-                        }}
-                      >
-                        {"Register"}
-                      </Button>
                     </Box>
                   </Stack>
                 </CardContent>
