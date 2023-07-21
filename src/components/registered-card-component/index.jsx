@@ -54,7 +54,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
         userAltIcon: <UserAltBlackIcon />,
         doneRingIcon: <DoneRingBlackIcon />,
       },
-      "Other": {
+      Other: {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
@@ -69,10 +69,10 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
       eventTypeColors[event.event_type] || {
         backgroundColor: "#3a8d75",
         textColor: "secondary",
-        clockIcon: <ClockBlackIcon />,
-        markerIcon: <MarkerBlackIcon />,
-        userAltIcon: <UserAltBlackIcon />,
-        doneRingIcon: <DoneRingBlackIcon />,
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
+        userAltIcon: <UserAltIcon />,
+        doneRingIcon: <DoneRingIcon />,
       }
     );
   };
@@ -150,7 +150,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   gap={0.5}
                   color={eventTypeColor.textColor}
                   variant="body2"
-                  my={1}
+                  my={1.5}
                   noWrap
                 >
                   {eventTypeColor.clockIcon}

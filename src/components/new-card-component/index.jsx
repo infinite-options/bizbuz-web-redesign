@@ -41,7 +41,7 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
-      "Other": {
+      Other: {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
@@ -54,8 +54,8 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
       eventTypeColors[event.event_type] || {
         backgroundColor: "#3a8d75",
         textColor: "secondary",
-        clockIcon: <ClockBlackIcon />,
-        markerIcon: <MarkerBlackIcon />,
+        clockIcon: <ClockIcon />,
+        markerIcon: <MarkerIcon />,
       }
     );
   };
@@ -67,6 +67,10 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
         bgcolor={eventTypeColor.backgroundColor}
         justifyContent="flex-end"
         alignItems="flex-start"
+        display="flex"
+        flexDirection="column"
+        height="240px"
+        maxHeight="100%"
       >
         <CardContent>
           <Typography
@@ -110,13 +114,18 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
                 gap={0.5}
                 color={eventTypeColor.textColor}
                 variant="body2"
-                my={1}
+                my={1.5}
                 noWrap
               >
                 {eventTypeColor.clockIcon}
-                <span>
+                <Typography
+                  fontFamily={"Inter"}
+                  fontSize={"14px"}
+                  fontWeight={400}
+                  noWrap
+                >
                   {event.event_start_time} - {event.event_end_time}
-                </span>
+                </Typography>
               </Typography>
               <Typography
                 display={"flex"}
@@ -127,7 +136,19 @@ const NewCardComponent = ({ event, onRegisterClick }) => {
                 mb={1}
               >
                 <Icon>{eventTypeColor.markerIcon}</Icon>
-                <span> {event.event_location}</span>
+                <span
+                  style={{
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    maxWidth: "100%",
+                    fontFamily: "Inter",
+                  }}
+                >
+                  {" "}
+                  {event.event_location}
+                </span>
               </Typography>
               <Button
                 variant="contained"
