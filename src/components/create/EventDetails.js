@@ -43,10 +43,10 @@ const EventDetails = () => {
   const [isDisabled, setDisabled] = useState(true);
   const [eventLimit, setEventLimit] = useState();
   const [startDate, setStartDate] = useState(
-    dayjs(event.eventStartDate, "mm/DD/YYYY")
+    dayjs(event.eventStartDate, "M/DD/YYYY")
   );
   const [endDate, setEndDate] = useState(
-    dayjs(event.eventEndDate, "mm/DD/YYYY")
+    dayjs(event.eventEndDate, "M/DD/YYYY")
   );
   const [startTime, setStartTime] = useState(
     dayjs(event.eventStartTime, "hh mm A")

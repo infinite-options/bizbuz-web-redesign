@@ -27,7 +27,7 @@ const EditEvent = () => {
       "Party or Event": "#90CAED",
       "Business Marketing": "#3A8D75",
       "Social Mixer": "#F26457",
-      "Other": "#AA0E00",
+      Other: "#AA0E00",
       // Add more event types and their corresponding colors here
     };
     // Return the color based on event_type
@@ -58,9 +58,9 @@ const EditEvent = () => {
           color="secondary"
           variant="contained"
           sx={{
-            width: "201px",
+            width: "48%",
             height: "56px",
-            mt: "8px",
+            mt: "15px",
             flexShrink: 0,
             borderRadius: "10px",
             background: "#F9FAFB",
@@ -79,11 +79,11 @@ const EditEvent = () => {
         <Button
           color="secondary"
           variant="contained"
-          // onClick={handleShare}
+          onClick={handleShare}
           sx={{
-            ml: "51px",
-            mt: "8px",
-            width: "127px",
+            ml: "4%",
+            mt: "15px",
+            width: "48%",
             height: "56px",
             flexShrink: 0,
             borderRadius: "10px",
@@ -95,7 +95,7 @@ const EditEvent = () => {
             fontStyle: "normal",
             fontWeight: 500,
             lineHeight: "normal",
-        }}
+          }}
         >
           {buttonText}
         </Button>
