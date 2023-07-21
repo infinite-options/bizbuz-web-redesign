@@ -10,7 +10,7 @@ import {
   CardActionArea,
 } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
+import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black-card.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import { ReactComponent as UserAltIcon } from "../../assets/user-alt.svg";
@@ -81,7 +81,13 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardActionArea onClick={handleCardClick}>
-        <Box bgcolor={eventTypeColor.backgroundColor}>
+        <Box
+          bgcolor={eventTypeColor.backgroundColor}
+          display="flex"
+          flexDirection="column"
+          height="240px" // Fixed height for the card
+          maxHeight="100%"
+        >
           <CardContent>
             <Stack direction="row" spacing={1} mb={1} alignItems="center">
               <Box width="50%">
@@ -93,7 +99,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   gap={0.5}
                 >
                   <Icon>{eventTypeColor.doneRingIcon}</Icon>
-                  <span> Attending</span>
+                  <span style={{ fontFamily: "Inter" }}> Attending</span>
                 </Typography>
               </Box>
               <Box
@@ -148,9 +154,14 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   noWrap
                 >
                   {eventTypeColor.clockIcon}
-                  <span>
+                  <Typography
+                    fontFamily={"Inter"}
+                    fontSize={"14px"}
+                    fontWeight={400}
+                    noWrap
+                  >
                     {event.event_start_time} - {event.event_end_time}
-                  </span>
+                  </Typography>
                 </Typography>
                 <Typography
                   display={"flex"}
@@ -161,7 +172,19 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   mb={1}
                 >
                   <Icon>{eventTypeColor.markerIcon}</Icon>
-                  <span> {event.event_location}</span>
+                  <span
+                    style={{
+                      overflow: "hidden",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      maxWidth: "100%",
+                      fontFamily: "Inter",
+                    }}
+                  >
+                    {" "}
+                    {event.event_location}
+                  </span>
                 </Typography>
                 <Typography
                   display={"flex"}
@@ -171,7 +194,9 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
                   variant="body2"
                 >
                   <Icon>{eventTypeColor.userAltIcon}</Icon>
-                  {event.num_attendees} Registrants
+                  <span style={{ fontFamily: "Inter" }}>
+                    {event.num_attendees} Registrants{" "}
+                  </span>
                 </Typography>
               </Box>
             </Stack>

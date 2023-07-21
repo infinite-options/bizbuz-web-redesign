@@ -10,7 +10,7 @@ import {
   Icon,
 } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
-import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
+import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black-card.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
