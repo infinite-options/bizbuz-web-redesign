@@ -9,7 +9,7 @@ import GoogleMap from "../map/GoogleMap";
 import SearchBox from "../map/SearchBox";
 
 // consts
-const center = { lat: 37.23672, lng: -121.88737 };
+// const center = { lat: 37.23672, lng: -121.88737 };
 
 class Searchbox extends Component {
   constructor(props) {
@@ -51,11 +51,15 @@ class Searchbox extends Component {
             map={mapInstance}
             mapApi={mapApi}
             addplace={this.addPlace}
+            defaultValue={this.props.defaultAddress}
           />
         )}
         <GoogleMap
           defaultZoom={10}
-          defaultCenter={center}
+          defaultCenter={{
+            lat: this.props.defaultLat,
+            lng: this.props.defaultLong,
+          }}
           bootstrapURLKeys={{
             key: process.env.REACT_APP_MAP_KEY,
             libraries: ["places", "geometry"],

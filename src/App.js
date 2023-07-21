@@ -31,7 +31,7 @@ import GoogleSignupForm from "./components/signup/GoogleSignupForm";
 import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
-import LoginContext, { LoginInitState } from "./LoginContext";
+import LoginContext, { LoginInitState } from "./util/LoginContext";
 import CurrentRsvp from "./components/rsvp/current-rsvp";
 import RsvpEventInfo from "./components/rsvp/rsvp-event-info";
 

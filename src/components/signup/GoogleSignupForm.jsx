@@ -16,7 +16,7 @@ import UserAlreadyExistsModal from "./UserAlreadyExistsModal";
 import { formatPhoneNumber } from "../../util/helper";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
-import LoginContext from "../../LoginContext";
+import LoginContext from "../../util/LoginContext";
 
 let SCOPES =
   "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.profile";

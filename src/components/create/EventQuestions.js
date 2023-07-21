@@ -27,13 +27,19 @@ const preDefQestions = [
 
 const EventQuestions = () => {
   const navigate = useNavigate();
-  const [selectedQuestions, setSelectedQuestions] = useState([]);
-  const [customQuestion, setCustomQuestion] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
+  const event = getEvent();
+  const [selectedQuestions, setSelectedQuestions] = useState(
+    event.preEventQuestionnaire || []
+  );
+  const [customQuestion, setCustomQuestion] = useState("");
 
   const handleSelectQuestion = (e) => {
     if (selectedQuestions.length < 3) {
-      setSelectedQuestions([...selectedQuestions, e.target.value]);
+      setSelectedQuestions([
+        ...selectedQuestions,
+        { question: e.target.value },
+      ]);
     }
   };
 
@@ -48,15 +54,17 @@ const EventQuestions = () => {
 
   const handleAddQuestion = () => {
     if (selectedQuestions.length < 3)
-      setSelectedQuestions([...selectedQuestions, customQuestion]);
+      setSelectedQuestions([
+        ...selectedQuestions,
+        { question: customQuestion },
+      ]);
     setCustomQuestion("");
   };
 
   const handleContinue = () => {
-    const event = getEvent();
-    let preEventQuestionnaire = selectedQuestions.map((question, index) => ({
+    let preEventQuestionnaire = selectedQuestions.map((q, index) => ({
       id: index + 1,
-      question: question,
+      question: q.question,
     }));
     event.preEventQuestionnaire = preEventQuestionnaire;
     setEvent(event);
@@ -112,25 +120,21 @@ const EventQuestions = () => {
         </Typography>
         <List sx={{ mt: 2 }}>
           {selectedQuestions.length > 0 ? (
-            selectedQuestions.map((question, index) => (
+            selectedQuestions.map((q, index) => (
               <Grid
                 container
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
+                key={index}
               >
                 <Grid item xs={10} md={10}>
-                  <Typography
-                    key={index}
-                    sx={{ color: "#FFFFFF", fontSize: 16 }}
-                  >
-                    {question}
+                  <Typography sx={{ color: "#FFFFFF", fontSize: 16 }}>
+                    {q.question}
                   </Typography>
                 </Grid>
                 <Grid item xs={2} md={2} sx={{ textAlign: "center" }}>
-                  <DeleteIcon
-                    onClick={() => handleDeselectQuestion(question)}
-                  />
+                  <DeleteIcon onClick={() => handleDeselectQuestion(q)} />
                 </Grid>
               </Grid>
             ))

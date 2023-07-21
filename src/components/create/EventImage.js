@@ -14,9 +14,12 @@ import { ReactComponent as CameraIcon } from "../../assets/camera.svg";
 
 const EventImage = () => {
   const navigate = useNavigate();
-  const [image, setImage] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
+  const event = getEvent();
+  const [image, setImage] = useState(
+    event.img_cover ? { image: event.img_cover } : {}
+  );
+  const [errorMessage, setErrorMessage] = useState("");
   const [isDefault, setDefault] = useState(false);
 
   const readImage = (file) => {
@@ -46,10 +49,11 @@ const EventImage = () => {
   };
 
   const handleContinue = async () => {
-    const event = getEvent();
     if (!isDefault) event.img_cover = image.image;
+    else event.img_cover = null;
     setEvent(event);
-    navigate("/eventQuestions");
+    if (event.isReview) navigate("/eventReview");
+    else navigate("/eventQuestions");
   };
 
   return (

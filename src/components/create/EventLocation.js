@@ -14,12 +14,15 @@ import { ReactComponent as NextIcon } from "../../assets/continue.svg";
 
 const EventLocation = () => {
   const navigate = useNavigate();
-  const [lat, setLat] = useState(37.23672);
-  const [long, setLong] = useState(-121.88737);
-  const [address, setAddress] = useState("");
-  const [zipcode, setZipcode] = useState("");
-  const [locationName, setLocationName] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
+  const event = getEvent();
+  const [lat, setLat] = useState(event.lat || 37.23672);
+  const [long, setLong] = useState(event.long || -121.88737);
+  const [address, setAddress] = useState(event.eventLocation || "");
+  const [zipcode, setZipcode] = useState(event.eventZip || "");
+  const [locationName, setLocationName] = useState(
+    event.eventLocationName || ""
+  );
 
   const handleLatLongChange = (lat, long) => {
     setLat(lat);
@@ -45,14 +48,14 @@ const EventLocation = () => {
   };
 
   const handleContinue = () => {
-    const event = getEvent();
     event.eventLocationName = locationName;
     event.eventLocation = address;
     event.eventZip = zipcode;
     event.lat = lat;
     event.long = long;
     setEvent(event);
-    navigate("/eventTitle");
+    if (event.isReview) navigate("/eventReview");
+    else navigate("/eventTitle");
   };
 
   return (
@@ -77,6 +80,9 @@ const EventLocation = () => {
           <Searchbox
             latLongHandler={handleLatLongChange}
             addressHandler={handleAddressChange}
+            defaultAddress={address}
+            defaultLat={lat}
+            defaultLong={long}
           />
           <Map latitude={lat} longitude={long} />
         </Grid>

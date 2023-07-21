@@ -50,6 +50,7 @@ class SearchBox extends Component {
     return (
       <Wrapper>
         <OutlinedInput
+          value={this.props.defaultValue}
           inputRef={(ref) => {
             this.searchInput = ref;
           }}

@@ -82,17 +82,15 @@ const EventReview = () => {
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
-      "Other": {
+      Other: {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
         markerIcon: <MarkerIcon />,
       },
     };
-
-    // Return the color based on event_type
     return (
-      eventTypeColors[event.event_type] || {
+      eventTypeColors[event.eventType] || {
         backgroundColor: "#3a8d75",
         textColor: "secondary",
         clockIcon: <ClockBlackIcon />,
@@ -101,6 +99,12 @@ const EventReview = () => {
     );
   };
   const eventTypeColor = getEventTypeColor();
+
+  const handleChange = (route) => {
+    event.isReview = true;
+    setEvent(event);
+    navigate(route);
+  };
 
   return (
     <Box display="flex" flexDirection="column">
@@ -127,6 +131,7 @@ const EventReview = () => {
                     color={eventTypeColor.textColor}
                     mb={1}
                     align="right"
+                    onClick={() => handleChange("/eventDetails")}
                   >
                     {dayjs(event.eventStartDate).format("MMMM DD")}
                   </Typography>
@@ -135,6 +140,7 @@ const EventReview = () => {
                     variant="h2"
                     color={eventTypeColor.textColor}
                     mb={1}
+                    onClick={() => handleChange("/eventTitle")}
                   >
                     {event.eventTitle}
                   </Typography>
@@ -147,6 +153,7 @@ const EventReview = () => {
                           image={DefaultEventImage}
                           alt="default"
                           sx={{ borderRadius: 3 }}
+                          onClick={() => handleChange("/eventImage")}
                         />
                       ) : (
                         <CardMedia
@@ -155,6 +162,7 @@ const EventReview = () => {
                           image={event.img_cover}
                           alt="event"
                           sx={{ borderRadius: 3 }}
+                          onClick={() => handleChange("/eventImage")}
                         />
                       )}
                     </Box>
@@ -166,6 +174,7 @@ const EventReview = () => {
                         color={eventTypeColor.textColor}
                         variant="body2"
                         my={1}
+                        onClick={() => handleChange("/eventDetails")}
                       >
                         {eventTypeColor.clockIcon}
                         <span>
@@ -179,6 +188,7 @@ const EventReview = () => {
                         color={eventTypeColor.textColor}
                         variant="body2"
                         mb={1}
+                        onClick={() => handleChange("/eventLocation")}
                       >
                         <Icon>{eventTypeColor.markerIcon}</Icon>
                         <span> {event.eventLocation}</span>
@@ -188,47 +198,70 @@ const EventReview = () => {
                 </CardContent>
               </Box>
             </Card>
-            <Button
+            <Box
               sx={{
                 color: "#000000",
                 backgroundColor: "#FFFFFF",
-                pointerEvents: "none",
                 borderRadius: "8px",
                 height: "100%",
                 textAlign: "left",
                 pl: 2,
+                py: 2,
+                fontFamily: "'Inter Variable', sans-serif",
+                textTransform: "none",
+                fontSize: 16,
+                fontWeight: 600,
               }}
             >
               <Grid container rowSpacing={1}>
                 <Grid item xs={6}>
                   {"Event Type"}
                 </Grid>
-                <Grid item xs={6} sx={{ fontWeight: "normal" }}>
+                <Grid
+                  item
+                  xs={6}
+                  onClick={() => handleChange("/eventDetails")}
+                  sx={{ fontWeight: "normal" }}
+                >
                   {event.eventType}
                 </Grid>
                 <Grid item xs={6}>
                   {"Accessibility"}
                 </Grid>
-                <Grid item xs={6} sx={{ fontWeight: "normal" }}>
+                <Grid
+                  item
+                  xs={6}
+                  onClick={() => handleChange("/eventTitle")}
+                  sx={{ fontWeight: "normal" }}
+                >
                   {event.eventVisibility}
                 </Grid>
                 <Grid item xs={6}>
                   {"Event Capacity"}
                 </Grid>
-                <Grid item xs={6} sx={{ fontWeight: "normal" }}>
+                <Grid
+                  item
+                  xs={6}
+                  onClick={() => handleChange("/eventDetails")}
+                  sx={{ fontWeight: "normal" }}
+                >
                   {event.eventCapacity}
                 </Grid>
               </Grid>
-            </Button>
-            <Button
+            </Box>
+            <Box
               sx={{
                 color: "#000000",
                 backgroundColor: "#FFFFFF",
-                pointerEvents: "none",
                 borderRadius: "8px",
                 height: "100%",
                 textAlign: "left",
                 pl: 2,
+                py: 2,
+                fontFamily: "'Inter Variable', sans-serif",
+                textTransform: "none",
+                fontSize: 16,
+                fontWeight: 600,
               }}
             >
               <Grid container rowSpacing={1}>
@@ -236,22 +269,33 @@ const EventReview = () => {
                   {"Pre-Event Questionnaire"}
                 </Grid>
                 {event.preEventQuestionnaire.map((q) => (
-                  <Grid item key={q.id} xs={12} sx={{ fontWeight: "normal" }}>
+                  <Grid
+                    item
+                    key={q.id}
+                    xs={12}
+                    onClick={() => handleChange("/eventQuestions")}
+                    sx={{ fontWeight: "normal" }}
+                  >
                     {q.question}
                   </Grid>
                 ))}
               </Grid>
-            </Button>
-            <Button
+            </Box>
+            <Box
               sx={{
                 color: "#000000",
                 backgroundColor: "#FFFFFF",
-                pointerEvents: "none",
                 borderRadius: "8px",
                 height: "100%",
                 textAlign: "left",
                 pl: 2,
+                py: 2,
+                fontFamily: "'Inter Variable', sans-serif",
+                textTransform: "none",
+                fontSize: 16,
+                fontWeight: 600,
               }}
+              onClick={() => handleChange("/eventLocation")}
             >
               <Grid container rowSpacing={1}>
                 <Grid item xs={6} sx={{ alignSelf: "center" }}>
@@ -265,7 +309,7 @@ const EventReview = () => {
                   />
                 </Grid>
               </Grid>
-            </Button>
+            </Box>
           </Stack>
         </Box>
         <Stack

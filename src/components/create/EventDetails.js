@@ -36,15 +36,22 @@ const Dot = styled("div")(({ color }) => ({
 
 const EventDetails = () => {
   const navigate = useNavigate();
-  const [eventType, setEventType] = useState();
+  const [getEvent, setEvent] = useLocalStorage("event");
+  const event = getEvent();
+  const [eventType, setEventType] = useState(event.eventType);
   const eventCapacity = useRef();
   const [isDisabled, setDisabled] = useState(true);
   const [eventLimit, setEventLimit] = useState();
-  const [startDate, setStartDate] = useState(dayjs());
-  const [endDate, setEndDate] = useState(dayjs());
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [getEvent, setEvent] = useLocalStorage("event");
+  const [startDate, setStartDate] = useState(
+    dayjs(event.eventStartDate, "mm/DD/YYYY")
+  );
+  const [endDate, setEndDate] = useState(
+    dayjs(event.eventEndDate, "mm/DD/YYYY")
+  );
+  const [startTime, setStartTime] = useState(
+    dayjs(event.eventStartTime, "hh mm A")
+  );
+  const [endTime, setEndTime] = useState(dayjs(event.eventEndTime, "hh mm A"));
 
   const handleEventTypeChange = (v) => {
     setEventType(v);
@@ -76,7 +83,6 @@ const EventDetails = () => {
   };
 
   const handleContinue = () => {
-    const event = getEvent();
     event.event_organizer_uid = "100-000038";
     event.eventType = eventType;
     event.eventStartDate = new Date(startDate).toLocaleDateString("en-US");
@@ -97,7 +103,8 @@ const EventDetails = () => {
       event.eventCapacity = eventCapacity.current.value;
     else event.eventCapacity = eventLimit;
     setEvent(event);
-    navigate("/eventLocation");
+    if (event.isReview) navigate("/eventReview");
+    else navigate("/eventLocation");
   };
 
   return (
@@ -383,6 +390,7 @@ const EventDetails = () => {
               <Grid item xs={6} />
               <Grid item xs={6}>
                 <OutlinedInput
+                  value={event.eventCapacity}
                   inputRef={eventCapacity}
                   sx={{
                     width: "129px",

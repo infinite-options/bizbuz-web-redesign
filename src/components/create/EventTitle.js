@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import ToggleButton from "@mui/material/ToggleButton";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import { ReactComponent as NextIcon } from "../../assets/continue.svg";
@@ -21,10 +22,11 @@ const Dot = styled("div")(({ color }) => ({
 
 const EventTitle = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [access, setAccess] = useState("");
   const [getEvent, setEvent] = useLocalStorage("event");
+  const event = getEvent();
+  const [title, setTitle] = useState(event.eventTitle || "");
+  const [description, setDescription] = useState(event.eventDescription || "");
+  const [access, setAccess] = useState(event.eventVisibility || "");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -39,12 +41,12 @@ const EventTitle = () => {
   };
 
   const handleContinue = () => {
-    const event = getEvent();
     event.eventTitle = title;
     event.eventDescription = description;
     event.eventVisibility = access;
     setEvent(event);
-    navigate("/eventImage");
+    if (event.isReview) navigate("/eventReview");
+    else navigate("/eventImage");
   };
 
   return (
@@ -86,34 +88,42 @@ const EventTitle = () => {
             maxWidth: "550px",
           }}
         >
-          <Button
+          <ToggleButton
             variant="contained"
             sx={{
               backgroundColor: "#FFFFFF",
               width: "128px",
               height: "40px",
               color: "#000000",
+              "&.Mui-selected": {
+                backgroundColor: "#F26457 !important",
+              },
             }}
             onClick={() => handleAccessChange("Public")}
+            selected={access === "Public"}
           >
             <Dot color="#AA0E00" />
             &nbsp;
             {"Public"}
-          </Button>
-          <Button
+          </ToggleButton>
+          <ToggleButton
             variant="contained"
             sx={{
               backgroundColor: "#FFFFFF",
               width: "128px",
               height: "40px",
               color: "#000000",
+              "&.Mui-selected": {
+                backgroundColor: "#F26457 !important",
+              },
             }}
             onClick={() => handleAccessChange("Private")}
+            selected={access === "Private"}
           >
             <Dot color="#20B2AA" />
             &nbsp;
             {"Private"}
-          </Button>
+          </ToggleButton>
         </Stack>
         <Stack
           spacing={2}
