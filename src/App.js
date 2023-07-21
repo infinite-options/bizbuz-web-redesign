@@ -7,6 +7,7 @@ import EditEvent from "./components/edit/EditEvent";
 import BroadcastMessage from "./components/edit/BroadcastMessage";
 import ViewRegistrants from "./components/edit/ViewRegistrants";
 import AttendeeDetails from "./components/edit/AttendeeDetails";
+import CreateBizCard from "./components/edit/CreateBizCard";
 import EventDetails from "./components/create/EventDetails";
 import EventLocation from "./components/create/EventLocation";
 import FindBy from "./components/find/FindBy";
@@ -73,6 +74,7 @@ const App = () => {
           <Route path="/viewRegistrants" element={<ViewRegistrants />} />
           <Route path="/broadcastMessage" element={<BroadcastMessage />} />
           <Route path="/attendeeDetails" element={<AttendeeDetails />} />
+          <Route path="/createBizCard" element={<CreateBizCard />} />
           <Route path="/eventDetails" element={<EventDetails />} />
           <Route path="/eventLocation" element={<EventLocation />} />
           <Route path="/eventTitle" element={<EventTitle />} />

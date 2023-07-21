@@ -24,10 +24,10 @@ const EditEvent = () => {
 
   const getEventTypeColor = (eventType) => {
     const eventTypeColors = {
-      Party: "#C2E9D9",
-      "Business Marketing": "#C1DEEF",
-      "Social Mixer": "#F2ABA5",
-      Other: "#CE807A",
+      "Party or Event": "#90CAED",
+      "Business Marketing": "#3A8D75",
+      "Social Mixer": "#F26457",
+      "Other": "#AA0E00",
       // Add more event types and their corresponding colors here
     };
     // Return the color based on event_type
@@ -79,10 +79,11 @@ const EditEvent = () => {
         <Button
           color="secondary"
           variant="contained"
+          // onClick={handleShare}
           sx={{
-            ml: "20px",
+            ml: "51px",
             mt: "8px",
-            width: "138px",
+            width: "127px",
             height: "56px",
             flexShrink: 0,
             borderRadius: "10px",
@@ -90,11 +91,11 @@ const EditEvent = () => {
             boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
             color: "#143959",
             fontFamily: "Inter",
-            fontSize: "16px",
+            fontSize: "24px",
             fontStyle: "normal",
             fontWeight: 500,
             lineHeight: "normal",
-          }}
+        }}
         >
           {buttonText}
         </Button>

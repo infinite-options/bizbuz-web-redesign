@@ -19,14 +19,14 @@ const CreateEvent = () => {
 
   const getEventsByUser = async () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const response = await axios.get(
-      BASE_URL +
-        `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
-    );
     // const response = await axios.get(
     //   BASE_URL +
-    //     `/GetEvents?timeZone=${user_timezone}`
+    //     `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
     // );
+    const response = await axios.get(
+      BASE_URL +
+        `/GetEvents?timeZone=${user_timezone}`
+    );
     setEvents(response.data.result);
   };
 

@@ -11,6 +11,7 @@ import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
+
 const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -51,6 +52,20 @@ const RegistrationConfirmation = () => {
 
   console.log("Event:", JSON.stringify(event));
 
+  const getEventTypeColor = (eventType) => {
+    const eventTypeColors = {
+      "Party or Event": "#90CAED",
+      "Business Marketing": "#3A8D75",
+      "Social Mixer": "#F26457",
+      "Other": "#AA0E00",
+      // Add more event types and their corresponding colors here
+    };
+    // Return the color based on event_type
+    return eventTypeColors[eventType] || "#3A8D75"; // Default color
+  };
+
+  const eventTypeColor = getEventTypeColor(event.event_type);
+
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -81,36 +96,6 @@ const RegistrationConfirmation = () => {
         {"Registration Confirmed!"}
       </Typography>
       <Box
-        sx={{
-          marginLeft: "151px",
-          position: "relative",
-          left: 0,
-          top: "50%",
-          transform: "translateY(-50%)",
-        }}
-      >
-        <Done />
-      </Box>
-      <Typography
-        variant="h1"
-        sx={{
-          mt: "-32px",
-          textAlign: "center",
-          color: "#FFF",
-          fontFamily: "Fira Sans Condensed",
-          fontSize: "20px",
-          fontStyle: "normal",
-          fontWeight: 500,
-          lineHeight: "normal",
-        }}
-      >
-        Registration Code:{" "}
-        <span style={{ fontSize: "30px", marginLeft: "8px" }}>
-          {event.event_registration_code}
-        </span>
-      </Typography>
-
-      <Box
         display="flex"
         width="347px"
         height="163px"
@@ -128,38 +113,85 @@ const RegistrationConfirmation = () => {
           },
           textIndent: "1em",
           textAlign: "justify",
-          marginTop: "8px",
+          marginTop: "2px",
         }}
       >
-        <Typography>
+        <Typography sx={{ml:"24px"}}>
           A confirmation email has been sent to the provided email address.
           Please check your inbox for further details.
         </Typography>
-        <Typography sx={{ mt: "32px" }}>
-          We look forward to seeing you at the event and hope you have a great
-          experience!
+        <Box
+          sx={{
+            marginLeft: "130px",
+            marginTop: "-8px",
+            position: "relative",
+            left: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          <Done />
+        </Box>
+        <Typography sx={{ mt: "32px", ml:"24px" }}>
+          Make it easy to share your contact info by making a Free bizCard
         </Typography>
       </Box>
-
-      <Button
-        variant="contained"
+      
+      {/* <Typography
+        variant="h1"
         sx={{
-          width: "352.5px",
-          height: "56px",
-          mt: "auto",
-          marginLeft: "auto",
-          marginRight: "auto",
-          position: "fixed",
-          bottom: "20px",
-          left: "0",
-          right: "0",
-        }}
-        onClick={() => {
-          navigate("/");
+          mt: "-32px",
+          textAlign: "center",
+          color: "#FFF",
+          fontFamily: "Fira Sans Condensed",
+          fontSize: "20px",
+          fontStyle: "normal",
+          fontWeight: 500,
+          lineHeight: "normal",
         }}
       >
-        {"Go Back to Homepage"}
-      </Button>
+        Registration Code:{" "}
+        <span style={{ fontSize: "30px", marginLeft: "8px" }}>
+          {event.event_registration_code}
+        </span>
+      </Typography> */}
+
+      <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="40vh" 
+        >
+          <Button
+            variant="contained"
+            sx={{
+              width: "352.5px",
+              height: "56px",
+              mt: "auto",
+              backgroundColor: eventTypeColor,
+            }}
+            onClick={() => {
+              navigate("/createBizCard", {state: { event, user},});
+            }}
+          >
+            {"Create a bizCard"}
+          </Button>
+
+          <Button
+            variant="contained"
+            sx={{
+              width: "352.5px",
+              height: "56px",
+              mt: "56px",
+            }}
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            {"Go Back to Homepage"}
+          </Button>
+        </Box>
     </Box>
   );
 };
