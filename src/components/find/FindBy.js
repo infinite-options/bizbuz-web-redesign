@@ -16,10 +16,10 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as Location } from "../../assets/marker-black.svg";
+import NewCardComponent from "../new-card-component";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Down } from "../../assets/down.svg";
 import { Select, MenuItem } from "@mui/material";
-import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
@@ -35,86 +35,8 @@ export default function FindBy() {
 
   const getEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    let query = BASE_URL + `/GetEvents?timeZone=${user_timezone}`;
-    if (selectedDate) {
-      query += `&event_start_date=${selectedDate}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setSelectedDate("");
-          console.log(query);
-          console.log(response.data.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
+    let queries = [];
 
-    if (city) {
-      let obj = {
-        city: city,
-      };
-      axios
-        .post(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setCity("");
-        });
-      console.log(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj);
-    }
-    if (miles && zipCode) {
-      let obj = {
-        miles: miles,
-        zip_code: zipCode,
-      };
-      axios
-        .post(BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`, obj)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setMiles(5);
-          setZipCode("");
-        });
-      console.log(
-        BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`,
-        obj
-      );
-    }
-
-    if (type) {
-      query += `&event_type=${type}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result);
-          if (!showList) setShowList(!showList);
-          setType("");
-          console.log(query);
-          console.log(response.data.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
-
-    if (registionCode) {
-      query = BASE_URL + `/verifyRegCode/${registionCode}`;
-      axios
-        .get(query)
-        .then((response) => {
-          setEvents(response.data.result.result);
-          if (!showList) setShowList(!showList);
-          setRegistionCode("");
-          console.log(query);
-          console.log(response.data.result.result);
-        })
-        .catch((error) => {
-          console.error("Error fetching events:", error);
-        });
-    }
     if (!selectedDate && !city && !type && !registionCode && !zipCode) {
       axios
         .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
@@ -122,7 +44,69 @@ export default function FindBy() {
           setEvents(response.data.result);
           if (!showList) setShowList(!showList);
         });
+    } else {
+      if (selectedDate) {
+        queries.push(
+          axios.get(
+            BASE_URL +
+              `/GetEvents?timeZone=${user_timezone}&event_start_date=${selectedDate}`
+          )
+        );
+      }
+
+      if (city) {
+        let obj = {
+          city: city,
+        };
+        queries.push(
+          axios.post(BASE_URL + `/EventsByCity?timeZone=${user_timezone}`, obj)
+        );
+      }
+
+      if (miles && zipCode) {
+        let obj = {
+          miles: miles,
+          zip_code: zipCode,
+        };
+        queries.push(
+          axios.post(
+            BASE_URL + `/EventsByZipCodes?timeZone=${user_timezone}`,
+            obj
+          )
+        );
+      }
+
+      if (type) {
+        queries.push(
+          axios.get(
+            BASE_URL + `/GetEvents?timeZone=${user_timezone}&event_type=${type}`
+          )
+        );
+      }
+
+      if (registionCode) {
+        queries.push(axios.get(BASE_URL + `/verifyRegCode/${registionCode}`));
+      }
+
+      Promise.all(queries)
+        .then((responses) => {
+          const results = responses.map((response) => response.data.result);
+          const mergedResults = results.reduce((intersection, arr) => {
+            const eventUids = arr.map((item) => item.event_uid);
+            return intersection.filter((item) =>
+              eventUids.includes(item.event_uid)
+            );
+          });
+
+          setEvents(mergedResults);
+          if (!showList) setShowList(!showList);
+          console.log(mergedResults);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
     }
+    setSelectedDate("");
   };
 
   const handleRegisterClick = (event) => {
@@ -157,9 +141,8 @@ export default function FindBy() {
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               sx={{
-                width: "350px",
+                width: "355px",
                 height: "56px",
-                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -179,11 +162,6 @@ export default function FindBy() {
               inputFormat="MM-DD-YYYY"
               onChange={(d) => {
                 setSelectedDate(d.format("MM/DD/YYYY"));
-                setCity("");
-                setMiles(5);
-                setZipCode("");
-                setType("");
-                setRegistionCode("");
               }}
             />
           </DemoContainer>
@@ -204,16 +182,10 @@ export default function FindBy() {
               value={city}
               onChange={(e) => {
                 setCity(e.target.value);
-                setSelectedDate("");
-                setMiles(5);
-                setZipCode("");
-                setType("");
-                setRegistionCode("");
               }}
               sx={{
-                width: "350px",
+                width: "355px",
                 height: "56px",
-                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -249,11 +221,8 @@ export default function FindBy() {
               sx={{
                 width: "120px",
                 height: "56px",
-                marginLeft: "20px",
                 fontSize: 12,
-                backgroundColor: "white",
                 borderRadius: "8px",
-                // marginTop: '16px',
               }}
             />
           </FormControl>
@@ -274,13 +243,11 @@ export default function FindBy() {
                 setRegistionCode("");
               }}
               sx={{
-                width: "150px",
+                width: "225px",
                 height: "56px",
-                marginLeft: "90px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
-                // marginTop: '16px',
               }}
             />
           </FormControl>
@@ -292,16 +259,10 @@ export default function FindBy() {
               value={type}
               onChange={(e) => {
                 setType(e.target.value);
-                setSelectedDate("");
-                setMiles(5);
-                setCity("");
-                setZipCode("");
-                setRegistionCode("");
               }}
               sx={{
-                width: "350px",
+                width: "355px",
                 height: "56px",
-                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -331,16 +292,10 @@ export default function FindBy() {
               value={registionCode}
               onChange={(e) => {
                 setRegistionCode(e.target.value);
-                setSelectedDate("");
-                setMiles(5);
-                setCity("");
-                setZipCode("");
-                setType("");
               }}
               sx={{
-                width: "350px",
+                width: "355px",
                 height: "56px",
-                marginLeft: "20px",
                 fontSize: 12,
                 backgroundColor: "white",
                 borderRadius: "8px",
@@ -353,9 +308,8 @@ export default function FindBy() {
         <Button
           variant="contained"
           sx={{
-            width: "352.5px",
+            width: "355px",
             height: "56px",
-            marginLeft: "20px",
             mt: "16px",
           }}
           onClick={getEvents}

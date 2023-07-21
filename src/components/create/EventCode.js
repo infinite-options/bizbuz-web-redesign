@@ -29,7 +29,7 @@ const EventCode = () => {
             sx={{ justifyContent: "center", alignItems: "center" }}
           >
             <QRCode
-              route={"/preregistration-event/"}
+              route={"/eventQuestionnaire"}
               eventRegistrationCode={event.event_registration_code}
             />
             <Typography sx={{ color: "#FFFFFF", fontSize: 24 }}>
@@ -65,8 +65,13 @@ const EventCode = () => {
             maxWidth: "550px",
           }}
         >
-          <Button variant="contained" onClick={() => navigate("/")} fullWidth>
-            {"Go to Main menu"}
+          <Button
+            color="info"
+            variant="contained"
+            onClick={() => navigate("/")}
+            fullWidth
+          >
+            {"Return to Home Page"}
           </Button>
         </Stack>
       </Stack>

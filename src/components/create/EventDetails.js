@@ -36,7 +36,7 @@ const Dot = styled("div")(({ color }) => ({
 
 const EventDetails = () => {
   const navigate = useNavigate();
-  const [eventType, setEventType] = useState("Business Marketing");
+  const [eventType, setEventType] = useState();
   const eventCapacity = useRef();
   const [isDisabled, setDisabled] = useState(true);
   const [eventLimit, setEventLimit] = useState();
