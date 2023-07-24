@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
@@ -21,9 +21,10 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const EventReview = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
   const event = getEvent();
-  console.log(event);
 
   const handleAddEvent = async () => {
     const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -49,6 +50,35 @@ const EventReview = () => {
     removeEvent();
     const data = await response.json();
     navigate("/eventCode", { state: { event: data.result[0] } });
+  };
+
+  const handleUpdateEvent = async () => {
+    const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    event.user_timezone = user_timezone;
+    const headers = {
+      // "content-type": "application/json",
+    };
+    const requestBody = new FormData();
+    const fileName = "img_cover";
+    for (const key of Object.keys(event)) {
+      if (typeof event[key] === "object" && key !== "img_cover") {
+        requestBody.append(key, JSON.stringify(event[key]));
+      } else if (key === fileName) {
+        requestBody.append(key, getImage(event[key]));
+      } else {
+        requestBody.append(key, event[key]);
+      }
+    }
+    if (!requestBody.has(fileName))
+      requestBody.append(fileName, JSON.parse(event["event_photo"])[0]);
+    const response = await fetch(BASE_URL + "/UpdateEvent", {
+      method: "PUT",
+      headers: headers,
+      body: requestBody,
+    });
+    removeEvent();
+    const data = await response.json();
+    navigate("/editEvent", { state: { event: data.result[0], user } });
   };
 
   const getImage = (img) => {
@@ -91,7 +121,7 @@ const EventReview = () => {
       },
     };
     return (
-      eventTypeColors[event.eventType] || {
+      eventTypeColors[event.event_type] || {
         backgroundColor: "#3a8d75",
         textColor: "secondary",
         clockIcon: <ClockBlackIcon />,
@@ -104,7 +134,7 @@ const EventReview = () => {
   const handleChange = (route) => {
     event.isReview = true;
     setEvent(event);
-    navigate(route);
+    navigate(route, { state: { user } });
   };
 
   return (
@@ -138,7 +168,7 @@ const EventReview = () => {
                     align="right"
                     onClick={() => handleChange("/eventDetails")}
                   >
-                    {dayjs(event.eventStartDate).format("MMMM DD")}
+                    {dayjs(event.event_start_date).format("MMMM DD")}
                   </Typography>
 
                   <Typography
@@ -147,16 +177,25 @@ const EventReview = () => {
                     mb={1}
                     onClick={() => handleChange("/eventTitle")}
                   >
-                    {event.eventTitle}
+                    {event.event_title}
                   </Typography>
                   <Stack direction="row" spacing={1}>
                     <Box width="50%" mt={1}>
-                      {!event.img_cover ? (
+                      {event.img_cover ? (
                         <CardMedia
                           component="img"
                           height="120rem"
-                          image={DefaultEventImage}
+                          image={event.img_cover}
                           alt="default"
+                          sx={{ borderRadius: 3 }}
+                          onClick={() => handleChange("/eventImage")}
+                        />
+                      ) : event.isEdit ? (
+                        <CardMedia
+                          component="img"
+                          height="120rem"
+                          image={JSON.parse(event.event_photo)[0]}
+                          alt="event"
                           sx={{ borderRadius: 3 }}
                           onClick={() => handleChange("/eventImage")}
                         />
@@ -164,7 +203,7 @@ const EventReview = () => {
                         <CardMedia
                           component="img"
                           height="120rem"
-                          image={event.img_cover}
+                          image={DefaultEventImage}
                           alt="event"
                           sx={{ borderRadius: 3 }}
                           onClick={() => handleChange("/eventImage")}
@@ -183,7 +222,7 @@ const EventReview = () => {
                       >
                         {eventTypeColor.clockIcon}
                         <span>
-                          {event.eventStartTime} - {event.eventEndTime}
+                          {event.event_start_time} - {event.event_end_time}
                         </span>
                       </Typography>
                       <Typography
@@ -196,7 +235,7 @@ const EventReview = () => {
                         onClick={() => handleChange("/eventLocation")}
                       >
                         <Icon>{eventTypeColor.markerIcon}</Icon>
-                        <span> {event.eventLocation}</span>
+                        <span> {event.event_location}</span>
                       </Typography>
                     </Box>
                   </Stack>
@@ -228,7 +267,7 @@ const EventReview = () => {
                   onClick={() => handleChange("/eventDetails")}
                   sx={{ fontWeight: "normal" }}
                 >
-                  {event.eventType}
+                  {event.event_type}
                 </Grid>
                 <Grid item xs={6}>
                   {"Accessibility"}
@@ -239,7 +278,7 @@ const EventReview = () => {
                   onClick={() => handleChange("/eventTitle")}
                   sx={{ fontWeight: "normal" }}
                 >
-                  {event.eventVisibility}
+                  {event.event_visibility}
                 </Grid>
                 <Grid item xs={6}>
                   {"Event Capacity"}
@@ -250,7 +289,7 @@ const EventReview = () => {
                   onClick={() => handleChange("/eventDetails")}
                   sx={{ fontWeight: "normal" }}
                 >
-                  {event.eventCapacity}
+                  {event.event_capacity}
                 </Grid>
               </Grid>
             </Box>
@@ -273,7 +312,7 @@ const EventReview = () => {
                 <Grid item xs={12}>
                   {"Pre-Event Questionnaire"}
                 </Grid>
-                {event.preEventQuestionnaire.map((q) => (
+                {JSON.parse(event.pre_event_questionnaire).map((q) => (
                   <Grid
                     item
                     key={q.id}
@@ -326,14 +365,25 @@ const EventReview = () => {
             pb: 2,
           }}
         >
-          <Button
-            color="info"
-            variant="contained"
-            onClick={() => handleAddEvent()}
-            fullWidth
-          >
-            {"Create Event"}
-          </Button>
+          {event.isEdit ? (
+            <Button
+              color="info"
+              variant="contained"
+              onClick={handleUpdateEvent}
+              fullWidth
+            >
+              {"Update Event"}
+            </Button>
+          ) : (
+            <Button
+              color="info"
+              variant="contained"
+              onClick={handleAddEvent}
+              fullWidth
+            >
+              {"Create Event"}
+            </Button>
+          )}
         </Stack>
       </Stack>
     </Box>

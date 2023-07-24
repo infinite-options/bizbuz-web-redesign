@@ -52,6 +52,7 @@ class Searchbox extends Component {
             mapApi={mapApi}
             addplace={this.addPlace}
             defaultValue={this.props.defaultAddress}
+            handleChange={this.props.addressChangeHandler}
           />
         )}
         <GoogleMap
@@ -84,7 +85,10 @@ class Searchbox extends Component {
                   place.geometry.location.lat(),
                   place.geometry.location.lng()
                 )}
-                {this.props.addressHandler(place.formatted_address, place.name)}
+                {this.props.addressSelectHandler(
+                  place.formatted_address,
+                  place.name
+                )}
               </>
             ))}
         </GoogleMap>

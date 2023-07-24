@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
@@ -14,21 +14,23 @@ import { ReactComponent as NextIcon } from "../../assets/continue.svg";
 
 const EventLocation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
   const [lat, setLat] = useState(event.lat || 37.23672);
   const [long, setLong] = useState(event.long || -121.88737);
-  const [address, setAddress] = useState(event.eventLocation || "");
-  const [zipcode, setZipcode] = useState(event.eventZip || "");
+  const [address, setAddress] = useState(event.event_location || "");
+  const [zipcode, setZipcode] = useState(event.event_zip || "");
   const [locationName, setLocationName] = useState(
-    event.eventLocationName || ""
+    event.event_location_name || ""
   );
 
   const handleLatLongChange = (lat, long) => {
     setLat(lat);
     setLong(long);
   };
-  const handleAddressChange = (address, name) => {
+  const handleAddressSelect = (address, name) => {
     setLocationName(name);
     setAddress(address);
     console.log(address);
@@ -47,15 +49,25 @@ const EventLocation = () => {
     setZipcode(zip);
   };
 
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
+  };
+
   const handleContinue = () => {
-    event.eventLocationName = locationName;
-    event.eventLocation = address;
-    event.eventZip = zipcode;
+    event.event_location_name = locationName;
+    event.event_location = address;
+    event.event_zip = zipcode;
     event.lat = lat;
     event.long = long;
     setEvent(event);
-    if (event.isReview) navigate("/eventReview");
-    else navigate("/eventTitle");
+    if (event.isReview)
+      navigate("/eventReview", {
+        state: { user },
+      });
+    else
+      navigate("/eventTitle", {
+        state: { user },
+      });
   };
 
   return (
@@ -79,7 +91,8 @@ const EventLocation = () => {
         >
           <Searchbox
             latLongHandler={handleLatLongChange}
-            addressHandler={handleAddressChange}
+            addressSelectHandler={handleAddressSelect}
+            addressChangeHandler={handleAddressChange}
             defaultAddress={address}
             defaultLat={lat}
             defaultLong={long}

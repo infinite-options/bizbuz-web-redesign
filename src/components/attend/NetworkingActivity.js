@@ -61,7 +61,7 @@ const NetworkingActivity = () => {
         point: {
           events: {
             click(e) {
-              // handleNodeClick(e.point);
+              handleNodeClick(e.point);
             },
           },
         },
@@ -87,6 +87,12 @@ const NetworkingActivity = () => {
       enabled: false,
     },
   });
+
+  const handleNodeClick = (e) => {
+    navigate("/attendeeDetails", {
+      state: { event: eventObj, user: userObj, id: e.id },
+    });
+  };
 
   const handleUserImage = (images) => {
     const imagesArr = JSON.parse(images);

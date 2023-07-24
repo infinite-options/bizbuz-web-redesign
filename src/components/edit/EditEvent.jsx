@@ -7,12 +7,14 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import RegisteredCardComponent from "../registered-card-component";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
+import useLocalStorage from "../../util/localStorage";
 
 const EditEvent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { event, user } = location.state;
   const [buttonText, setButtonText] = useState("Share");
+  const [getEvent, setEvent] = useLocalStorage("event");
 
   const handleShare = () => {
     navigator.clipboard.writeText(event.event_registration_code);
@@ -20,6 +22,12 @@ const EditEvent = () => {
     setTimeout(() => {
       setButtonText("Share");
     }, 2000);
+  };
+
+  const handleEditEvent = () => {
+    event.isEdit = true;
+    setEvent(event);
+    navigate("/eventReview", { state: { event, user } });
   };
 
   const getEventTypeColor = (eventType) => {
@@ -134,7 +142,7 @@ const EditEvent = () => {
         size="large"
         color="secondary"
         variant="contained"
-        onClick={() => navigate("/eventReview")}
+        onClick={handleEditEvent}
       >
         {"Edit Event"}
       </Button>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -27,10 +27,14 @@ const preDefQestions = [
 
 const EventQuestions = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
   const [selectedQuestions, setSelectedQuestions] = useState(
-    event.preEventQuestionnaire || []
+    event.pre_event_questionnaire
+      ? JSON.parse(event.pre_event_questionnaire)
+      : []
   );
   const [customQuestion, setCustomQuestion] = useState("");
 
@@ -62,13 +66,15 @@ const EventQuestions = () => {
   };
 
   const handleContinue = () => {
-    let preEventQuestionnaire = selectedQuestions.map((q, index) => ({
+    const preEventQuestionnaire = selectedQuestions.map((q, index) => ({
       id: index + 1,
       question: q.question,
     }));
-    event.preEventQuestionnaire = preEventQuestionnaire;
+    event.pre_event_questionnaire = JSON.stringify(preEventQuestionnaire);
     setEvent(event);
-    navigate("/eventReview");
+    navigate("/eventReview", {
+      state: { user },
+    });
   };
 
   return (

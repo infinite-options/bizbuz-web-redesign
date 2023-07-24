@@ -45,7 +45,7 @@ const OverallNetwork = () => {
         point: {
           events: {
             click(e) {
-              // handleNodeClick(e.point);
+              handleNodeClick(e.point);
             },
           },
         },
@@ -102,6 +102,12 @@ const OverallNetwork = () => {
           nodes: nodesArr,
         },
       ],
+    });
+  };
+
+  const handleNodeClick = (e) => {
+    navigate("/attendeeDetails", {
+      state: { event: eventObj, user: userObj, id: e.id },
     });
   };
 

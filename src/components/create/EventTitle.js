@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -22,11 +22,13 @@ const Dot = styled("div")(({ color }) => ({
 
 const EventTitle = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
-  const [title, setTitle] = useState(event.eventTitle || "");
-  const [description, setDescription] = useState(event.eventDescription || "");
-  const [access, setAccess] = useState(event.eventVisibility || "");
+  const [title, setTitle] = useState(event.event_title || "");
+  const [description, setDescription] = useState(event.event_description || "");
+  const [access, setAccess] = useState(event.event_visibility || "");
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -41,12 +43,18 @@ const EventTitle = () => {
   };
 
   const handleContinue = () => {
-    event.eventTitle = title;
-    event.eventDescription = description;
-    event.eventVisibility = access;
+    event.event_title = title;
+    event.event_description = description;
+    event.event_visibility = access;
     setEvent(event);
-    if (event.isReview) navigate("/eventReview");
-    else navigate("/eventImage");
+    if (event.isReview)
+      navigate("/eventReview", {
+        state: { user },
+      });
+    else
+      navigate("/eventImage", {
+        state: { user },
+      });
   };
 
   return (

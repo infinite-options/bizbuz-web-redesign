@@ -39,7 +39,11 @@ const CreateEvent = () => {
       <Button
         variant="contained"
         sx={{ mt: "8px" }}
-        onClick={() => navigate("/eventDetails")}
+        onClick={() =>
+          navigate("/eventDetails", {
+            state: { user },
+          })
+        }
       >
         {"Create"}
       </Button>
@@ -54,6 +58,7 @@ const CreateEvent = () => {
       >
         {events.map((event) => (
           <NewCardComponent
+            key={event.event_uid}
             event={event}
             isRegisteredEventCard={false}
             onRegisterClick={() => {

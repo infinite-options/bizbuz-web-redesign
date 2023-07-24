@@ -23,6 +23,12 @@ const EventRegistrants = () => {
   const [registrants, setRegistrants] = useState([]);
   const [eventHost, setEventHost] = useState();
 
+  const handleClickRegistrant = (registrant) => {
+    navigate("/attendeeDetails", {
+      state: { event: eventObj, user: userObj, id: registrant.user_uid },
+    });
+  };
+
   const fetchRegistrants = async () => {
     const response = await axios.get(
       `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
@@ -121,7 +127,7 @@ const EventRegistrants = () => {
                         alignSelf: "center",
                       }}
                       alt={registrant.first_name}
-                      // onClick={() => handleClickRegistrant(registrant)}
+                      onClick={() => handleClickRegistrant(registrant)}
                     />
                     <Typography align="center">
                       {registrant.first_name}

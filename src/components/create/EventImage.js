@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -14,6 +14,8 @@ import { ReactComponent as CameraIcon } from "../../assets/camera.svg";
 
 const EventImage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
   const [image, setImage] = useState(
@@ -52,8 +54,14 @@ const EventImage = () => {
     if (!isDefault) event.img_cover = image.image;
     else event.img_cover = null;
     setEvent(event);
-    if (event.isReview) navigate("/eventReview");
-    else navigate("/eventQuestions");
+    if (event.isReview)
+      navigate("/eventReview", {
+        state: { user },
+      });
+    else
+      navigate("/eventQuestions", {
+        state: { user },
+      });
   };
 
   return (
