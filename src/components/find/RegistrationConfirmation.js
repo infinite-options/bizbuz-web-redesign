@@ -17,6 +17,8 @@ const RegistrationConfirmation = () => {
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
   const [userDetails, setUserDetails] = useState([]);
+  const [showCreateCard, setShowCreateCard] = useState(false);
+  const [showEditCard, setShowEditCard] = useState(false);
   let email = state.email;
   let user = state.user;
   const eventObj = state.eventObj !== undefined ? state.eventObj : "";
@@ -30,6 +32,12 @@ const RegistrationConfirmation = () => {
       };
   
       axios.get(BASE_URL + `/CheckUserProfile/${user_uid}`).then((response) => {
+        if (response.data.message === "User Profile Doest Not Exist") {
+          setShowCreateCard(true);
+        } else {
+          setShowEditCard(true);
+        }
+        console.log("User Profile", response.data.result[0]);
         setUserDetails(response.data.result[0]);
       });
     };
@@ -175,28 +183,61 @@ const RegistrationConfirmation = () => {
           justifyContent="center"
           height="40vh" 
         >
-          <Button
-            variant="contained"
-            sx={{
-              width: "352.5px",
-              height: "56px",
-              mt: "auto",
-              backgroundColor: eventTypeColor,
-            }}
-            onClick={() => {
-              navigate("/createBizCard", {
-                state: { 
-                  event: event,
-                  user: user,
-                  userDetails: userDetails, 
-                  email: email,
-                  user_uid: user_uid,
-                },
-              });
-            }}
-          >
-            {"Create a bizCard"}
-          </Button>
+          {showCreateCard ? (
+            <Button
+              variant="contained"
+              sx={{
+                width: "352.5px",
+                height: "56px",
+                mt: "auto",
+                backgroundColor: eventTypeColor,
+              }}
+              onClick={() => {
+                navigate("/createBizCard", {
+                  state: { 
+                    event: event,
+                    user: user,
+                    userDetails: userDetails, 
+                    edit: false,
+                    email: email,
+                    user_uid: user_uid,
+                  },
+                });
+              }}
+            >
+              {"Create a bizCard"}
+            </Button>
+          ):(
+            ""
+          )}
+
+          {showEditCard ? (
+            <Button
+              variant="contained"
+              sx={{
+                width: "352.5px",
+                height: "56px",
+                mt: "auto",
+                backgroundColor: eventTypeColor,
+              }}
+              onClick={() => {
+                navigate("/createBizCard", {
+                  state: { 
+                    event: event,
+                    user: user,
+                    edit: true,
+                    userDetails: userDetails, 
+                    email: email,
+                    user_uid: user_uid,
+                  },
+                });
+              }}
+            >
+              {"Edit Your bizCard"}
+            </Button>
+          ):(
+            ""
+          )}
 
           <Button
             variant="contained"

@@ -23,7 +23,7 @@ const CreateBizCard = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const { event, userDetails, user_uid, user} = location.state;
+    const { event, userDetails, user_uid, user, edit} = location.state;
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [company, setCompany] = useState("");
@@ -35,54 +35,132 @@ const CreateBizCard = () => {
     const [agreement, setAgreement] = useState(false);
     const imageState = useState([]);
 
-
+    const loadUserDetails = () => {
+        setFirstName(userDetails.first_name);
+        setLastName(userDetails.last_name);
+        setPhoneNumber(userDetails.phone_number);
+        setCompany(userDetails.company);
+        setTitle(userDetails.title);
+        setPhrase(userDetails.catch_phrase);
+        setCurrentRole(userDetails.role);
+        setEmail(userDetails.email);
+        loadImages();
+      };
+    const loadImages = async () => {
+    const files = [];
+    const images = JSON.parse(userDetails.images);
+    if (images !== null && images.length > 0) {
+        for (let i = 0; i < images.length; i++) {
+        files.push({
+            index: i,
+            image: images[i],
+            file: null,
+            coverPhoto: i === 0,
+        });
+        }
+        imageState[1](files);
+    }
+    };
+    useEffect(() => {
+    if (userDetails && edit) {
+        loadUserDetails();
+    }
+    }, [userDetails]);
     const handleChange = (e) => {
         setAgreement(e.target.checked);
     };
 
     const UpdateProfile = async () => {
-        const body = {
-            profile_user_id: user_uid,
-            title: title,
-            company: company,
-            catch_phrase: phrase,
-            role: currentRole,
-            first_name: firstName,
-            last_name: lastName,
-            phone_number: phoneNumber,
-          };
-          const files = imageState[0];
-          let i = 0;
-          console.log(files);
-          for (const file of imageState[0]) {
-            let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
-            if (file.file !== null) {
-              body[key] = file.file;
-            } else {
-              body[key] = file.image;
-            }
-          }
-          let headers = {
-            "content-type": "application/json",
-          };
-          let requestBody = JSON.stringify(body);
-          if (files !== null) {
-            headers = {};
-            requestBody = new FormData();
-            for (const key of Object.keys(body)) {
-              requestBody.append(key, body[key]);
-            }
-          }
-    
-          const response = await fetch(BASE_URL + "/UserProfile", {
-            method: "POST",
-            headers: headers,
-            body: requestBody,
-          });
+        if(edit){
+            const body = {
+                profile_uid: userDetails.profile_uid,
+                profile_user_id: user_uid,
+                title: title,
+                company: company,
+                catch_phrase: phrase,
+                role: currentRole,
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phoneNumber,
+              };
+              const files = imageState[0];
+              console.log(files);
+              let i = 0;
+              for (const file of imageState[0]) {
+                let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
+                if (file.file !== null) {
+                  console.log("if file not null");
+                  body[key] = file.file;
+                } else {
+                  console.log("if else");
+                  body[key] = file.image;
+                }
+              }
+        
+              let headers = {
+                "content-type": "application/json",
+              };
+              let requestBody = JSON.stringify(body);
+              if (files !== null) {
+                headers = {};
+                requestBody = new FormData();
+                for (const key of Object.keys(body)) {
+                  requestBody.append(key, body[key]);
+                }
+              }
+              console.log(requestBody);
+        
+              const response = await fetch(BASE_URL + "/UserProfile", {
+                method: "PUT",
+                headers: headers,
+                body: requestBody,
+              });
+        
+              const data = await response.json();
+        }else{
+            const body = {
+                profile_user_id: user_uid,
+                title: title,
+                company: company,
+                catch_phrase: phrase,
+                role: currentRole,
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phoneNumber,
+                };
+                const files = imageState[0];
+                let i = 0;
+                console.log(files);
+                for (const file of imageState[0]) {
+                let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
+                if (file.file !== null) {
+                    body[key] = file.file;
+                } else {
+                    body[key] = file.image;
+                }
+                }
+                let headers = {
+                "content-type": "application/json",
+                };
+                let requestBody = JSON.stringify(body);
+                if (files !== null) {
+                headers = {};
+                requestBody = new FormData();
+                for (const key of Object.keys(body)) {
+                    requestBody.append(key, body[key]);
+                }
+                }
+        
+                const response = await fetch(BASE_URL + "/UserProfile", {
+                method: "POST",
+                headers: headers,
+                body: requestBody,
+                });
 
-          console.log(response);
-    
-          const data = await response.json();
+                console.log(response);
+        
+                const data = await response.json();
+        }
     };
 
     const getEventTypeColor = (eventType) => {
@@ -98,6 +176,18 @@ const CreateBizCard = () => {
       };
     
     const eventTypeColor = getEventTypeColor(event.event_type);
+
+    const canBeSubmitted = () => {
+        const isValid = agreement; // checkbox for terms
+    
+        if (isValid) {
+          document.getElementById("submitButton").removeAttribute("disabled");
+        } else {
+          document.getElementById("submitButton").setAttribute("disabled", true);
+        }
+        console.log({ agreement });
+      };
+      useEffect(() => canBeSubmitted(), [agreement]);
 
     return ( 
         <Box display="flex" flexDirection="column">
@@ -407,6 +497,7 @@ const CreateBizCard = () => {
                 height="30vh" 
             >
                 <Button
+                    id="submitButton"
                     variant="contained"
                     color="primary"
                     sx={{
