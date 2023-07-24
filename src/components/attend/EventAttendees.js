@@ -48,6 +48,12 @@ const EventAttendees = () => {
     setAttendees(data["attendees"]);
   };
 
+  const handleClickAttendee = (attendee) => {
+    navigate("/attendeeDetails", {
+      state: { event: eventObj, user: userObj, id: attendee.user_uid },
+    });
+  };
+
   // const fetchOrganizers = async () => {
   //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
   //   const organizersData = response.data.result;
@@ -170,7 +176,7 @@ const EventAttendees = () => {
                         alignSelf: "center",
                       }}
                       alt={attendee.first_name}
-                      // onClick={() => handleClickRegistrant(registrant)}
+                      onClick={() => handleClickAttendee(attendee)}
                     />
                     <Typography align="center">
                       {attendee.first_name}

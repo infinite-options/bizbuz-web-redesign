@@ -15,7 +15,7 @@ const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
-  const [userDetails, setUserDetails] = useState([]);
+  const [userDetails, setUserDetails] = useState();
   let email = state.email;
   let user = state.user;
   const eventObj = state.eventObj !== undefined ? state.eventObj : "";
@@ -194,7 +194,7 @@ const RegistrationConfirmation = () => {
             });
           }}
         >
-          {"Create a bizCard"}
+          {userDetails ? "Edit bizCard" : "Create a bizCard"}
         </Button>
 
         <Button

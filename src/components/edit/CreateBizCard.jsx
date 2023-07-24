@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import UploadPhotos from "./UploadPhotos";
 import Box from "@mui/material/Box";
@@ -32,69 +32,136 @@ const CreateBizCard = () => {
   const [phrase, setPhrase] = useState("");
   const [agreement, setAgreement] = useState(false);
   const imageState = useState([]);
+  const isEdit = useRef(false);
+
+  const loadUserDetails = () => {
+    setFirstName(userDetails.first_name);
+    setLastName(userDetails.last_name);
+    setPhoneNumber(userDetails.phone_number);
+    setCompany(userDetails.company);
+    setTitle(userDetails.title);
+    setPhrase(userDetails.catch_phrase);
+    setCurrentRole(userDetails.role);
+    loadImages();
+    isEdit.current = true;
+  };
+
+  const loadImages = async () => {
+    const files = [];
+    const images = JSON.parse(userDetails.images);
+    if (images !== null && images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        files.push({
+          index: i,
+          image: images[i],
+          file: null,
+          coverPhoto: i === 0,
+        });
+      }
+      imageState[1](files);
+    }
+  };
+  useEffect(() => {
+    if (userDetails) loadUserDetails();
+  }, []);
 
   const handleChange = (e) => {
     setAgreement(e.target.checked);
   };
 
   const UpdateProfile = async () => {
-    const body = {
-      profile_user_id: user_uid,
-      title: title,
-      company: company,
-      catch_phrase: phrase,
-      role: currentRole,
-      first_name: firstName,
-      last_name: lastName,
-      phone_number: phoneNumber,
-    };
-    const files = imageState[0];
-    let i = 0;
-    console.log(files);
-    for (const file of imageState[0]) {
-      let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
-      if (file.file !== null) {
-        body[key] = file.file;
-      } else {
-        body[key] = file.image;
+    if (isEdit.current) {
+      const body = {
+        profile_uid: userDetails.profile_uid,
+        profile_user_id: user_uid,
+        title: title,
+        company: company,
+        catch_phrase: phrase,
+        role: currentRole,
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+      };
+      const files = imageState[0];
+      console.log(files);
+      let i = 0;
+      for (const file of imageState[0]) {
+        let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
+        if (file.file !== null) {
+          console.log("if file not null");
+          body[key] = file.file;
+        } else {
+          console.log("if else");
+          body[key] = file.image;
+        }
       }
-    }
-    let headers = {
-      "content-type": "application/json",
-    };
-    let requestBody = JSON.stringify(body);
-    if (files !== null) {
-      headers = {};
-      requestBody = new FormData();
-      for (const key of Object.keys(body)) {
-        requestBody.append(key, body[key]);
+
+      let headers = {
+        "content-type": "application/json",
+      };
+      let requestBody = JSON.stringify(body);
+      if (files !== null) {
+        headers = {};
+        requestBody = new FormData();
+        for (const key of Object.keys(body)) {
+          requestBody.append(key, body[key]);
+        }
       }
+      console.log(requestBody);
+
+      const response = await fetch(BASE_URL + "/UserProfile", {
+        method: "PUT",
+        headers: headers,
+        body: requestBody,
+      });
+
+      const data = await response.json();
+      console.log(data);
+    } else {
+      const body = {
+        profile_user_id: user_uid,
+        title: title,
+        company: company,
+        catch_phrase: phrase,
+        role: currentRole,
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: phoneNumber,
+      };
+      const files = imageState[0];
+      let i = 0;
+      console.log(files);
+      for (const file of imageState[0]) {
+        let key = file.coverPhoto ? "img_cover" : `img_${i++}`;
+        if (file.file !== null) {
+          body[key] = file.file;
+        } else {
+          body[key] = file.image;
+        }
+      }
+      let headers = {
+        "content-type": "application/json",
+      };
+      let requestBody = JSON.stringify(body);
+      if (files !== null) {
+        headers = {};
+        requestBody = new FormData();
+        for (const key of Object.keys(body)) {
+          requestBody.append(key, body[key]);
+        }
+      }
+
+      const response = await fetch(BASE_URL + "/UserProfile", {
+        method: "POST",
+        headers: headers,
+        body: requestBody,
+      });
+
+      const data = await response.json();
+      console.log(data);
     }
-
-    const response = await fetch(BASE_URL + "/UserProfile", {
-      method: "POST",
-      headers: headers,
-      body: requestBody,
-    });
-
-    console.log(response);
-
-    const data = await response.json();
+    navigate("/");
   };
-
-  const getEventTypeColor = (eventType) => {
-    const eventTypeColors = {
-      "Party or Event": "#90CAED",
-      "Business Marketing": "#3A8D75",
-      "Social Mixer": "#F26457",
-      Other: "#AA0E00",
-      // Add more event types and their corresponding colors here
-    };
-    // Return the color based on event_type
-    return eventTypeColors[eventType] || "#3A8D75"; // Default color
-  };
-
-  const eventTypeColor = getEventTypeColor(event.event_type);
 
   return (
     <Box display="flex" flexDirection="column">
@@ -114,7 +181,8 @@ const CreateBizCard = () => {
           lineHeight: "normal",
         }}
       >
-        {"Create Your Own bizCard"}
+        {userDetails ? "Edit" : "Create"}
+        {" Your Own bizCard"}
       </Typography>
       <Typography
         variant="h1"
