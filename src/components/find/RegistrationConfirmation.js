@@ -16,12 +16,23 @@ const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
+  const [userDetails, setUserDetails] = useState([]);
   let email = state.email;
   let user = state.user;
   const eventObj = state.eventObj !== undefined ? state.eventObj : "";
   console.log(eventObj);
   let user_uid =
     typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
+
+    const GetUserProfile = async () => {
+      let x = {
+        profile_user_id: user_uid,
+      };
+  
+      axios.get(BASE_URL + `/CheckUserProfile/${user_uid}`).then((response) => {
+        setUserDetails(response.data.result[0]);
+      });
+    };
 
   const addEventUser = () => {
     let eObj = eventObj;
@@ -44,6 +55,7 @@ const RegistrationConfirmation = () => {
       });
   };
   useEffect(() => {
+    GetUserProfile();
     if (eventObj) {
       console.log("addEvent");
       addEventUser();
@@ -172,7 +184,15 @@ const RegistrationConfirmation = () => {
               backgroundColor: eventTypeColor,
             }}
             onClick={() => {
-              navigate("/createBizCard", {state: { event, user},});
+              navigate("/createBizCard", {
+                state: { 
+                  event: event,
+                  user: user,
+                  userDetails: userDetails, 
+                  email: email,
+                  user_uid: user_uid,
+                },
+              });
             }}
           >
             {"Create a bizCard"}
