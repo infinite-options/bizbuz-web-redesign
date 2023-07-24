@@ -17,6 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MUIAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import RegisteredCardComponent from "../registered-card-component";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -118,7 +119,7 @@ const EventAttendees = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <RegisteredCardComponent event={eventObj} />
+        <NewCardComponent event={eventObj} isRegisteredEventCard={true} />
       </Stack>
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
         <CardActionArea>

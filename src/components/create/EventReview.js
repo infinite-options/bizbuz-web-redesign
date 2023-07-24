@@ -15,6 +15,7 @@ import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -119,6 +120,10 @@ const EventReview = () => {
         <Box display="flex" flexDirection="column" sx={{ minHeight: "62vh" }}>
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
+            <NewCardComponent
+              event={event}
+              isRegisteredEventCard={true}
+            ></NewCardComponent>
             <Card sx={{ minWidth: 275 }}>
               <Box
                 bgcolor={eventTypeColor.backgroundColor}

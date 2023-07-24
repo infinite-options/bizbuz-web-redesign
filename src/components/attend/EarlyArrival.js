@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
-import RegisteredCardComponent from "../registered-card-component";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -94,7 +94,7 @@ const EarlyArrival = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <RegisteredCardComponent event={eventObj} />
+        <NewCardComponent event={eventObj} isRegisteredEventCard={true} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "35px" }}>
         {"Event has not started"}

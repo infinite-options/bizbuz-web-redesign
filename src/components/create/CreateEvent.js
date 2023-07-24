@@ -53,9 +53,10 @@ const CreateEvent = () => {
         sx={{ mt: 2 }}
       >
         {events.map((event) => (
-          <RegisteredCardComponent
+          <NewCardComponent
             event={event}
-            onCardClick={() => {
+            isRegisteredEventCard={false}
+            onRegisterClick={() => {
               navigate("/editEvent", {
                 state: { event, user },
               });
