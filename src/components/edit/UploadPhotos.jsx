@@ -1,13 +1,6 @@
-import React, { useState, useRef} from "react";
-import { Box, Button} from "@mui/material";
-import NoImage from "../../assets/NoImage.png";
+import React, { useState, useRef } from "react";
+import { Box, Button } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import {
-  red,
-  small,
-  hidden,
-  tileImg,
-} from "/Users/mac/Desktop/bizbuz-web-redesign/src/styles.js";
 
 function UploadPhotos(props) {
   const [imageState, setImageState] = props.state;
@@ -31,7 +24,7 @@ function UploadPhotos(props) {
     }
 
     readImage(file);
-};
+  };
 
   const handleUploadButtonClick = () => {
     fileInputRef.current.click();
@@ -54,7 +47,7 @@ function UploadPhotos(props) {
           height: "67px",
           bgcolor: "white",
           alignSelf: "center",
-      }}
+        }}
       >
         {imageState.map((file, i) => (
           <div
@@ -72,40 +65,59 @@ function UploadPhotos(props) {
               <img
                 key={Date.now()}
                 src={`${file.image}?${Date.now()}`}
-                style={{ ...tileImg, objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "5px",
+                  backgroundColor: "#F5F5F5",
+                  border: "1px solid #C4C4C4",
+                  objectFit: "cover",
+                }}
+                alt="user"
               />
             ) : (
               <img
                 key={Date.now()}
                 src={file.image}
-                style={{ ...tileImg, objectFit: "cover" }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "5px",
+                  backgroundColor: "#F5F5F5",
+                  border: "1px solid #C4C4C4",
+                  objectFit: "cover",
+                }}
+                alt="user"
               />
             )}
           </div>
         ))}
       </Avatar>
-      <Button 
-          variant="contained" 
-          sx={{ 
-              ml: "100px",
-              width: "235px",
-              height: "56px",
-              borderRadius: "10px",
-              backgroundColor: "rgba(59, 140, 117, 1)",
-          }}
-          onClick={handleUploadButtonClick}
-          > 
-          Upload Image
+      <Button
+        variant="contained"
+        sx={{
+          ml: "100px",
+          width: "235px",
+          height: "56px",
+          borderRadius: "10px",
+          backgroundColor: "rgba(59, 140, 117, 1)",
+        }}
+        onClick={handleUploadButtonClick}
+      >
+        Upload Image
       </Button>
       <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileInputChange}
-          style={{ display: "none" }}
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        style={{ display: "none" }}
       />
-      <div className="text-center" style={errorMessage === "" ? hidden : {}}>
-        <p style={{ ...red, ...small }}>{errorMessage || "error"}</p>
+      <div
+        className="text-center"
+        style={errorMessage === "" ? { visibility: "hidden" } : {}}
+      >
+        <p style={{ fontSize: "small" }}>{errorMessage || "error"}</p>
       </div>
     </Box>
   );
