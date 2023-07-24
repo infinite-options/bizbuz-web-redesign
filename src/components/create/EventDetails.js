@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -36,22 +36,32 @@ const Dot = styled("div")(({ color }) => ({
 
 const EventDetails = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
-  const [eventType, setEventType] = useState(event.eventType);
-  const eventCapacity = useRef();
-  const [isDisabled, setDisabled] = useState(true);
-  const [eventLimit, setEventLimit] = useState();
+  const [eventType, setEventType] = useState(event.event_type);
+  const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
+  const [isDisabled, setDisabled] = useState(
+    event.event_capacity === "No Limit"
+  );
+  const [eventLimit, setEventLimit] = useState(
+    event.event_capacity ? "Set Limit" : "No Limit"
+  );
   const [startDate, setStartDate] = useState(
-    dayjs(event.eventStartDate, "M/DD/YYYY")
+    event.event_start_date
+      ? dayjs(event.event_start_date, "M/DD/YYYY")
+      : dayjs()
   );
   const [endDate, setEndDate] = useState(
-    dayjs(event.eventEndDate, "M/DD/YYYY")
+    event.event_end_date ? dayjs(event.event_end_date, "M/DD/YYYY") : dayjs()
   );
   const [startTime, setStartTime] = useState(
-    dayjs(event.eventStartTime, "hh mm A")
+    dayjs(event.event_start_time, "hh mm A")
   );
-  const [endTime, setEndTime] = useState(dayjs(event.eventEndTime, "hh mm A"));
+  const [endTime, setEndTime] = useState(
+    dayjs(event.event_end_time, "hh mm A")
+  );
 
   const handleEventTypeChange = (v) => {
     setEventType(v);
@@ -84,27 +94,34 @@ const EventDetails = () => {
 
   const handleContinue = () => {
     event.event_organizer_uid = "100-000038";
-    event.eventType = eventType;
-    event.eventStartDate = new Date(startDate).toLocaleDateString("en-US");
-    event.eventEndDate = new Date(endDate).toLocaleDateString("en-US");
-    let eventStartTime = new Date(startTime).toLocaleTimeString("en-US", {
+    event.event_type = eventType;
+    event.event_start_date = new Date(startDate).toLocaleDateString("en-US");
+    event.event_end_date = new Date(endDate).toLocaleDateString("en-US");
+    let event_start_time = new Date(startTime).toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
-    event.eventStartTime = eventStartTime
-      ? eventStartTime.replace(/^0+/, "")
+    event.event_start_time = event_start_time
+      ? event_start_time.replace(/^0+/, "")
       : "";
-    let eventEndTime = new Date(endTime).toLocaleTimeString("en-US", {
+    let event_end_time = new Date(endTime).toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });
-    event.eventEndTime = eventEndTime ? eventEndTime.replace(/^0+/, "") : "";
-    if (eventLimit === "Set Limit")
-      event.eventCapacity = eventCapacity.current.value;
-    else event.eventCapacity = eventLimit;
+    event.event_end_time = event_end_time
+      ? event_end_time.replace(/^0+/, "")
+      : "";
+    if (eventLimit === "Set Limit") event.event_capacity = eventCapacity;
+    else event.event_capacity = eventLimit;
     setEvent(event);
-    if (event.isReview) navigate("/eventReview");
-    else navigate("/eventLocation");
+    if (event.isReview)
+      navigate("/eventReview", {
+        state: { user },
+      });
+    else
+      navigate("/eventLocation", {
+        state: { user },
+      });
   };
 
   return (
@@ -357,6 +374,7 @@ const EventDetails = () => {
                   control={
                     <Radio
                       onClick={() => handleEventLimitChange("No Limit")}
+                      checked={eventLimit === "No Limit"}
                       sx={{
                         color: "white",
                         "&.Mui-checked": {
@@ -372,9 +390,10 @@ const EventDetails = () => {
               <Grid item xs={6}>
                 <FormControlLabel
                   value="Set Limit"
-                  onClick={() => handleEventLimitChange("Set Limit")}
                   control={
                     <Radio
+                      onClick={() => handleEventLimitChange("Set Limit")}
+                      checked={eventLimit === "Set Limit"}
                       sx={{
                         color: "white",
                         "&.Mui-checked": {
@@ -390,8 +409,7 @@ const EventDetails = () => {
               <Grid item xs={6} />
               <Grid item xs={6}>
                 <OutlinedInput
-                  value={event.eventCapacity}
-                  inputRef={eventCapacity}
+                  value={eventCapacity}
                   sx={{
                     width: "129px",
                     height: "36px",
@@ -400,13 +418,27 @@ const EventDetails = () => {
                     borderRadius: "8px",
                   }}
                   disabled={isDisabled}
+                  onChange={(e) => setEventCapacity(e.target.value)}
                 />
               </Grid>
             </Grid>
           </RadioGroup>
         </FormControl>
-        <Stack spacing={2} direction="row" sx={{ pt: "60px" }}>
-          <Button variant="contained" onClick={handleContinue} fullWidth>
+        <Stack
+          spacing={2}
+          direction="row"
+          sx={{
+            width: "92vw",
+            position: "fixed",
+            bottom: "30px",
+            maxWidth: "550px",
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleContinue}
+            sx={{ width: "100%" }}
+          >
             {"Continue"}&nbsp;
             <NextIcon />
           </Button>

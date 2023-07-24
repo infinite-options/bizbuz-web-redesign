@@ -11,7 +11,6 @@ import RegisteredCardComponent from "../registered-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
-
 const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
@@ -38,7 +37,7 @@ const RegistrationConfirmation = () => {
         } else {
           axios.post(BASE_URL + "/EventUser", eObj).then((response) => {
             console.log("Start Registering", response.data.result[0]);
-            setEvent(response.data.result[0]);
+            // setEvent(response.data.result[0]);
           });
         }
       });
@@ -57,7 +56,7 @@ const RegistrationConfirmation = () => {
       "Party or Event": "#90CAED",
       "Business Marketing": "#3A8D75",
       "Social Mixer": "#F26457",
-      "Other": "#AA0E00",
+      Other: "#AA0E00",
       // Add more event types and their corresponding colors here
     };
     // Return the color based on event_type
@@ -116,7 +115,7 @@ const RegistrationConfirmation = () => {
           marginTop: "2px",
         }}
       >
-        <Typography sx={{ml:"24px"}}>
+        <Typography sx={{ ml: "24px" }}>
           A confirmation email has been sent to the provided email address.
           Please check your inbox for further details.
         </Typography>
@@ -132,11 +131,11 @@ const RegistrationConfirmation = () => {
         >
           <Done />
         </Box>
-        <Typography sx={{ mt: "32px", ml:"24px" }}>
+        <Typography sx={{ mt: "32px", ml: "24px" }}>
           Make it easy to share your contact info by making a Free bizCard
         </Typography>
       </Box>
-      
+
       {/* <Typography
         variant="h1"
         sx={{
@@ -157,41 +156,41 @@ const RegistrationConfirmation = () => {
       </Typography> */}
 
       <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          height="40vh" 
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="40vh"
+      >
+        <Button
+          variant="contained"
+          sx={{
+            width: "352.5px",
+            height: "56px",
+            mt: "auto",
+            backgroundColor: eventTypeColor,
+          }}
+          onClick={() => {
+            navigate("/createBizCard", { state: { event, user } });
+          }}
         >
-          <Button
-            variant="contained"
-            sx={{
-              width: "352.5px",
-              height: "56px",
-              mt: "auto",
-              backgroundColor: eventTypeColor,
-            }}
-            onClick={() => {
-              navigate("/createBizCard", {state: { event, user},});
-            }}
-          >
-            {"Create a bizCard"}
-          </Button>
+          {"Create a bizCard"}
+        </Button>
 
-          <Button
-            variant="contained"
-            sx={{
-              width: "352.5px",
-              height: "56px",
-              mt: "56px",
-            }}
-            onClick={() => {
-              navigate("/");
-            }}
-          >
-            {"Go Back to Homepage"}
-          </Button>
-        </Box>
+        <Button
+          variant="contained"
+          sx={{
+            width: "352.5px",
+            height: "56px",
+            mt: "56px",
+          }}
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          {"Go Back to Homepage"}
+        </Button>
+      </Box>
     </Box>
   );
 };
