@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../../assets/brand.svg";
 import { ReactComponent as Back } from "../../../assets/back.svg";
-import RegisteredCardComponent from "../../registered-card-component";
+import NewCardComponent from "../../new-card-component";
 
 //const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -26,7 +26,11 @@ const RsvpEventInfo = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <RegisteredCardComponent event={event} />
+        <NewCardComponent
+          event={event}
+          isRegisteredEventCard={true}
+          totalRegistrants={event.registrants}
+        />
       </Stack>
       <Typography
         variant="h1"

@@ -85,7 +85,7 @@ const RegisteredCardComponent = ({ event, onCardClick }) => {
           bgcolor={eventTypeColor.backgroundColor}
           display="flex"
           flexDirection="column"
-          height="240px" // Fixed height for the card
+          height="240px"
           maxHeight="100%"
         >
           <CardContent>

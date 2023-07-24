@@ -381,6 +381,7 @@ export default function FindBy() {
                     <NewCardComponent
                       event={event}
                       onRegisterClick={handleRegisterClick}
+                      isRegisteredEventCard={false}
                     />
                   );
                 })}

@@ -7,6 +7,7 @@ import { ReactComponent as Down } from "../../../assets/down.svg";
 import { ReactComponent as Globe } from "../../../assets/globe.svg";
 import { ReactComponent as Brand } from "../../../assets/brand.svg";
 import { ReactComponent as Back } from "../../../assets/back.svg";
+import NewCardComponent from "../../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -18,6 +19,7 @@ const CurrentRsvp = () => {
   let user_uid =
     typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
   const [events, setEvents] = useState([]);
+  const [rsvpEvents, setRsvpEvents] = useState([]);
   const getRSVPdEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     axios
@@ -26,12 +28,23 @@ const CurrentRsvp = () => {
           `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user_uid}`
       )
       .then((response) => {
-        setEvents(response.data.result);
+        setRsvpEvents(response.data.result);
         if (!showList) setShowList(!showList);
+      });
+  };
+  const getEvents = () => {
+    let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    axios
+      .get(
+        BASE_URL + `/GetEvents?timeZone=${user_timezone}&eu_user_id=${user_uid}`
+      )
+      .then((response) => {
+        setEvents(response.data.result);
       });
   };
   useEffect(() => {
     getRSVPdEvents();
+    getEvents();
   }, []);
 
   const handleCardClick = (event) => {
@@ -112,11 +125,21 @@ const CurrentRsvp = () => {
                   <Down />
                 </div>
 
-                {events.map((event) => {
+                {rsvpEvents.map((event) => {
+                  const correspondingEvent = events.find(
+                    (e) => e.event_uid === event.event_uid
+                  );
+
+                  // Extract the registrants field
+                  const totalRegistrants = correspondingEvent
+                    ? correspondingEvent.registrants
+                    : 0;
                   return (
-                    <RegisteredCardComponent
+                    <NewCardComponent
                       event={event}
                       onCardClick={handleCardClick}
+                      totalRegistrants={totalRegistrants}
+                      isRegisteredEventCard={true}
                     />
                   );
                 })}
