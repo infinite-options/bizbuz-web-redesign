@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Done } from "../../assets/done.svg";
-import RegisteredCardComponent from "../registered-card-component";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -61,6 +61,17 @@ const RegistrationConfirmation = () => {
     }
   }, []);
 
+  const getEvents = () => {
+    let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    axios
+      .get(
+        BASE_URL + `/GetEvents?timeZone=${user_timezone}&eu_user_id=${user_uid}`
+      )
+      .then((response) => {
+        setEvent(response.data.result);
+      });
+  };
+
   console.log("Event:", JSON.stringify(event));
 
   const getEventTypeColor = (eventType) => {
@@ -88,7 +99,7 @@ const RegistrationConfirmation = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <RegisteredCardComponent event={event} />
+        <NewCardComponent event={event} isRegisteredEventCard={true} />
       </Stack>
       <Typography
         variant="h1"

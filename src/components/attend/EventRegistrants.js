@@ -73,7 +73,11 @@ const EventRegistrants = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <NewCardComponent event={eventObj} isRegisteredEventCard={true} />
+        <NewCardComponent
+          event={eventObj}
+          isRegisteredEventCard={true}
+          totalRegistrants={eventObj.registrants}
+        />
       </Stack>
 
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>

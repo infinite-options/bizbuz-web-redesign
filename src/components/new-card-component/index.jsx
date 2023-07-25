@@ -220,7 +220,7 @@ const NewCardComponent = ({
                       >
                         <Icon>{eventTypeColor.userAltIcon}</Icon>
                         <span style={{ fontFamily: "Inter" }}>
-                          {totalRegistrants} Registrants{" "}
+                          {totalRegistrants} Registrants
                         </span>
                       </Typography>
                     );

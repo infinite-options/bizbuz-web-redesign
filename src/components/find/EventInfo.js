@@ -26,6 +26,7 @@ const EventInfo = () => {
       >
         <NewCardComponent
           event={event}
+          isRegisteredEventCard={false}
           onRegisterClick={() => {
             navigate("/eventQuestionnaire", {
               state: { event: event },

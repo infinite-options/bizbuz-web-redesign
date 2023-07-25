@@ -11,6 +11,7 @@ import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../assets/NoUserImage.png";
 import RegisteredCardComponent from "../registered-card-component";
+import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -134,7 +135,11 @@ const OverallNetwork = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <RegisteredCardComponent event={eventObj} />
+        <NewCardComponent
+          event={eventObj}
+          isRegisteredEventCard={true}
+          totalRegistrants={eventObj.registrants}
+        />
       </Stack>
 
       <Stack

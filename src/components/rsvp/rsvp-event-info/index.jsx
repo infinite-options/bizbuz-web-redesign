@@ -14,6 +14,41 @@ const RsvpEventInfo = () => {
   const { event } = location.state;
   const navigate = useNavigate();
 
+  const handleEventClick = (event) => {
+    if (
+      document.cookie !== "" &&
+      document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
+        undefined
+    ) {
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("loggedIn="))
+        .split("=")[1] === "true"
+        ? navigate("/earlyArrival", {
+            state: {
+              email: document.cookie
+                .split("; ")
+                .find((row) => row.startsWith("user_email="))
+                .split("=")[1],
+              user: JSON.parse(
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("user_details="))
+                  .split("=")[1]
+              ),
+              eventObj: event,
+            },
+          })
+        : navigate("/login", {
+            state: { path: "/earlyArrival", eventObj: event },
+          });
+    } else {
+      navigate("/login", {
+        state: { path: "/earlyArrival", eventObj: event },
+      });
+    }
+  };
+
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -108,6 +143,23 @@ const RsvpEventInfo = () => {
           </Typography>
         ))}
       </Box>
+      <Button
+        variant="contained"
+        sx={{
+          width: "352.5px",
+          height: "56px",
+          mt: "auto",
+          marginLeft: "auto",
+          marginRight: "auto",
+          position: "fixed",
+          bottom: "96px",
+          left: "0",
+          right: "0",
+        }}
+        onClick={handleEventClick(location.state.event)}
+      >
+        {"Attend"}
+      </Button>
       <Button
         variant="contained"
         sx={{
