@@ -34,9 +34,8 @@ const NetworkingActivity = () => {
   const userObj = location.state
     ? location.state.userObj
     : JSON.parse(localStorage.getItem("user"));
-  const { onAttendeeUpdate, subscribe, unSubscribe, detach } = useAbly(
-    eventObj.event_uid
-  );
+  const { removeAttendee, onAttendeeUpdate, subscribe, unSubscribe, detach } =
+    useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [options, setOptions] = useState({
@@ -129,10 +128,16 @@ const NetworkingActivity = () => {
     });
   };
 
-  const handleExitEvent = () => {
-    axios.put(
+  const handleEndEvent = async () => {
+    await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
     );
+  };
+
+  const handleLeaveEvent = async () => {
+    removeAttendee(userObj.user_uid);
+    await handleEndEvent();
+    navigate("/");
   };
 
   const broadcastAndExitSubscribe = () => {
@@ -141,7 +146,7 @@ const NetworkingActivity = () => {
     });
     subscribe((e) => {
       if (e.data === "Event ended") {
-        handleExitEvent();
+        handleEndEvent();
         detach();
         navigate("/");
       } else {
@@ -189,57 +194,6 @@ const NetworkingActivity = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        {/* <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h2" component="div">
-                {eventObj.event_title}
-              </Typography>
-              <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <CalendarIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {new Date().toLocaleString("default", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} />
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <ClockIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <MarkerIcon />
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12, maxWidth: "80%" }}
-                  >
-                    {eventObj.event_location}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card> */}
         <RegisteredCardComponent event={eventObj} />
       </Stack>
 
@@ -251,7 +205,7 @@ const NetworkingActivity = () => {
         variant="contained"
         sx={{ mt: "16px" }}
         color="primary"
-        onClick={() => navigate("/")}
+        onClick={handleLeaveEvent}
       >
         {"Leave Event"}
       </Button>

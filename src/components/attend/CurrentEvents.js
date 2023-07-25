@@ -8,12 +8,14 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import RegisteredCardComponent from "../registered-card-component";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const CurrentEvents = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   const handleEventClick = (event) => {
     if (
@@ -56,6 +58,7 @@ const CurrentEvents = () => {
       `${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
     );
     setEvents(response.data.result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -65,12 +68,13 @@ const CurrentEvents = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
+        <Brand onClick={() => navigate("/")} />
         <BackIcon
           style={{ marginLeft: "auto" }}
           onClick={() => navigate("/")}
         />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Stack
         direction="column"
         justifyContent="center"

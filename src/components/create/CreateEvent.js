@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import NewCardComponent from "../new-card-component";
 import RegisteredCardComponent from "../registered-card-component";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -16,6 +17,7 @@ const CreateEvent = () => {
   const location = useLocation();
   const { user } = location.state;
   const [events, setEvents] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   const getEventsByUser = async () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -24,6 +26,7 @@ const CreateEvent = () => {
         `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
     );
     setEvents(response.data.result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -33,6 +36,7 @@ const CreateEvent = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Brand onClick={() => navigate("/")} style={{ marginTop: "36px" }} />
+      <Loading isLoading={isLoading} />
       <Typography variant="h1" sx={{ mt: "78px" }}>
         {"Create new Event"}
       </Typography>
