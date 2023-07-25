@@ -166,7 +166,7 @@ const EventAttendees = () => {
         <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant="h2" component="div">
-              {"Current Registrants"}
+              {"Current Attendees"}
             </Typography>
             <Grid container spacing={2}>
               {attendees.map((attendee) => (

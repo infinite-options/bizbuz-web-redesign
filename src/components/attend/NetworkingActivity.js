@@ -136,8 +136,8 @@ const NetworkingActivity = () => {
   };
 
   const handleLeaveEvent = async () => {
-    removeAttendee(userObj.user_uid);
     await handleEndEvent();
+    removeAttendee(userObj.user_uid);
     navigate("/");
   };
 
