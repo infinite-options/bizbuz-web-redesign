@@ -8,10 +8,9 @@ import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
@@ -144,7 +143,6 @@ export default function FindBy() {
           </Typography>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DatePicker"]}>
               <DatePicker
                 sx={{
                   width: "355px",
@@ -163,6 +161,9 @@ export default function FindBy() {
                     border: "none",
                     underline: "none",
                   },
+                  "& .MuiInputBase-root": {
+                    borderRadius: "10px",
+                  },
                 }}
                 value={selectedDate}
                 inputFormat="MM-DD-YYYY"
@@ -170,7 +171,6 @@ export default function FindBy() {
                   setSelectedDate(d.format("MM/DD/YYYY"));
                 }}
               />
-            </DemoContainer>
           </LocalizationProvider>
 
           <Grid item sx={{ pl: "0 !important" }}>
