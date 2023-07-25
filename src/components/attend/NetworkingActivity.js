@@ -35,9 +35,8 @@ const NetworkingActivity = () => {
   const userObj = location.state
     ? location.state.userObj
     : JSON.parse(localStorage.getItem("user"));
-  const { onAttendeeUpdate, subscribe, unSubscribe, detach } = useAbly(
-    eventObj.event_uid
-  );
+  const { removeAttendee, onAttendeeUpdate, subscribe, unSubscribe, detach } =
+    useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [options, setOptions] = useState({
@@ -130,10 +129,16 @@ const NetworkingActivity = () => {
     });
   };
 
-  const handleExitEvent = () => {
-    axios.put(
+  const handleEndEvent = async () => {
+    await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
     );
+  };
+
+  const handleLeaveEvent = async () => {
+    removeAttendee(userObj.user_uid);
+    await handleEndEvent();
+    navigate("/");
   };
 
   const broadcastAndExitSubscribe = () => {
@@ -142,7 +147,7 @@ const NetworkingActivity = () => {
     });
     subscribe((e) => {
       if (e.data === "Event ended") {
-        handleExitEvent();
+        handleEndEvent();
         detach();
         navigate("/");
       } else {
@@ -256,7 +261,7 @@ const NetworkingActivity = () => {
         variant="contained"
         sx={{ mt: "16px" }}
         color="primary"
-        onClick={() => navigate("/")}
+        onClick={handleLeaveEvent}
       >
         {"Leave Event"}
       </Button>

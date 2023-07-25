@@ -82,7 +82,7 @@ const EventQuestionnaire = () => {
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")}/>
         <Back onClick={() => navigate(-1)} />
       </Box>
       <Typography
