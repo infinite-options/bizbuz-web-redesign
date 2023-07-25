@@ -112,6 +112,7 @@ export default function FindBy() {
         });
     }
     setSelectedDate("");
+    
   };
 
   const handleRegisterClick = (event) => {
@@ -119,292 +120,292 @@ export default function FindBy() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" flexDirection="column">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
+    <Box>
+      <Box display="flex" justifyContent="space-between" alignItems="center" >
+        <Brand style={{ marginTop: "36px"}} onClick={() => navigate("/")} />
         <Back onClick={() => navigate("/")} />
       </Box>
+      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+        <Box>
+          <Typography
+            gutterBottom
+            variant="h4"
+            align="center"
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontSize: "20px",
+              lineHeight: "24px",
+              color: "#FFFFFF",
+              marginTop: "32px",
+              marginLeft: "139dp",
+            }}
+          >
+            {"Search Events"}
+          </Typography>
 
-      <Box>
-        <Typography
-          gutterBottom
-          variant="h4"
-          align="center"
-          sx={{
-            fontFamily: "Fira Sans Condensed",
-            fontSize: "20px",
-            lineHeight: "24px",
-            color: "#FFFFFF",
-            marginTop: "32px",
-            marginLeft: "139dp",
-          }}
-        >
-          {"Search Events"}
-        </Typography>
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              sx={{
-                width: "355px",
-                height: "56px",
-                fontSize: 12,
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                color: (theme) =>
-                  `${theme.palette.primary.contrastText} !important`,
-                "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                  underline: "none",
-                },
-                "& .MuiOutlinedInput-notchedOutline": {
-                  border: "none",
-                  underline: "none",
-                },
-              }}
-              value={selectedDate}
-              inputFormat="MM-DD-YYYY"
-              onChange={(d) => {
-                setSelectedDate(d.format("MM/DD/YYYY"));
-              }}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Location"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              endAdornment={
-                <InputAdornment position="end">
-                  <Location />
-                </InputAdornment>
-              }
-              value={city}
-              onChange={(e) => {
-                setCity(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                height: "56px",
-                fontSize: 12,
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-              }}
-            />
-          </FormControl>
-        </Grid>
-
-        <Typography
-          gutterBottom
-          variant="h4"
-          align="center"
-          sx={{
-            fontFamily: "Fira Sans Condensed",
-            fontSize: "15px",
-            lineHeight: "24px",
-            color: "#FFFFFF",
-            marginLeft: "139dp",
-          }}
-        >
-          {"Or"}
-        </Typography>
-
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              endAdornment={
-                <InputAdornment position="end">{"Miles From"}</InputAdornment>
-              }
-              value={miles}
-              onChange={(e) => setMiles(e.target.value)}
-              sx={{
-                width: "120px",
-                height: "56px",
-                fontSize: 12,
-                borderRadius: "8px",
-              }}
-            />
-          </FormControl>
-
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Zip Code"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={zipCode}
-              onChange={(e) => {
-                setZipCode(e.target.value);
-                setSelectedDate("");
-                setMiles(5);
-                setCity("");
-                setType("");
-                setRegistionCode("");
-              }}
-              sx={{
-                width: "225px",
-                height: "56px",
-                fontSize: 12,
-                backgroundColor: "white",
-                borderRadius: "8px",
-              }}
-            />
-          </FormControl>
-        </Grid>
-
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <Select
-              value={type}
-              onChange={(e) => {
-                setType(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                height: "56px",
-                fontSize: 12,
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-              }}
-              displayEmpty
-            >
-              <MenuItem disabled value="">
-                <em>Select by Type</em>
-              </MenuItem>
-              <MenuItem value="Business Marketing">Business Marketing</MenuItem>
-              <MenuItem value="Party">Party</MenuItem>
-              <MenuItem value="Social Mixer">Social Mixer</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Search by Registration Code"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              endAdornment={<InputAdornment position="end"></InputAdornment>}
-              value={registionCode}
-              onChange={(e) => {
-                setRegistionCode(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                height: "56px",
-                fontSize: 12,
-                backgroundColor: "white",
-                borderRadius: "8px",
-                mt: "16px",
-              }}
-            />
-          </FormControl>
-        </Grid>
-
-        <Button
-          variant="contained"
-          sx={{
-            width: "355px",
-            height: "56px",
-            mt: "16px",
-          }}
-          onClick={getEvents}
-        >
-          {"Get Events"}
-        </Button>
-      </Box>
-
-      <Grid container>
-        {" "}
-        <Grid
-          item
-          xs={12}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {showList && events.length > 0 ? (
-            <Box>
-              <Typography
-                gutterBottom
-                variant="h4"
-                align="right"
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker"]}>
+              <DatePicker
                 sx={{
-                  fontFamily: "Fira Sans Condensed",
-                  fontSize: "20px",
-                  lineHeight: "24px",
-                  color: "#FFFFFF",
-                  marginTop: "32px",
-                  marginLeft: "139dp",
+                  width: "355px",
+                  height: "56px",
+                  fontSize: 12,
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  marginTop: "16px",
+                  color: (theme) =>
+                    `${theme.palette.primary.contrastText} !important`,
+                  "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                    underline: "none",
+                  },
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    border: "none",
+                    underline: "none",
+                  },
                 }}
+                value={selectedDate}
+                inputFormat="MM-DD-YYYY"
+                onChange={(d) => {
+                  setSelectedDate(d.format("MM/DD/YYYY"));
+                }}
+              />
+            </DemoContainer>
+          </LocalizationProvider>
+
+          <Grid item sx={{ pl: "0 !important" }}>
+            <FormControl sx={{ width: "129px" }} variant="outlined">
+              <OutlinedInput
+                placeholder="Location"
+                startAdornment={
+                  <InputAdornment position="start"></InputAdornment>
+                }
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Location />
+                  </InputAdornment>
+                }
+                value={city}
+                onChange={(e) => {
+                  setCity(e.target.value);
+                }}
+                sx={{
+                  width: "355px",
+                  height: "56px",
+                  fontSize: 12,
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  marginTop: "16px",
+                }}
+              />
+            </FormControl>
+          </Grid>
+
+          <Typography
+            gutterBottom
+            variant="h4"
+            align="center"
+            sx={{
+              fontFamily: "Fira Sans Condensed",
+              fontSize: "15px",
+              lineHeight: "24px",
+              color: "#FFFFFF",
+              marginLeft: "139dp",
+            }}
+          >
+            {"Or"}
+          </Typography>
+
+          <Grid item sx={{ pl: "0 !important" }}>
+            <FormControl sx={{ width: "129px" }} variant="outlined">
+              <OutlinedInput
+                endAdornment={
+                  <InputAdornment position="end">{"Miles From"}</InputAdornment>
+                }
+                value={miles}
+                onChange={(e) => setMiles(e.target.value)}
+                sx={{
+                  width: "130px",
+                  height: "56px",
+                  fontSize: 12,
+                  borderRadius: "10px",
+                }}
+              />
+            </FormControl>
+
+            <FormControl sx={{ width: "129px" }} variant="outlined">
+              <OutlinedInput
+                placeholder="Zip Code"
+                startAdornment={
+                  <InputAdornment position="start"></InputAdornment>
+                }
+                value={zipCode}
+                onChange={(e) => {
+                  setZipCode(e.target.value);
+                }}
+                sx={{
+                  width: "215px",
+                  height: "56px",
+                  fontSize: 12,
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  ml:"10px",
+                }}
+              />
+            </FormControl>
+          </Grid>
+
+          <Grid item sx={{ pl: "0 !important" }}>
+            <FormControl sx={{ width: "129px" }} variant="outlined">
+              <Select
+                value={type}
+                onChange={(e) => {
+                  setType(e.target.value);
+                }}
+                sx={{
+                  width: "355px",
+                  height: "56px",
+                  fontSize: 12,
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  marginTop: "16px",
+                }}
+                displayEmpty
               >
-                {events.length}
-                {events.length === 1 ? " Result" : " Results"}
-              </Typography>
-              <Stack
-                direction="column"
-                justifyContent="center"
-                spacing={2}
-                sx={{ mt: 2, p: 2 }}
+                <MenuItem disabled value="">
+                  <Typography sx={{fontStyle: "normal",}}>
+                    Select by Type
+                  </Typography>
+                </MenuItem>
+                <MenuItem value="Business Marketing">Business Marketing</MenuItem>
+                <MenuItem value="Party or Event">Party or Event</MenuItem>
+                <MenuItem value="Social Mixer">Social Mixer</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item sx={{ pl: "0 !important" }}>
+            <FormControl sx={{ width: "129px" }} variant="outlined">
+              <OutlinedInput
+                placeholder="Search by Registration Code"
+                startAdornment={
+                  <InputAdornment position="start"></InputAdornment>
+                }
+                endAdornment={<InputAdornment position="end"></InputAdornment>}
+                value={registionCode}
+                onChange={(e) => {
+                  setRegistionCode(e.target.value);
+                }}
+                sx={{
+                  width: "355px",
+                  height: "56px",
+                  fontSize: 12,
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                  mt: "16px",
+                }}
+              />
+            </FormControl>
+          </Grid>
+
+          <Button
+            variant="contained"
+            sx={{
+              width: "355px",
+              height: "56px",
+              mt: "16px",
+            }}
+            onClick={getEvents}
+          >
+            {"Get Events"}
+          </Button>
+        </Box>
+        
+
+        <Grid container>
+          {" "}
+          <Grid
+            item
+            xs={12}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {showList && events.length > 0 ? (
+              <Box>
+                <Typography
+                  gutterBottom
+                  variant="h4"
+                  align="right"
+                  sx={{
+                    fontFamily: "Fira Sans Condensed",
+                    fontSize: "20px",
+                    lineHeight: "24px",
+                    color: "#FFFFFF",
+                    marginTop: "32px",
+                    marginLeft: "139dp",
+                  }}
+                >
+                  {events.length}
+                  {events.length === 1 ? " Result" : " Results"}
+                </Typography>
+                <Stack
+                  direction="column"
+                  justifyContent="center"
+                  spacing={2}
+                  sx={{ mt: 2, p: 2 }}
+                  style={{
+                    backgroundColor: "white",
+                    marginTop: "1rem",
+                    minWidth: "100%",
+                    borderRadius: "25px 0px 25px 0px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: "0.5rem",
+                    }}
+                    onClick={() => setShowList(false)}
+                  >
+                    <Down />
+                  </div>
+
+                  {events.map((event) => {
+                    return (
+                      <NewCardComponent
+                        event={event}
+                        onRegisterClick={handleRegisterClick}
+                        isRegisteredEventCard={false}
+                      />
+                    );
+                  })}
+                </Stack>
+              </Box>
+            ) : (
+              <Button
+                hide={showList}
                 style={{
                   backgroundColor: "white",
                   marginTop: "1rem",
                   minWidth: "100%",
                   borderRadius: "25px 25px 0px 0px",
+                  position: "fixed",
+                  bottom: 0,
                 }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "0.5rem",
-                  }}
-                  onClick={() => setShowList(false)}
-                >
-                  <Down />
-                </div>
-
-                {events.map((event) => {
-                  return (
-                    <NewCardComponent
-                      event={event}
-                      onRegisterClick={handleRegisterClick}
-                      isRegisteredEventCard={false}
-                    />
-                  );
-                })}
-              </Stack>
-            </Box>
-          ) : (
-            <Button
-              hide={showList}
-              style={{
-                backgroundColor: "white",
-                marginTop: "1rem",
-                minWidth: "100%",
-                borderRadius: "25px 25px 0px 0px",
-                position: "fixed",
-                bottom: 0,
-              }}
-            >
-              {" "}
-              <Globe />
-            </Button>
-          )}
-        </Grid>{" "}
-      </Grid>
+                {" "}
+                <Globe />
+              </Button>
+            )}
+          </Grid>{" "}
+        </Grid>
+      </Box>
     </Box>
   );
 }
