@@ -38,6 +38,7 @@ const CreateBizCard = () => {
     setFirstName(userDetails.first_name);
     setLastName(userDetails.last_name);
     setPhoneNumber(userDetails.phone_number);
+    setEmail(userDetails.email);
     setCompany(userDetails.company);
     setTitle(userDetails.title);
     setPhrase(userDetails.catch_phrase);
@@ -176,7 +177,7 @@ const CreateBizCard = () => {
   return (
     <Box display="flex" flexDirection="column" justifyContent="center">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")}/>
+        <Brand onClick={() => navigate("/")} />
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
       <Typography
@@ -213,7 +214,7 @@ const CreateBizCard = () => {
           "Simply enter the information below and we’ll create a bizCard for you!"
         }
       </Typography>
-      <Box sx={{ mt: "32px", ml:"16px"}}>
+      <Box sx={{ mt: "32px", ml: "16px" }}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -269,7 +270,7 @@ const CreateBizCard = () => {
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "32px", ml:"16px" }}>
+      <Box sx={{ mt: "32px", ml: "16px" }}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -325,7 +326,7 @@ const CreateBizCard = () => {
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "32px" , ml:"16px"}}>
+      <Box sx={{ mt: "32px", ml: "16px" }}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -377,11 +378,12 @@ const CreateBizCard = () => {
                   color: "black",
                 },
               }}
+              disabled
             />
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "48px" , ml:"16px"}}>
+      <Box sx={{ mt: "48px", ml: "16px" }}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <Select
