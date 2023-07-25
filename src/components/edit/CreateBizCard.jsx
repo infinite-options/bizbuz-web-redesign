@@ -162,11 +162,21 @@ const CreateBizCard = () => {
     }
     navigate("/");
   };
+  const canBeSubmitted = () => {
+    const isValid = agreement; // checkbox for terms
 
+    if (isValid) {
+      document.getElementById("submitButton").removeAttribute("disabled");
+    } else {
+      document.getElementById("submitButton").setAttribute("disabled", true);
+    }
+    console.log({ agreement });
+  };
+  useEffect(() => canBeSubmitted(), [agreement]);
   return (
-    <Box display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column" justifyContent="center">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
+        <Brand onClick={() => navigate("/")}/>
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
       <Typography
@@ -203,7 +213,7 @@ const CreateBizCard = () => {
           "Simply enter the information below and we’ll create a bizCard for you!"
         }
       </Typography>
-      <Box sx={{ mt: "32px" }}>
+      <Box sx={{ mt: "32px", ml:"16px"}}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -259,7 +269,7 @@ const CreateBizCard = () => {
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "32px" }}>
+      <Box sx={{ mt: "32px", ml:"16px" }}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -315,7 +325,7 @@ const CreateBizCard = () => {
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "32px" }}>
+      <Box sx={{ mt: "32px" , ml:"16px"}}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <OutlinedInput
@@ -371,7 +381,7 @@ const CreateBizCard = () => {
           </FormControl>
         </Grid>
       </Box>
-      <Box sx={{ mt: "48px" }}>
+      <Box sx={{ mt: "48px" , ml:"16px"}}>
         <Grid item sx={{ pl: "0 !important" }}>
           <FormControl sx={{ width: "129px" }} variant="outlined">
             <Select
@@ -474,6 +484,7 @@ const CreateBizCard = () => {
         height="30vh"
       >
         <Button
+          id="submitButton"
           variant="contained"
           color="primary"
           sx={{

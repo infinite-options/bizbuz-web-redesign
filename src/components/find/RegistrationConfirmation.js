@@ -80,7 +80,7 @@ const RegistrationConfirmation = () => {
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")}/>
       </Box>
       <Stack
         direction="column"
@@ -106,13 +106,11 @@ const RegistrationConfirmation = () => {
       >
         {"Registration Confirmed!"}
       </Typography>
-      <Box
-        display="flex"
-        width="347px"
-        height="163px"
+      <Box 
+        display="flex" 
+        justifyContent="space-between" 
+        alignItems="center" 
         flexDirection="column"
-        justifyContent="center"
-        flexShrink={0}
         sx={{
           typography: {
             color: "#FFF",
@@ -127,14 +125,14 @@ const RegistrationConfirmation = () => {
           marginTop: "2px",
         }}
       >
-        <Typography sx={{ ml: "24px" }}>
+        <Typography>
           A confirmation email has been sent to the provided email address.
           Please check your inbox for further details.
         </Typography>
+        
         <Box
           sx={{
-            marginLeft: "130px",
-            marginTop: "-8px",
+            marginTop: "96px",
             position: "relative",
             left: 0,
             top: "50%",
@@ -143,29 +141,10 @@ const RegistrationConfirmation = () => {
         >
           <Done />
         </Box>
-        <Typography sx={{ mt: "32px", ml: "24px" }}>
+        <Typography sx={{ mt: "8px",}}>
           Make it easy to share your contact info by making a Free bizCard
         </Typography>
       </Box>
-
-      {/* <Typography
-        variant="h1"
-        sx={{
-          mt: "-32px",
-          textAlign: "center",
-          color: "#FFF",
-          fontFamily: "Fira Sans Condensed",
-          fontSize: "20px",
-          fontStyle: "normal",
-          fontWeight: 500,
-          lineHeight: "normal",
-        }}
-      >
-        Registration Code:{" "}
-        <span style={{ fontSize: "30px", marginLeft: "8px" }}>
-          {event.event_registration_code}
-        </span>
-      </Typography> */}
 
       <Box
         display="flex"
