@@ -67,16 +67,17 @@ const RegistrationConfirmation = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     axios
       .get(
-        BASE_URL + `/GetEvents?timeZone=${user_timezone}&eu_user_id=${user_uid}`
+        BASE_URL +
+          `/GetEvents?timeZone=${user_timezone}&event_uid=${event.event_uid}`
       )
       .then((response) => {
         setEventDet(response.data.result);
       });
   };
 
-  const currentEventDet = eventDet?.find(
-    (evt) => evt.event_uid === event.eu_event_id
-  );
+  // const currentEventDet = eventDet?.find(
+  //   (evt) => evt.event_uid === event.eu_event_id
+  // );
 
   console.log("Event:", JSON.stringify(event));
 
@@ -108,7 +109,7 @@ const RegistrationConfirmation = () => {
         <NewCardComponent
           event={event}
           isRegisteredEventCard={true}
-          totalRegistrants={currentEventDet.registrants}
+          totalRegistrants={eventDet[0].registrants}
         />
       </Stack>
       <Typography
