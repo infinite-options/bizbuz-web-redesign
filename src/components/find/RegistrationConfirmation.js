@@ -15,6 +15,7 @@ const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
+  const [eventDet, setEventDet] = useState();
   const [userDetails, setUserDetails] = useState();
   let email = state.email;
   let user = state.user;
@@ -59,6 +60,7 @@ const RegistrationConfirmation = () => {
       console.log("addEvent");
       addEventUser();
     }
+    getEvents();
   }, []);
 
   const getEvents = () => {
@@ -68,9 +70,13 @@ const RegistrationConfirmation = () => {
         BASE_URL + `/GetEvents?timeZone=${user_timezone}&eu_user_id=${user_uid}`
       )
       .then((response) => {
-        setEvent(response.data.result);
+        setEventDet(response.data.result);
       });
   };
+
+  const currentEventDet = eventDet?.find(
+    (evt) => evt.event_uid === event.eu_event_id
+  );
 
   console.log("Event:", JSON.stringify(event));
 
@@ -102,7 +108,7 @@ const RegistrationConfirmation = () => {
         <NewCardComponent
           event={event}
           isRegisteredEventCard={true}
-          totalRegistrants={eventObj.registrants}
+          totalRegistrants={currentEventDet.registrants}
         />
       </Stack>
       <Typography
