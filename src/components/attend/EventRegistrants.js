@@ -11,7 +11,6 @@ import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Avatar from "@mui/material/Avatar";
-import RegisteredCardComponent from "../registered-card-component";
 import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;

@@ -11,43 +11,10 @@ import NewCardComponent from "../../new-card-component";
 
 const RsvpEventInfo = () => {
   const location = useLocation();
-  const { event } = location.state;
+  const { event, user } = location.state;
   const navigate = useNavigate();
 
-  const handleEventClick = (event) => {
-    if (
-      document.cookie !== "" &&
-      document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
-        undefined
-    ) {
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("loggedIn="))
-        .split("=")[1] === "true"
-        ? navigate("/earlyArrival", {
-            state: {
-              email: document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("user_email="))
-                .split("=")[1],
-              user: JSON.parse(
-                document.cookie
-                  .split("; ")
-                  .find((row) => row.startsWith("user_details="))
-                  .split("=")[1]
-              ),
-              eventObj: event,
-            },
-          })
-        : navigate("/login", {
-            state: { path: "/earlyArrival", eventObj: event },
-          });
-    } else {
-      navigate("/login", {
-        state: { path: "/earlyArrival", eventObj: event },
-      });
-    }
-  };
+  const userAnswers = JSON.parse(event.eu_qas);
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
@@ -138,9 +105,14 @@ const RsvpEventInfo = () => {
         }}
       >
         {JSON.parse(event.pre_event_questionnaire).map((question, index) => (
-          <Typography key={question.id} variant="body1">
-            {`${index + 1}. ${question.question}`}
-          </Typography>
+          <div key={question.id}>
+            <Typography key={question.id} variant="body1">
+              {`${index + 1}. ${question.question}`}
+            </Typography>
+            <Typography variant="body2">
+              Your Answer - {userAnswers[index].answer}
+            </Typography>
+          </div>
         ))}
       </Box>
       <Button
@@ -156,7 +128,11 @@ const RsvpEventInfo = () => {
           left: "0",
           right: "0",
         }}
-        onClick={handleEventClick(location.state.event)}
+        onClick={() => {
+          navigate("/earlyArrival", {
+            state: { eventObj: event, user },
+          });
+        }}
       >
         {"Attend"}
       </Button>

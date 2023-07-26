@@ -91,7 +91,7 @@ const RegistrationConfirmation = () => {
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")}/>
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
       </Box>
       <Stack
         direction="column"
@@ -99,7 +99,11 @@ const RegistrationConfirmation = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <NewCardComponent event={event} isRegisteredEventCard={true} />
+        <NewCardComponent
+          event={event}
+          isRegisteredEventCard={true}
+          totalRegistrants={eventObj.registrants}
+        />
       </Stack>
       <Typography
         variant="h1"
@@ -117,10 +121,10 @@ const RegistrationConfirmation = () => {
       >
         {"Registration Confirmed!"}
       </Typography>
-      <Box 
-        display="flex" 
-        justifyContent="space-between" 
-        alignItems="center" 
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
         flexDirection="column"
         sx={{
           typography: {
@@ -140,7 +144,7 @@ const RegistrationConfirmation = () => {
           A confirmation email has been sent to the provided email address.
           Please check your inbox for further details.
         </Typography>
-        
+
         <Box
           sx={{
             marginTop: "96px",
@@ -152,7 +156,7 @@ const RegistrationConfirmation = () => {
         >
           <Done />
         </Box>
-        <Typography sx={{ mt: "8px",}}>
+        <Typography sx={{ mt: "8px" }}>
           Make it easy to share your contact info by making a Free bizCard
         </Typography>
       </Box>

@@ -211,18 +211,15 @@ const NewCardComponent = ({
                 {(() => {
                   if (isRegisteredEventCard) {
                     return (
-                      <Typography
-                        display={"flex"}
-                        alignItems={"center"}
-                        gap={0.5}
-                        color={eventTypeColor.textColor}
-                        variant="body2"
-                      >
+                      <Box display="flex" alignItems="center" gap={0.5}>
                         <Icon>{eventTypeColor.userAltIcon}</Icon>
-                        <span style={{ fontFamily: "Inter" }}>
+                        <Typography
+                          color={eventTypeColor.textColor}
+                          variant="body2"
+                        >
                           {totalRegistrants} Registrants
-                        </span>
-                      </Typography>
+                        </Typography>
+                      </Box>
                     );
                   } else {
                     if (onRegisterClick !== undefined) {

@@ -10,7 +10,6 @@ import Stack from "@mui/material/Stack";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../assets/NoUserImage.png";
-import RegisteredCardComponent from "../registered-card-component";
 import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;

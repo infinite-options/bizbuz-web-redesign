@@ -5,9 +5,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
-import RegisteredCardComponent from "../registered-card-component";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import useLocalStorage from "../../util/localStorage";
+import NewCardComponent from "../new-card-component";
 
 const EditEvent = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const EditEvent = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")}/>
+        <Brand onClick={() => navigate("/")} />
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "40px" }}>
@@ -59,7 +59,7 @@ const EditEvent = () => {
         spacing={2}
         sx={{ mt: "8px" }}
       >
-        <RegisteredCardComponent event={event} />
+        <NewCardComponent event={event} isRegisteredEventCard={true} />
       </Stack>
       <Box sx={{ display: "flex" }}>
         <Button

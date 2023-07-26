@@ -16,7 +16,6 @@ import Avatar from "@mui/material/Avatar";
 import Snackbar from "@mui/material/Snackbar";
 import MUIAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
-import RegisteredCardComponent from "../registered-card-component";
 import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
