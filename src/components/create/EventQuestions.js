@@ -73,7 +73,7 @@ const EventQuestions = () => {
     event.pre_event_questionnaire = JSON.stringify(preEventQuestionnaire);
     setEvent(event);
     navigate("/eventReview", {
-      state: { user },
+      state: { event, user },
     });
   };
 

@@ -28,6 +28,7 @@ const NewCardComponent = ({
   isRegisteredEventCard,
   totalRegistrants,
   onCardClick,
+  buttonLabel = "Register",
 }) => {
   const handleRegisterClick = () => {
     onRegisterClick(event);
@@ -231,7 +232,7 @@ const NewCardComponent = ({
                           sx={{ width: "90%", height: 40 }}
                           onClick={handleRegisterClick}
                         >
-                          Register
+                          {buttonLabel}
                         </Button>
                       );
                     }

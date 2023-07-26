@@ -64,6 +64,7 @@ const CreateEvent = () => {
             key={event.event_uid}
             event={event}
             isRegisteredEventCard={false}
+            buttonLabel="Edit Event"
             onRegisterClick={() => {
               navigate("/editEvent", {
                 state: { event, user },
