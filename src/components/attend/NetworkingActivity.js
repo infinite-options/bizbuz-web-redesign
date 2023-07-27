@@ -54,8 +54,8 @@ const NetworkingActivity = () => {
         keys: ["from", "to"],
         layoutAlgorithm: {
           enableSimulation: false,
-          linkLength: 50,
           initialPositions: "circle",
+          repulsiveForce: () => 100,
         },
         point: {
           events: {
@@ -100,28 +100,38 @@ const NetworkingActivity = () => {
 
   const refreshGraph = async () => {
     const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+      `${BASE_URL}/overallGraph?eventId=${eventObj.event_uid}`
     );
     const data = response["data"];
     let nodesArr = [];
-    data["users"].forEach((u) => {
-      nodesArr.push({
-        id: u.user_uid,
-        marker: {
-          symbol: `url(${handleUserImage(u.images)})`,
-          width: 50,
-          height: 50,
-        },
-        name: `${u.first_name} is ${u.role}`,
-        className: {
-          clipPath: "circle()",
-        },
-      });
-    });
+    for (const u of data["users"]) {
+      if (
+        u.user_uid === userObj.user_uid ||
+        (nodesArr.length <= 7 && u.user_uid !== userObj.user_uid)
+      ) {
+        nodesArr.push({
+          id: u.user_uid,
+          marker: {
+            symbol: `url(${handleUserImage(u.images)})`,
+            width: 50,
+            height: 50,
+          },
+          name: `${u.first_name} is ${u.role}`,
+          className: {
+            clipPath: "circle()",
+          },
+        });
+      }
+    }
+    let linksArr = [];
+    for (const l of data["links"]) {
+      if (l["from"] === userObj.user_uid || l["to"] === userObj.user_uid)
+        linksArr.push(l);
+    }
     setOptions({
       series: [
         {
-          data: data["links"],
+          data: linksArr,
           nodes: nodesArr,
         },
       ],
@@ -194,57 +204,6 @@ const NetworkingActivity = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        {/* <Card>
-          <CardActionArea>
-            <CardContent>
-              <Typography gutterBottom variant="h2" component="div">
-                {eventObj.event_title}
-              </Typography>
-              <Grid container rowSpacing={{ xs: 1, sm: 10 }}>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <CalendarIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {new Date().toLocaleString("default", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </Typography>
-                </Grid>
-                <Grid item xs={6} />
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <ClockIcon />
-                  &nbsp;
-                  <Typography variant="body1">
-                    {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={6}
-                  sx={{ display: "flex", flexDirection: "row" }}
-                >
-                  <MarkerIcon />
-                  <Typography
-                    variant="body1"
-                    sx={{ fontSize: 12, maxWidth: "80%" }}
-                  >
-                    {eventObj.event_location}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </CardActionArea>
-        </Card> */}
         <NewCardComponent
           event={eventObj}
           isRegisteredEventCard={true}
