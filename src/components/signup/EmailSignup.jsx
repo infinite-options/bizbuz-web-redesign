@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserAlreadyExistsModal from "./UserAlreadyExistsModal";
-import { hidden } from "../../styles";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
 
@@ -145,7 +144,9 @@ export default function EmailSignup() {
                   required
                 />
               </FormGroup>
-              <div className={errorMessage === "" ? hidden : {}}>
+              <div
+                className={errorMessage === "" ? { visibility: "hidden" } : {}}
+              >
                 <Typography variant="h3">{errorMessage}</Typography>
               </div>
               <Stack sx={{ mt: 2 }}>

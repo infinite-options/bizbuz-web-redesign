@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
@@ -15,6 +16,7 @@ import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
+import Loading from "../common/Loading";
 // import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -25,8 +27,10 @@ const EventReview = () => {
   const { user } = location.state;
   const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
   const event = getEvent();
+  const [isLoading, setLoading] = useState(false);
 
   const handleAddEvent = async () => {
+    setLoading(true);
     const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     event.user_timezone = user_timezone;
     const headers = {
@@ -49,6 +53,7 @@ const EventReview = () => {
     });
     removeEvent();
     const data = await response.json();
+    setLoading(false);
     navigate("/eventCode", { state: { event: data.result[0] } });
   };
 
@@ -149,6 +154,7 @@ const EventReview = () => {
           onClick={() => navigate(-1)}
         />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
       </Typography>

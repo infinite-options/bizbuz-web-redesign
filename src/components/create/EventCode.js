@@ -6,12 +6,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import QRCode from "../common/QRCode";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import Loading from "../common/Loading";
 
 const EventCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { event } = location.state;
   const [buttonText, setButtonText] = useState("Share");
+  const [isLoading, setLoading] = useState(true);
 
   const handleShare = () => {
     navigator.clipboard.writeText(event.event_registration_code);
@@ -29,6 +31,7 @@ const EventCode = () => {
           navigate("/");
         }}
       />
+      <Loading isLoading={isLoading} />
       <Typography variant="h1" sx={{ mt: "68px" }}>
         {"Registration code"}
       </Typography>
@@ -46,6 +49,7 @@ const EventCode = () => {
             <QRCode
               route={"/eventQuestionnaire"}
               eventRegistrationCode={event.event_registration_code}
+              setLoading={setLoading}
             />
             <Typography sx={{ color: "#FFFFFF", fontSize: 24 }}>
               {event.event_registration_code}

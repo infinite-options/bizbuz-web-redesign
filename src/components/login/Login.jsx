@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import GoogleLogin from "./GoogleLogin";
 import EmailLogin from "./EmailLogin";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-// import Back from "../../assets/Back.png";
-import { hidden } from "../../styles";
+
 export default function Login() {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -76,7 +75,10 @@ export default function Login() {
         spacing={2}
         sx={{ mt: 2 }}
       >
-        <div className="text-center" style={errorMessage === "" ? hidden : {}}>
+        <div
+          className="text-center"
+          style={errorMessage === "" ? { visibility: "hidden" } : {}}
+        >
           <Typography variant="h3">{errorMessage || "error"}</Typography>
         </div>
       </Stack>
@@ -91,7 +93,14 @@ export default function Login() {
           </Button>
         )}
       </Stack> */}
-      <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0", zIndex: -1}} />
+      <Footer
+        style={{
+          alignSelf: "center",
+          position: "fixed",
+          bottom: "0",
+          zIndex: -1,
+        }}
+      />
     </Box>
   );
 }
