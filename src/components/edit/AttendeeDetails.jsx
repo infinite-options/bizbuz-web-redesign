@@ -252,7 +252,7 @@ const AttendeeDetails = () => {
           mt: "auto",
           marginLeft: "auto",
           marginRight: "auto",
-          position: "fixed",
+          // position: "fixed",
           bottom: "20px",
           left: "0",
           right: "0",

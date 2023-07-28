@@ -91,7 +91,7 @@ export default function Login() {
           </Button>
         )}
       </Stack> */}
-      <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0" }} />
+      <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0", zIndex: -1}} />
     </Box>
   );
 }
