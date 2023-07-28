@@ -118,8 +118,7 @@ const EventInfo = () => {
           mt: "auto",
           marginLeft: "auto",
           marginRight: "auto",
-          position: "fixed",
-          bottom: "20px",
+          bottom: "-36px",
           left: "0",
           right: "0",
         }}

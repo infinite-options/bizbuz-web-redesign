@@ -393,10 +393,12 @@ export default function FindBy() {
                 style={{
                   backgroundColor: "white",
                   marginTop: "1rem",
-                  minWidth: "100%",
                   borderRadius: "25px 25px 0px 0px",
+                  alignSelf: "center",
                   position: "fixed",
-                  bottom: 0,
+                  bottom: "0",
+                  width: "100%",
+                  zIndex: -1,
                 }}
               >
                 {" "}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -20,6 +20,7 @@ const Landing = () => {
     }, 1000);
     navigate("/");
   };
+
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
@@ -128,6 +129,8 @@ const Landing = () => {
           alignSelf: "center",
           position: "fixed",
           bottom: "0",
+          height: "25%",
+          width: "100%",
           zIndex: "auto",
         }}
         onClick={handleLogout}
