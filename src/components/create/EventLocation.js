@@ -54,6 +54,10 @@ const EventLocation = () => {
   };
 
   const handleContinue = () => {
+    if (!address || !lat || !long) {
+      alert("Please fill out the location");
+      return;
+    }
     event.event_location_name = locationName;
     event.event_location = address;
     event.event_zip = zipcode;

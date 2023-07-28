@@ -51,6 +51,10 @@ const EventImage = () => {
   };
 
   const handleContinue = async () => {
+    if (!isDefault && Object.keys(image).length === 0) {
+      alert("Please select an image");
+      return;
+    }
     if (!isDefault) event.img_cover = image.image;
     else event.img_cover = null;
     setEvent(event);

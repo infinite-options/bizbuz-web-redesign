@@ -93,6 +93,17 @@ const EventDetails = () => {
   };
 
   const handleContinue = () => {
+    if (
+      !eventType ||
+      !startDate ||
+      !endDate ||
+      !startTime ||
+      !endTime ||
+      (eventLimit === "Set Limit" && !eventCapacity)
+    ) {
+      alert("Please fill out all the fields");
+      return;
+    }
     event.event_organizer_uid = user.user_uid;
     event.event_type = eventType;
     event.event_start_date = new Date(startDate).toLocaleDateString("en-US");

@@ -43,6 +43,10 @@ const EventTitle = () => {
   };
 
   const handleContinue = () => {
+    if (!title || !description || !access) {
+      alert("Please fill out all the fields");
+      return;
+    }
     event.event_title = title;
     event.event_description = description;
     event.event_visibility = access;
