@@ -73,7 +73,7 @@ function GoogleSignupForm(props) {
             user_details: user,
           });
 
-          navigate("/create-card", {
+          navigate("/createBizCard", {
             state: {
               email: email,
               user_uid: response.data.result.user_uid,

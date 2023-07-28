@@ -49,7 +49,7 @@ export default function ValidationCode() {
         if (response.data.email_validated_status === "...") {
           setErrorMessage(response.data.message);
         } else if (response.data.email_validated_status === "TRUE") {
-          navigate("/create-card", {
+          navigate("/createBizCard", {
             state: {
               email: email,
               user_uid: user_uid,

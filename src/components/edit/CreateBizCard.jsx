@@ -21,7 +21,7 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const CreateBizCard = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { event, userDetails, user_uid, user } = location.state;
+  const { event, userDetails, user_uid, user, path } = location.state;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [company, setCompany] = useState("");
@@ -161,8 +161,10 @@ const CreateBizCard = () => {
       const data = await response.json();
       console.log(data);
     }
-    navigate("/");
+    if (path) navigate(path, { state: { event, eventObj: event, user } });
+    else navigate("/");
   };
+
   const canBeSubmitted = () => {
     const isValid = agreement; // checkbox for terms
 
