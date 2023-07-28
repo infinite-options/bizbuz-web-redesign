@@ -6,6 +6,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import NewCardComponent from "../new-card-component";
 import Loading from "../common/Loading";
 
@@ -34,7 +35,13 @@ const CreateEvent = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand onClick={() => navigate("/")} style={{ marginTop: "36px" }} />
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
       <Loading isLoading={isLoading} />
       <Typography variant="h1" sx={{ mt: "78px" }}>
         {"Create new Event"}
@@ -42,11 +49,12 @@ const CreateEvent = () => {
       <Button
         variant="contained"
         sx={{ mt: "8px" }}
-        onClick={() =>
+        onClick={() => {
+          localStorage.clear();
           navigate("/eventDetails", {
             state: { user },
-          })
-        }
+          });
+        }}
       >
         {"Create"}
       </Button>
@@ -66,6 +74,7 @@ const CreateEvent = () => {
             isRegisteredEventCard={false}
             buttonLabel="Edit Event"
             onRegisterClick={() => {
+              localStorage.clear();
               navigate("/editEvent", {
                 state: { event, user },
               });

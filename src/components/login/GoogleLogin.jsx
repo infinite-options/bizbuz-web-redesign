@@ -212,6 +212,9 @@ function GoogleLogin(props) {
                 color: "#000000",
                 width: "92vw",
                 height: "44px",
+                "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                  backgroundColor: "white",
+                },
               }}
             >
               <img

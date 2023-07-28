@@ -60,8 +60,15 @@ const EventTitle = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
@@ -103,8 +110,8 @@ const EventTitle = () => {
               width: "128px",
               height: "40px",
               color: "#000000",
-              "&.Mui-selected": {
-                backgroundColor: "#F26457 !important",
+              "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                backgroundColor: "#AA0E00",
               },
             }}
             onClick={() => handleAccessChange("Public")}
@@ -121,8 +128,8 @@ const EventTitle = () => {
               width: "128px",
               height: "40px",
               color: "#000000",
-              "&.Mui-selected": {
-                backgroundColor: "#F26457 !important",
+              "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                backgroundColor: "#20B2AA",
               },
             }}
             onClick={() => handleAccessChange("Private")}

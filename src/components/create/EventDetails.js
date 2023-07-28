@@ -43,7 +43,7 @@ const EventDetails = () => {
   const [eventType, setEventType] = useState(event.event_type);
   const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
   const [isDisabled, setDisabled] = useState(
-    event.event_capacity === "No Limit"
+    !event.event_capacity || event.event_capacity === "No Limit"
   );
   const [eventLimit, setEventLimit] = useState(
     event.event_capacity ? "Set Limit" : "No Limit"
@@ -93,7 +93,7 @@ const EventDetails = () => {
   };
 
   const handleContinue = () => {
-    event.event_organizer_uid = "100-000038";
+    event.event_organizer_uid = user.user_uid;
     event.event_type = eventType;
     event.event_start_date = new Date(startDate).toLocaleDateString("en-US");
     event.event_end_date = new Date(endDate).toLocaleDateString("en-US");
@@ -127,8 +127,15 @@ const EventDetails = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}

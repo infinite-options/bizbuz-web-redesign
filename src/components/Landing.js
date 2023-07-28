@@ -13,7 +13,8 @@ const Landing = () => {
   const navigate = useNavigate();
   const [isLoggedOut, setLoggedOut] = useState(false);
   const handleLogout = () => {
-    document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setLoggedOut(true);
     setTimeout(() => {
       setLoggedOut(false);
@@ -26,7 +27,10 @@ const Landing = () => {
       <Brand style={{ marginTop: "36px", marginBottom: "5rem" }} />
       <Grid container rowSpacing={{ xs: 1, sm: 10 }} columnSpacing={{ xs: 1 }}>
         <Grid item xs={6} align="center">
-          <Search onClick={() => navigate("/findEvent")} />
+          <Search
+            onClick={() => navigate("/findEvent")}
+            style={{ cursor: "pointer" }}
+          />
         </Grid>
         <Grid item xs={6} align="center">
           <RSVPs
@@ -64,10 +68,14 @@ const Landing = () => {
                 });
               }
             }}
+            style={{ cursor: "pointer" }}
           />
         </Grid>
         <Grid item xs={6} align="center">
-          <Attend onClick={() => navigate("/currentEvents")} />
+          <Attend
+            onClick={() => navigate("/currentEvents")}
+            style={{ cursor: "pointer" }}
+          />
         </Grid>
         <Grid item xs={6} align="center">
           <Create
@@ -105,6 +113,7 @@ const Landing = () => {
                 });
               }
             }}
+            style={{ cursor: "pointer" }}
           />
         </Grid>
       </Grid>

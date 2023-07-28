@@ -5,6 +5,7 @@ import GoogleLogin from "./GoogleLogin";
 import EmailLogin from "./EmailLogin";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 // import Back from "../../assets/Back.png";
 import { hidden } from "../../styles";
 export default function Login() {
@@ -22,14 +23,10 @@ export default function Login() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {/* <UserDoesNotExistModal
-        isOpen={userDoesntExist}
-        onCancel={onCancelModal}
-        path={path}
-        eventObj={eventObj}
-      /> */}
-
-      <Brand style={{ marginTop: "36px", marginBottom: "2rem" }} />
+      <Stack direction="row" sx={{ mt: "36px", marginBottom: "2rem" }}>
+        <Brand onClick={() => navigate("/")} />
+        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+      </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Login here"}
       </Typography>
@@ -80,7 +77,7 @@ export default function Login() {
         sx={{ mt: 2 }}
       >
         <div className="text-center" style={errorMessage === "" ? hidden : {}}>
-          <p>{errorMessage || "error"}</p>
+          <Typography variant="h3">{errorMessage || "error"}</Typography>
         </div>
       </Stack>
 

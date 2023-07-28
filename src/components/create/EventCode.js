@@ -23,7 +23,12 @@ const EventCode = () => {
 
   return (
     <Box display="flex" flexDirection="column">
-      <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
+      <Brand
+        style={{ marginTop: "36px", cursor: "pointer" }}
+        onClick={() => {
+          navigate("/");
+        }}
+      />
       <Typography variant="h1" sx={{ mt: "68px" }}>
         {"Registration code"}
       </Typography>

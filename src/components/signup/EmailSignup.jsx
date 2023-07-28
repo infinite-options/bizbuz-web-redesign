@@ -114,8 +114,11 @@ export default function EmailSignup() {
               <FormGroup>
                 <Typography variant="h3">Username</Typography>
                 <TextField
-                  style={{
+                  sx={{
                     backgroundColor: "white",
+                    width: "92vw",
+                    height: "44px",
+                    borderRadius: "8px",
                   }}
                   type="email"
                   name="email"
@@ -125,11 +128,14 @@ export default function EmailSignup() {
                   required
                 />
               </FormGroup>
-              <FormGroup>
+              <FormGroup sx={{ mt: 2 }}>
                 <Typography variant="h3">Confirm Password</Typography>
                 <TextField
-                  style={{
+                  sx={{
                     backgroundColor: "white",
+                    width: "92vw",
+                    height: "44px",
+                    borderRadius: "8px",
                   }}
                   type="password"
                   margin="normal"
@@ -140,14 +146,20 @@ export default function EmailSignup() {
                 />
               </FormGroup>
               <div className={errorMessage === "" ? hidden : {}}>
-                <p>{errorMessage}</p>
+                <Typography variant="h3">{errorMessage}</Typography>
               </div>
               <Stack sx={{ mt: 2 }}>
                 <Button
                   onClick={submitForm}
-                  style={{
+                  sx={{
+                    textTransform: "none",
                     backgroundColor: "#F26457",
                     color: "white",
+                    width: "92vw",
+                    height: "44px",
+                    "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                      backgroundColor: "#F26457",
+                    },
                   }}
                 >
                   Create New Account
