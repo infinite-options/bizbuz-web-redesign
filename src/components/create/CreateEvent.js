@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -68,12 +68,11 @@ const CreateEvent = () => {
         sx={{ mt: 2 }}
       >
         {events.map((event) => (
-          <NewCardComponent
+          <EventCard
             key={event.event_uid}
             event={event}
-            isRegisteredEventCard={false}
             buttonLabel="Edit Event"
-            onRegisterClick={() => {
+            onButtonClick={() => {
               localStorage.clear();
               navigate("/editEvent", {
                 state: { event, user },

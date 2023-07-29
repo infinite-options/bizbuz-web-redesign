@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import useLocalStorage from "../../util/localStorage";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const EditEvent = () => {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const EditEvent = () => {
         spacing={2}
         sx={{ mt: "8px" }}
       >
-        <NewCardComponent event={event} isRegisteredEventCard={true} />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Box sx={{ display: "flex" }}>
         <Button

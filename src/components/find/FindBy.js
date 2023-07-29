@@ -15,10 +15,10 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
 import { ReactComponent as Location } from "../../assets/marker-black.svg";
-import NewCardComponent from "../new-card-component";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Down } from "../../assets/down.svg";
 import { Select, MenuItem } from "@mui/material";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
@@ -111,7 +111,6 @@ export default function FindBy() {
         });
     }
     setSelectedDate("");
-    
   };
 
   const handleRegisterClick = (event) => {
@@ -120,11 +119,16 @@ export default function FindBy() {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center" >
-        <Brand style={{ marginTop: "36px"}} onClick={() => navigate("/")} />
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
         <Back onClick={() => navigate("/")} />
       </Box>
-      <Box display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection="column"
+      >
         <Box>
           <Typography
             gutterBottom
@@ -143,34 +147,34 @@ export default function FindBy() {
           </Typography>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{
-                  width: "355px",
-                  height: "56px",
-                  fontSize: 12,
-                  backgroundColor: "white",
+            <DatePicker
+              sx={{
+                width: "355px",
+                height: "56px",
+                fontSize: 12,
+                backgroundColor: "white",
+                borderRadius: "10px",
+                marginTop: "16px",
+                color: (theme) =>
+                  `${theme.palette.primary.contrastText} !important`,
+                "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  underline: "none",
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                  underline: "none",
+                },
+                "& .MuiInputBase-root": {
                   borderRadius: "10px",
-                  marginTop: "16px",
-                  color: (theme) =>
-                    `${theme.palette.primary.contrastText} !important`,
-                  "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                    underline: "none",
-                  },
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    border: "none",
-                    underline: "none",
-                  },
-                  "& .MuiInputBase-root": {
-                    borderRadius: "10px",
-                  },
-                }}
-                value={selectedDate}
-                inputFormat="MM-DD-YYYY"
-                onChange={(d) => {
-                  setSelectedDate(d.format("MM/DD/YYYY"));
-                }}
-              />
+                },
+              }}
+              value={selectedDate}
+              inputFormat="MM-DD-YYYY"
+              onChange={(d) => {
+                setSelectedDate(d.format("MM/DD/YYYY"));
+              }}
+            />
           </LocalizationProvider>
 
           <Grid item sx={{ pl: "0 !important" }}>
@@ -249,7 +253,7 @@ export default function FindBy() {
                   fontSize: 12,
                   backgroundColor: "white",
                   borderRadius: "10px",
-                  ml:"10px",
+                  ml: "10px",
                 }}
               />
             </FormControl>
@@ -273,11 +277,13 @@ export default function FindBy() {
                 displayEmpty
               >
                 <MenuItem disabled value="">
-                  <Typography sx={{fontStyle: "normal",}}>
+                  <Typography sx={{ fontStyle: "normal" }}>
                     Select by Type
                   </Typography>
                 </MenuItem>
-                <MenuItem value="Business Marketing">Business Marketing</MenuItem>
+                <MenuItem value="Business Marketing">
+                  Business Marketing
+                </MenuItem>
                 <MenuItem value="Party or Event">Party or Event</MenuItem>
                 <MenuItem value="Social Mixer">Social Mixer</MenuItem>
                 <MenuItem value="Other">Other</MenuItem>
@@ -321,7 +327,6 @@ export default function FindBy() {
             {"Get Events"}
           </Button>
         </Box>
-        
 
         <Grid container>
           {" "}
@@ -378,10 +383,9 @@ export default function FindBy() {
 
                   {events.map((event) => {
                     return (
-                      <NewCardComponent
+                      <EventCard
                         event={event}
-                        onRegisterClick={handleRegisterClick}
-                        isRegisteredEventCard={false}
+                        onButtonClick={handleRegisterClick}
                       />
                     );
                   })}

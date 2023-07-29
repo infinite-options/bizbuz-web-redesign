@@ -15,7 +15,7 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Phone } from "../../assets/phone.svg";
 import { ReactComponent as Mail } from "../../assets/mail-04.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const AttendeeDetails = () => {
@@ -54,7 +54,7 @@ const AttendeeDetails = () => {
         spacing={2}
         sx={{ mt: "40px" }}
       >
-        <NewCardComponent event={event} isRegisteredEventCard={true} />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Box sx={{ display: "flex", flexDirection: "column", mt: 4 }}>
         <Stack align="center" direction="column">

@@ -3,11 +3,9 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { ReactComponent as Brand } from "../../../assets/brand.svg";
-import { ReactComponent as Back } from "../../../assets/back.svg";
-import NewCardComponent from "../../new-card-component";
-
-//const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as Back } from "../../assets/back.svg";
+import EventCard from "../common/EventCard";
 
 const RsvpEventInfo = () => {
   const location = useLocation();
@@ -28,10 +26,10 @@ const RsvpEventInfo = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <NewCardComponent
+        <EventCard
           event={event}
-          isRegisteredEventCard={true}
-          totalRegistrants={event.registrants}
+          isRegistered={true}
+          registrants={event.registrants}
         />
       </Stack>
       <Typography

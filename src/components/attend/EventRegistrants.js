@@ -11,7 +11,7 @@ import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Avatar from "@mui/material/Avatar";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -35,15 +35,6 @@ const EventRegistrants = () => {
     const data = response["data"];
     setRegistrants(data["attendees"]);
   };
-
-  // const fetchOrganizers = async () => {
-  //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
-  //   const organizersData = response.data.result;
-  //   const eventHost = organizersData.find(
-  //     (organizer) => organizer.event_uid === eventObj.event_uid
-  //   );
-  //   setEventHost(eventHost);
-  // };
 
   const fetchOrganizerProfile = async () => {
     const response = await axios.get(
@@ -72,10 +63,10 @@ const EventRegistrants = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <NewCardComponent
+        <EventCard
           event={eventObj}
-          isRegisteredEventCard={true}
-          totalRegistrants={eventObj.registrants}
+          isRegistered={true}
+          registrants={eventObj.registrants}
         />
       </Stack>
 

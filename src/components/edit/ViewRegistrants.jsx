@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { CardActionArea } from "@mui/material";
@@ -13,7 +12,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -57,7 +56,7 @@ const ViewRegistrants = () => {
         spacing={2}
         sx={{ mt: "8px" }}
       >
-        <NewCardComponent event={event} isRegisteredEventCard={true} />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
         <CardActionArea>

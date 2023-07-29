@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Grid, Box, Button, Typography, Stack } from "@mui/material";
-import { ReactComponent as Down } from "../../../assets/down.svg";
-import { ReactComponent as Globe } from "../../../assets/globe.svg";
-import { ReactComponent as Brand } from "../../../assets/brand.svg";
-import { ReactComponent as Back } from "../../../assets/back.svg";
-import NewCardComponent from "../../new-card-component";
+import { ReactComponent as Down } from "../../assets/down.svg";
+import { ReactComponent as Globe } from "../../assets/globe.svg";
+import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as Back } from "../../assets/back.svg";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -134,11 +134,11 @@ const CurrentRsvp = () => {
                     ? correspondingEvent.registrants
                     : 0;
                   return (
-                    <NewCardComponent
+                    <EventCard
                       event={event}
                       onCardClick={handleCardClick}
-                      totalRegistrants={totalRegistrants}
-                      isRegisteredEventCard={true}
+                      registrants={totalRegistrants}
+                      isRegistered={true}
                     />
                   );
                 })}

@@ -7,7 +7,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -84,11 +84,11 @@ const CurrentEvents = () => {
         {events.length > 0 ? (
           events.map((event) => {
             return (
-              <NewCardComponent
+              <EventCard
                 event={event}
                 onCardClick={handleEventClick}
-                isRegisteredEventCard={true}
-                totalRegistrants={event.registrants}
+                isRegistered={true}
+                registrants={event.registrants}
               />
             );
           })

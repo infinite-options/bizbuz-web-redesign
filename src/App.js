@@ -33,8 +33,8 @@ import EmailSignupForm from "./components/signup/EmailSignupForm";
 import ValidationCode from "./components/signup/ValidationCode";
 import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./util/LoginContext";
-import CurrentRsvp from "./components/rsvp/current-rsvp";
-import RsvpEventInfo from "./components/rsvp/rsvp-event-info";
+import CurrentRsvp from "./components/rsvp/CurrentRsvp";
+import RsvpEventInfo from "./components/rsvp/RsvpEventInfo";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);

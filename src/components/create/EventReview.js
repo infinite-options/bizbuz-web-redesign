@@ -10,14 +10,13 @@ import Grid from "@mui/material/Grid";
 import Map from "./Map";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import { Card, CardContent, CardMedia, Icon } from "@mui/material";
+import { Card, CardContent, CardMedia } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
 import Loading from "../common/Loading";
-// import NewCardComponent from "../new-card-component";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -162,10 +161,6 @@ const EventReview = () => {
         <Box display="flex" flexDirection="column" sx={{ minHeight: "62vh" }}>
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
-            {/* <NewCardComponent
-              event={event}
-              isRegisteredEventCard={true}
-            ></NewCardComponent> */}
             <Card sx={{ minWidth: 275 }}>
               <Box
                 bgcolor={eventTypeColor.backgroundColor}
@@ -226,28 +221,24 @@ const EventReview = () => {
                       <Typography
                         display={"flex"}
                         alignItems={"center"}
-                        gap={0.5}
                         color={eventTypeColor.textColor}
                         variant="body2"
                         my={1}
                         onClick={() => handleChange("/eventDetails")}
                       >
-                        {eventTypeColor.clockIcon}
-                        <span>
-                          {event.event_start_time} - {event.event_end_time}
-                        </span>
+                        {eventTypeColor.clockIcon}&nbsp;
+                        {event.event_start_time} - {event.event_end_time}
                       </Typography>
                       <Typography
                         display={"flex"}
                         alignItems={"center"}
-                        gap={0.5}
                         color={eventTypeColor.textColor}
                         variant="body2"
                         mb={1}
                         onClick={() => handleChange("/eventLocation")}
                       >
-                        <Icon>{eventTypeColor.markerIcon}</Icon>
-                        <span> {event.event_location}</span>
+                        {eventTypeColor.markerIcon}&nbsp;
+                        {event.event_location}
                       </Typography>
                     </Box>
                   </Stack>
