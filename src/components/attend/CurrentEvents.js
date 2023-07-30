@@ -88,7 +88,7 @@ const CurrentEvents = () => {
                 event={event}
                 onCardClick={handleEventClick}
                 isRegistered={true}
-                registrants={event.registrants}
+                isList={true}
               />
             );
           })

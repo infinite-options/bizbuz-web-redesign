@@ -182,10 +182,8 @@ const NetworkingActivity = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
+        style={{ marginTop: "36px", cursor: "pointer" }}
+        onClick={handleLeaveEvent}
       />
       <Snackbar
         open={showAlert}
@@ -204,11 +202,7 @@ const NetworkingActivity = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <EventCard
-          event={eventObj}
-          isRegistered={true}
-          registrants={eventObj.registrants}
-        />
+        <EventCard event={eventObj} isRegistered={true} />
       </Stack>
 
       <Stack spacing={2} direction="column">

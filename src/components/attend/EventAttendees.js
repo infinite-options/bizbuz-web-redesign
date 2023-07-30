@@ -101,9 +101,9 @@ const EventAttendees = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
-          style={{ marginLeft: "auto" }}
+          style={{ marginLeft: "auto", cursor: "pointer" }}
           onClick={() => navigate(-1, { state: { eventObj, userObj } })}
         />
       </Stack>
@@ -124,11 +124,7 @@ const EventAttendees = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <EventCard
-          event={eventObj}
-          isRegistered={true}
-          registrants={eventObj.registrants}
-        />
+        <EventCard event={eventObj} isRegistered={true} />
       </Stack>
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>
         <CardActionArea>

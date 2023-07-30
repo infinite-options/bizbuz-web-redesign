@@ -71,6 +71,7 @@ const CreateEvent = () => {
           <EventCard
             key={event.event_uid}
             event={event}
+            isList={true}
             buttonLabel="Edit Event"
             onButtonClick={() => {
               localStorage.clear();

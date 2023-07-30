@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
-import { ReactComponent as Back } from "../../assets/back.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import EventCard from "../common/EventCard";
 
 const RsvpEventInfo = () => {
@@ -16,21 +16,20 @@ const RsvpEventInfo = () => {
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
-        <Back onClick={() => navigate(-1)} />
-      </Box>
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
       <Stack
         direction="column"
         justifyContent="center"
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <EventCard
-          event={event}
-          isRegistered={true}
-          registrants={event.registrants}
-        />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Typography
         variant="h1"

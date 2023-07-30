@@ -99,11 +99,7 @@ const RegistrationConfirmation = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <EventCard
-          event={event}
-          isRegistered={true}
-          registrants={eventDet.registrants}
-        />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Typography
         variant="h1"

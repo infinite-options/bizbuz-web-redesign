@@ -5,8 +5,9 @@ import { Grid, Box, Button, Typography, Stack } from "@mui/material";
 import { ReactComponent as Down } from "../../assets/down.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
-import { ReactComponent as Back } from "../../assets/back.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -15,35 +16,22 @@ const CurrentRsvp = () => {
   const { state } = useLocation();
   const [showList, setShowList] = useState(false);
   const user = state.user;
-  let user_uid =
-    typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
-  const [events, setEvents] = useState([]);
   const [rsvpEvents, setRsvpEvents] = useState([]);
-  const getRSVPdEvents = () => {
+  const [isLoading, setLoading] = useState(true);
+
+  const getRSVPdEvents = async () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    axios
-      .get(
-        BASE_URL +
-          `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user_uid}`
-      )
-      .then((response) => {
-        setRsvpEvents(response.data.result);
-        if (!showList) setShowList(!showList);
-      });
+    const response = await axios.get(
+      BASE_URL +
+        `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user.user_uid}`
+    );
+    setRsvpEvents(response.data.result);
+    setLoading(false);
+    if (!showList) setShowList(!showList);
   };
-  const getEvents = () => {
-    let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    axios
-      .get(
-        BASE_URL + `/GetEvents?timeZone=${user_timezone}&eu_user_id=${user_uid}`
-      )
-      .then((response) => {
-        setEvents(response.data.result);
-      });
-  };
+
   useEffect(() => {
     getRSVPdEvents();
-    getEvents();
   }, []);
 
   const handleCardClick = (event) => {
@@ -52,10 +40,14 @@ const CurrentRsvp = () => {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
-        <Back onClick={() => navigate("/")} />
-      </Box>
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
+      <Loading isLoading={isLoading} />
       <Typography
         gutterBottom
         variant="h4"
@@ -82,24 +74,8 @@ const CurrentRsvp = () => {
             alignItems: "center",
           }}
         >
-          {showList && events.length > 0 ? (
+          {showList && rsvpEvents.length > 0 ? (
             <Box>
-              {/* <Typography
-                gutterBottom
-                variant="h4"
-                align="right"
-                sx={{
-                  fontFamily: "Fira Sans Condensed",
-                  fontSize: "20px",
-                  lineHeight: "24px",
-                  color: "#FFFFFF",
-                  marginTop: "32px",
-                  marginLeft: "139dp",
-                }}
-              >
-                {events.length}
-                {events.length === 1 ? " Result" : " Results"}
-              </Typography> */}
               <Stack
                 direction="column"
                 justifyContent="center"
@@ -124,24 +100,14 @@ const CurrentRsvp = () => {
                   <Down />
                 </div>
 
-                {rsvpEvents.map((event) => {
-                  const correspondingEvent = events.find(
-                    (e) => e.event_uid === event.event_uid
-                  );
-
-                  // Extract the registrants field
-                  const totalRegistrants = correspondingEvent
-                    ? correspondingEvent.registrants
-                    : 0;
-                  return (
-                    <EventCard
-                      event={event}
-                      onCardClick={handleCardClick}
-                      registrants={totalRegistrants}
-                      isRegistered={true}
-                    />
-                  );
-                })}
+                {rsvpEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    onCardClick={handleCardClick}
+                    isRegistered={true}
+                    isList={true}
+                  />
+                ))}
               </Stack>
             </Box>
           ) : (

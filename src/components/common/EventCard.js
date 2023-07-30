@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import axios from "axios";
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
@@ -7,6 +9,7 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black-card.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
@@ -16,7 +19,8 @@ import { ReactComponent as UserAltBlackIcon } from "../../assets/user-alt-black.
 import { ReactComponent as DoneRingIcon } from "../../assets/done-ring.svg";
 import { ReactComponent as DoneRingBlackIcon } from "../../assets/done-ring-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
-import { Grid } from "@mui/material";
+
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
 const getEventTypeColor = (event) => {
   const eventTypeColors = {
@@ -69,10 +73,12 @@ const EventCard = ({
   event,
   onButtonClick,
   isRegistered = false,
-  registrants,
+  isList = false,
   onCardClick,
   buttonLabel = "Register",
 }) => {
+  const [eventObj, setEventObj] = useState(event);
+
   const eventTypeColor = getEventTypeColor(event);
 
   const handleButtonClick = () => {
@@ -82,6 +88,20 @@ const EventCard = ({
   const handleCardClick = () => {
     if (onCardClick) onCardClick(event);
   };
+
+  const getEvent = async () => {
+    let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const response = await axios.get(
+      BASE_URL +
+        `/GetEvents?timeZone=${user_timezone}&event_uid=${event.event_uid}`
+    );
+    const respEventObj = response.data.result[0];
+    setEventObj({ ...eventObj, ...respEventObj });
+  };
+
+  useEffect(() => {
+    if (isRegistered) getEvent();
+  }, []);
 
   return (
     <Card
@@ -96,26 +116,23 @@ const EventCard = ({
           <Stack direction="row" spacing={1}>
             {isRegistered ? (
               <Box width="50%">
-                {/* <Typography
-                  color={eventTypeColor.textColor}
-                  variant="b"
-                  alignItems="center"
-                >
-                  {eventTypeColor.doneRingIcon}
-                  <Typography component="span" sx={{ fontFamily: "Inter" }}>
-                    &nbsp;{"Attending"}
-                  </Typography>
-                </Typography> */}
-                <Stack
-                  direction="row"
-                  width="50%"
-                  color={eventTypeColor.textColor}
-                >
-                  {eventTypeColor.doneRingIcon}
-                  <Typography component="span" sx={{ pt: "3px" }}>
-                    &nbsp;{"Attending"}
-                  </Typography>
-                </Stack>
+                <Grid container width="50%" spacing={1}>
+                  <Grid item xs={2}>
+                    {eventTypeColor.doneRingIcon}
+                  </Grid>
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{
+                      color: eventTypeColor.textColor,
+                      pt: "12px !important",
+                    }}
+                  >
+                    <Typography component="span" sx={{ pl: "12px" }}>
+                      {"Attending"}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Box>
             ) : (
               <Box width="50%"></Box>
@@ -131,17 +148,17 @@ const EventCard = ({
                 color={eventTypeColor.textColor}
                 align="right"
               >
-                {dayjs(event.event_start_date).format("MMMM DD")}
+                {dayjs(eventObj.event_start_date).format("MMMM DD")}
               </Typography>
             </Box>
           </Stack>
 
           <Typography variant="h2" color={eventTypeColor.textColor} mb={1}>
-            {event.event_title}
+            {eventObj.event_title}
           </Typography>
           <Stack direction="row" spacing={1}>
             <Box width="50%" mt={1}>
-              {JSON.parse(event.event_photo).length === 0 ? (
+              {JSON.parse(eventObj.event_photo).length === 0 ? (
                 <CardMedia
                   component="img"
                   height="134px"
@@ -155,7 +172,7 @@ const EventCard = ({
                   component="img"
                   height="134px"
                   width="100%"
-                  image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
+                  image={`${JSON.parse(eventObj.event_photo)}?${Date.now()}`}
                   alt="event"
                   sx={{ borderRadius: 3, objectFit: "cover" }}
                 />
@@ -174,7 +191,7 @@ const EventCard = ({
                     pt: "12px !important",
                   }}
                 >
-                  {`${event.event_start_time} - ${event.event_end_time}`}
+                  {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
                 </Grid>
                 <Grid item xs={2} sx={{ pt: "15px !important" }}>
                   {eventTypeColor.markerIcon}
@@ -191,16 +208,10 @@ const EventCard = ({
                     WebkitBoxOrient: "vertical",
                   }}
                 >
-                  {event.event_location}
+                  {eventObj.event_location}
                 </Grid>
               </Grid>
               {isRegistered ? (
-                // <Box display="flex" alignItems="center" sx={{ mt: 2 }}>
-                //   {eventTypeColor.userAltIcon}&nbsp;
-                //   <Typography color={eventTypeColor.textColor} variant="body2">
-                //     {`${registrants} Registrants`}
-                //   </Typography>
-                // </Box>
                 <Grid container spacing={1} sx={{ mt: 1 }}>
                   <Grid item xs={2}>
                     {eventTypeColor.userAltIcon}
@@ -213,7 +224,7 @@ const EventCard = ({
                       pt: "12px !important",
                     }}
                   >
-                    {`${registrants} Registrants`}
+                    {`${eventObj.registrants} Registrants`}
                   </Grid>
                 </Grid>
               ) : handleButtonClick ? (
