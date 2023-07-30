@@ -100,7 +100,7 @@ const EventCard = ({
   };
 
   useEffect(() => {
-    if (isRegistered) getEvent();
+    if (!isList && isRegistered) getEvent();
   }, []);
 
   return (
