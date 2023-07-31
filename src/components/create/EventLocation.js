@@ -69,11 +69,18 @@ const EventLocation = () => {
         state: { user },
       });
   };
+  const handleHomeClick = (e) => {
+    e.stopPropagation();
+    const shouldNavigate = window.confirm("Sure? Your progress will be lost.");
+    if (shouldNavigate) {
+      navigate("/");
+    }
+  };
 
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand />
+        <Brand onClick={handleHomeClick} />
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>

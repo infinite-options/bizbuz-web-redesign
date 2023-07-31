@@ -13,7 +13,8 @@ const Landing = () => {
   const navigate = useNavigate();
   const [isLoggedOut, setLoggedOut] = useState(false);
   const handleLogout = () => {
-    document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     setLoggedOut(true);
     setTimeout(() => {
       setLoggedOut(false);

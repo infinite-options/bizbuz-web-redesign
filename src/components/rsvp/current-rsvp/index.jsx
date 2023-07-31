@@ -52,8 +52,13 @@ const CurrentRsvp = () => {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} />
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: "36px" }}
+      >
+        <Brand onClick={() => navigate("/")} />
         <Back onClick={() => navigate("/")} />
       </Box>
       <Typography

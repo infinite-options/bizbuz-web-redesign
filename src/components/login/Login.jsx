@@ -29,7 +29,10 @@ export default function Login() {
         eventObj={eventObj}
       /> */}
 
-      <Brand style={{ marginTop: "36px", marginBottom: "2rem" }} />
+      <Brand
+        style={{ marginTop: "36px", marginBottom: "2rem" }}
+        onClick={() => navigate("/")}
+      />
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Login here"}
       </Typography>

@@ -29,6 +29,8 @@ const NewCardComponent = ({
   totalRegistrants,
   onCardClick,
   buttonLabel = "Register",
+  isRegistrationFull,
+  seatsRemaining,
 }) => {
   const handleRegisterClick = () => {
     onRegisterClick(event);
@@ -105,6 +107,40 @@ const NewCardComponent = ({
           <CardContent>
             <Stack direction="row" spacing={1} mb={1} alignItems="center">
               {(() => {
+                if (seatsRemaining === 0) {
+                  return (
+                    <Box width="50%">
+                      <Typography
+                        color={eventTypeColor.textColor}
+                        variant="b"
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                      >
+                        <span style={{ fontFamily: "Inter" }}>
+                          {" "}
+                          Registration closed!
+                        </span>
+                      </Typography>
+                    </Box>
+                  );
+                } else if (seatsRemaining > 0) {
+                  return (
+                    <Box width="50%">
+                      <Typography
+                        color={eventTypeColor.textColor}
+                        variant="b"
+                        display={"flex"}
+                        alignItems={"center"}
+                        gap={0.5}
+                      >
+                        <span style={{ fontFamily: "Inter" }}>
+                          {seatsRemaining} seats left!
+                        </span>
+                      </Typography>
+                    </Box>
+                  );
+                }
                 if (isRegisteredEventCard) {
                   return (
                     <Box width="50%">
@@ -161,7 +197,7 @@ const NewCardComponent = ({
                     width="100%"
                     image={`${JSON.parse(event.event_photo)}?${Date.now()}`}
                     alt="event"
-                    sx={{ borderRadius: 3, objectFit: "cover" }}
+                    sx={{ borderRadius: 3, objectFit: "fit" }}
                   />
                 )}
               </Box>
@@ -210,7 +246,7 @@ const NewCardComponent = ({
                 </Typography>
 
                 {(() => {
-                  if (isRegisteredEventCard) {
+                  if (isRegisteredEventCard && !isRegistrationFull) {
                     return (
                       <Box display="flex" alignItems="center" gap={0.5}>
                         <Icon>{eventTypeColor.userAltIcon}</Icon>
@@ -223,7 +259,7 @@ const NewCardComponent = ({
                       </Box>
                     );
                   } else {
-                    if (onRegisterClick !== undefined) {
+                    if (onRegisterClick !== undefined && seatsRemaining !== 0) {
                       return (
                         <Button
                           variant="contained"

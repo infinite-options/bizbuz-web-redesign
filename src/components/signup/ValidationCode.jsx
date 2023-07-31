@@ -73,7 +73,7 @@ export default function ValidationCode() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Brand style={{ marginTop: "36px" }} />
+      <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
       <Stack
         direction="column"
         justifyContent="center"

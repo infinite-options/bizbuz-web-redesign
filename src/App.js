@@ -35,9 +35,12 @@ import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./util/LoginContext";
 import CurrentRsvp from "./components/rsvp/current-rsvp";
 import RsvpEventInfo from "./components/rsvp/rsvp-event-info";
+import { ReactComponent as Brand } from "./assets/brand.svg";
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
+  const navigate = useNavigate();
 
   const isSignedIn =
     document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
@@ -55,6 +58,10 @@ const App = () => {
   );
   return (
     <Container maxWidth="sm">
+      {/* <Brand
+        style={{ marginTop: "36px", marginBottom: "5rem" }}
+        onClick={() => navigate("/")}
+      /> */}
       <LoginContext.Provider
         value={{
           loginState: loginState,
