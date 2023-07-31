@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
@@ -40,13 +40,14 @@ const EventDetails = () => {
   const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
+  const [invalidInput, setInvalidInput] = useState(false);
   const [eventType, setEventType] = useState(event.event_type);
   const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
   const [isDisabled, setDisabled] = useState(
     event.event_capacity === "No Limit"
   );
   const [eventLimit, setEventLimit] = useState(
-    event.event_capacity ? "Set Limit" : "No Limit"
+    event.event_capacity ? "No Limit" : "Set Limit"
   );
   const [startDate, setStartDate] = useState(
     event.event_start_date
@@ -60,7 +61,7 @@ const EventDetails = () => {
     dayjs(event.event_start_time, "hh mm A")
   );
   const [endTime, setEndTime] = useState(
-    dayjs(event.event_end_time, "hh mm A")
+    dayjs(event.event_end_time,"hh mm A")
   );
 
   const handleEventTypeChange = (v) => {
@@ -77,9 +78,13 @@ const EventDetails = () => {
   };
 
   const handleEndTimeChange = (v) => {
-    setEndTime(v);
-    if (v < startTime && startDate === endDate)
-      setEndDate(dayjs(startDate).add(1, "day"));
+    setEndTime(startTime);
+    if (v.isBefore(startTime)) {
+      setInvalidInput(true);
+    } else {
+      setEndTime(v);
+      setInvalidInput(false);
+    }
   };
 
   const handleStartTimeChange = (v) => {
@@ -93,36 +98,42 @@ const EventDetails = () => {
   };
 
   const handleContinue = () => {
-    event.event_organizer_uid = "100-000038";
-    event.event_type = eventType;
-    event.event_start_date = new Date(startDate).toLocaleDateString("en-US");
-    event.event_end_date = new Date(endDate).toLocaleDateString("en-US");
-    let event_start_time = new Date(startTime).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    event.event_start_time = event_start_time
-      ? event_start_time.replace(/^0+/, "")
-      : "";
-    let event_end_time = new Date(endTime).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    event.event_end_time = event_end_time
-      ? event_end_time.replace(/^0+/, "")
-      : "";
-    if (eventLimit === "Set Limit") event.event_capacity = eventCapacity;
-    else event.event_capacity = eventLimit;
-    setEvent(event);
-    if (event.isReview)
-      navigate("/eventReview", {
-        state: { user },
+    if(invalidInput){
+      window.alert("Please enter a valid input");
+    }
+    else{
+      event.event_organizer_uid = "100-000038";
+      event.event_type = eventType;
+      event.event_start_date = new Date(startDate).toLocaleDateString("en-US");
+      event.event_end_date = new Date(endDate).toLocaleDateString("en-US");
+      let event_start_time = new Date(startTime).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
       });
-    else
-      navigate("/eventLocation", {
-        state: { user },
+      event.event_start_time = event_start_time
+        ? event_start_time.replace(/^0+/, "")
+        : "";
+      let event_end_time = new Date(endTime).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
       });
+      event.event_end_time = event_end_time
+        ? event_end_time.replace(/^0+/, "")
+        : "";
+      if (eventLimit === "Set Limit") event.event_capacity = eventCapacity;
+      else event.event_capacity = eventLimit;
+      setEvent(event);
+      if (event.isReview)
+        navigate("/eventReview", {
+          state: { user },
+        });
+      else
+        navigate("/eventLocation", {
+          state: { user },
+        });
+    }
   };
+
 
   return (
     <Box display="flex" flexDirection="column">
@@ -217,7 +228,7 @@ const EventDetails = () => {
         </ToggleButtonGroup>
         <Typography variant="h2">{"Event Date & Time"}</Typography>
         <Grid container spacing={1} columnSpacing={2}>
-          <Grid item sx={{ pl: "0 !important" }}>
+          <Grid item sx={{ pl: "0 !important" }} xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"Start Date"}
@@ -254,7 +265,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"Start Time"}
@@ -290,7 +301,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item sx={{ pl: "0 !important" }}>
+          <Grid item sx={{ pl: "0 !important"}} xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"End Date"}
@@ -327,7 +338,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"End Time"}
@@ -360,6 +371,7 @@ const EventDetails = () => {
                     },
                   }}
                 />
+                {invalidInput && <p style={{ color: "red" }}>End time must be after start time.</p>}
               </LocalizationProvider>
             </FormControl>
           </Grid>
