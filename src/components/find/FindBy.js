@@ -35,8 +35,6 @@ export default function FindBy() {
   const [registionCode, setRegistionCode] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [userEvents, setUserEvents] = useState([]);
-  //const [userDetails, setUserDetails] = useState();
-  const [user_uid, setUserUid] = useState(null);
 
   const getEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -122,28 +120,10 @@ export default function FindBy() {
   };
 
   const getUserRegisteredEvents = async () => {
-    const isUserLoggedIn = () => {
-      if (
-        document.cookie !== "" &&
-        document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("loggedIn=")) !== undefined
-      ) {
-        return document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("loggedIn="))
-          .split("=")[1] === "true"
-          ? true
-          : false;
-      }
-    };
-
-    if (isUserLoggedIn && location.state && location.state.user) {
+    if (location.state.isUserLoggedIn) {
       let user = location.state.user;
       let user_uid =
         typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
-      console.log("inside loop");
-      setUserUid(user_uid);
 
       let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
       await axios
@@ -434,10 +414,6 @@ export default function FindBy() {
                   </div>
 
                   {events.map((event) => {
-                    const isEventRegistered =
-                      event.eu_user_uid === user_uid ? true : false;
-
-                    // Check if the user is logged in, and if so, provide userEvents data to the NewCardComponent
                     const userEvent = userEvents.find(
                       (item) => item.event_uid === event.event_uid
                     );
@@ -445,6 +421,7 @@ export default function FindBy() {
                       <EventCard
                         event={event}
                         onButtonClick={handleRegisterClick}
+                        isRegistered={userEvent === undefined ? false : true}
                         isList={true}
                       />
                     );
