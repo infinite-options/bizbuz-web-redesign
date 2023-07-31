@@ -13,7 +13,7 @@ import Slide from "@mui/material/Slide";
 import NoUserImage from "../../assets/NoUserImage.png";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -182,10 +182,8 @@ const NetworkingActivity = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Brand
-        style={{ marginTop: "36px" }}
-        onClick={() => {
-          navigate("/");
-        }}
+        style={{ marginTop: "36px", cursor: "pointer" }}
+        onClick={handleLeaveEvent}
       />
       <Snackbar
         open={showAlert}
@@ -204,11 +202,7 @@ const NetworkingActivity = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <NewCardComponent
-          event={eventObj}
-          isRegisteredEventCard={true}
-          totalRegistrants={eventObj.registrants}
-        />
+        <EventCard event={eventObj} isRegistered={true} />
       </Stack>
 
       <Stack spacing={2} direction="column">

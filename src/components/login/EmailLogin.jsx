@@ -9,13 +9,10 @@ import {
   FormControl,
   FormGroup,
   TextField,
-  FormControlLabel,
-  InputLabel,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PasswordModal from "./PasswordModal";
 import Email from "../../assets/Email.png";
-import { red, pillButton, boldSmall, hidden, small } from "../../styles";
 
 export default function EmailLogin(props) {
   const navigate = useNavigate();
@@ -181,7 +178,7 @@ export default function EmailLogin(props) {
 
   const required =
     errorMessage === "Please fill out all fields" ? (
-      <span style={red} className="ms-1">
+      <span style={{ color: "red" }} className="ms-1">
         *
       </span>
     ) : (
@@ -239,9 +236,11 @@ export default function EmailLogin(props) {
           </div>
           <div
             className="text-center"
-            style={errorMessage === "" ? hidden : {}}
+            style={errorMessage === "" ? { visibility: "hidden" } : {}}
           >
-            <p style={{ ...red, ...small }}>{errorMessage || "error"}</p>
+            <p style={{ color: "red", fontSize: "small" }}>
+              {errorMessage || "error"}
+            </p>
           </div>
         </Stack>
       ) : (
@@ -253,6 +252,9 @@ export default function EmailLogin(props) {
             color: "#000000",
             width: "92vw",
             height: "44px",
+            "&.MuiButtonBase-root:hover, &.Mui-selected": {
+              backgroundColor: "white",
+            },
           }}
         >
           <img

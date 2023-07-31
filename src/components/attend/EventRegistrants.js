@@ -11,7 +11,7 @@ import { CardActionArea } from "@mui/material";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Avatar from "@mui/material/Avatar";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -36,15 +36,6 @@ const EventRegistrants = () => {
     setRegistrants(data["attendees"]);
   };
 
-  // const fetchOrganizers = async () => {
-  //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
-  //   const organizersData = response.data.result;
-  //   const eventHost = organizersData.find(
-  //     (organizer) => organizer.event_uid === eventObj.event_uid
-  //   );
-  //   setEventHost(eventHost);
-  // };
-
   const fetchOrganizerProfile = async () => {
     const response = await axios.get(
       `${BASE_URL}/profileByUserUID?userId=${eventObj.event_organizer_uid}`
@@ -60,9 +51,9 @@ const EventRegistrants = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
-          style={{ marginLeft: "auto" }}
+          style={{ marginLeft: "auto", cursor: "pointer" }}
           onClick={() => navigate(-1, { state: { eventObj, userObj } })}
         />
       </Stack>
@@ -72,11 +63,7 @@ const EventRegistrants = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <NewCardComponent
-          event={eventObj}
-          isRegisteredEventCard={true}
-          totalRegistrants={eventObj.registrants}
-        />
+        <EventCard event={eventObj} isRegistered={true} />
       </Stack>
 
       <Card sx={{ mt: "16px", bgcolor: "#FFFFFF", color: "#000000" }}>

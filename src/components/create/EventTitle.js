@@ -43,6 +43,10 @@ const EventTitle = () => {
   };
 
   const handleContinue = () => {
+    if (!title || !description || !access) {
+      alert("Please fill out all the fields");
+      return;
+    }
     event.event_title = title;
     event.event_description = description;
     event.event_visibility = access;
@@ -68,8 +72,15 @@ const EventTitle = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={handleHomeClick} />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand style={{ cursor: "pointer" }} onClick={handleHomeClick} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
@@ -111,8 +122,8 @@ const EventTitle = () => {
               width: "128px",
               height: "40px",
               color: "#000000",
-              "&.Mui-selected": {
-                backgroundColor: "#F26457 !important",
+              "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                backgroundColor: "#AA0E00",
               },
             }}
             onClick={() => handleAccessChange("Public")}
@@ -129,8 +140,8 @@ const EventTitle = () => {
               width: "128px",
               height: "40px",
               color: "#000000",
-              "&.Mui-selected": {
-                backgroundColor: "#F26457 !important",
+              "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                backgroundColor: "#20B2AA",
               },
             }}
             onClick={() => handleAccessChange("Private")}

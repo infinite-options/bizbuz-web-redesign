@@ -54,6 +54,10 @@ const EventLocation = () => {
   };
 
   const handleContinue = () => {
+    if (!address || !lat || !long) {
+      alert("Please fill out the location");
+      return;
+    }
     event.event_location_name = locationName;
     event.event_location = address;
     event.event_zip = zipcode;
@@ -80,8 +84,15 @@ const EventLocation = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={handleHomeClick} />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand style={{ cursor: "pointer" }} onClick={handleHomeClick} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}

@@ -73,6 +73,12 @@ export default function EmailSignupForm() {
               label="First Name"
               InputLabelProps={{ shrink: true }}
               onChange={(e) => setFirstName(e.target.value)}
+              sx={{
+                backgroundColor: "white",
+                width: "92vw",
+                height: "44px",
+                borderRadius: "8px",
+              }}
               required
             />
           </FormGroup>
@@ -85,6 +91,12 @@ export default function EmailSignupForm() {
               name="email"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              sx={{
+                backgroundColor: "white",
+                width: "92vw",
+                height: "44px",
+                borderRadius: "8px",
+              }}
               required
             />
           </FormGroup>
@@ -103,13 +115,29 @@ export default function EmailSignupForm() {
               onChange={(e) =>
                 setPhoneNumber(formatPhoneNumber(e.target.value))
               }
+              sx={{
+                backgroundColor: "white",
+                width: "92vw",
+                height: "44px",
+                borderRadius: "8px",
+              }}
               required
             />
           </FormGroup>
         </FormControl>
         <Button
           variant="outlined"
-          style={{ margin: "2rem 0rem" }}
+          // style={{ margin: "2rem 0rem" }}
+          sx={{
+            textTransform: "none",
+            backgroundColor: "#F26457",
+            color: "white",
+            width: "92vw",
+            height: "44px",
+            "&.MuiButtonBase-root:hover, &.Mui-selected": {
+              backgroundColor: "#F26457",
+            },
+          }}
           onClick={updateUser}
         >
           {" "}

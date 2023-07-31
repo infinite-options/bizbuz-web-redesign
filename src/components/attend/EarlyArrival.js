@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -82,9 +82,9 @@ const EarlyArrival = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
-          style={{ marginLeft: "auto" }}
+          style={{ marginLeft: "auto", cursor: "pointer" }}
           onClick={() => navigate("/")}
         />
       </Stack>
@@ -94,11 +94,7 @@ const EarlyArrival = () => {
         spacing={2}
         sx={{ mt: 6 }}
       >
-        <NewCardComponent
-          event={eventObj}
-          isRegisteredEventCard={true}
-          totalRegistrants={eventObj.registrants}
-        />
+        <EventCard event={eventObj} isRegistered={true} />
       </Stack>
       <Typography variant="h1" sx={{ mt: "35px" }}>
         {"Event has not started"}

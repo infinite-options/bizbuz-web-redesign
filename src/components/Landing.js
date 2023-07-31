@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -22,12 +22,16 @@ const Landing = () => {
     navigate("/");
   };
 
+
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Brand style={{ marginTop: "36px", marginBottom: "5rem" }} />
       <Grid container rowSpacing={{ xs: 1, sm: 10 }} columnSpacing={{ xs: 1 }}>
         <Grid item xs={6} align="center">
-          <Search onClick={() => navigate("/findEvent")} />
+          <Search
+            onClick={() => navigate("/findEvent")}
+            style={{ cursor: "pointer" }}
+          />
         </Grid>
         <Grid item xs={6} align="center">
           <RSVPs
@@ -65,10 +69,14 @@ const Landing = () => {
                 });
               }
             }}
+            style={{ cursor: "pointer" }}
           />
         </Grid>
         <Grid item xs={6} align="center">
-          <Attend onClick={() => navigate("/currentEvents")} />
+          <Attend
+            onClick={() => navigate("/currentEvents")}
+            style={{ cursor: "pointer" }}
+          />
         </Grid>
         <Grid item xs={6} align="center">
           <Create
@@ -106,6 +114,7 @@ const Landing = () => {
                 });
               }
             }}
+            style={{ cursor: "pointer" }}
           />
         </Grid>
       </Grid>
@@ -129,6 +138,8 @@ const Landing = () => {
           alignSelf: "center",
           position: "fixed",
           bottom: "0",
+          height: "25%",
+          width: "100%",
           zIndex: "auto",
         }}
         onClick={handleLogout}

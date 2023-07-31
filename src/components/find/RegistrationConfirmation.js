@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Done } from "../../assets/done.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -99,11 +99,7 @@ const RegistrationConfirmation = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <NewCardComponent
-          event={event}
-          isRegisteredEventCard={true}
-          totalRegistrants={eventDet.registrants}
-        />
+        <EventCard event={event} isRegistered={true} />
       </Stack>
       <Typography
         variant="h1"

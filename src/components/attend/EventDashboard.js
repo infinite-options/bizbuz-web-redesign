@@ -81,9 +81,9 @@ const EventDashboard = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
-          style={{ marginLeft: "auto" }}
+          style={{ marginLeft: "auto", cursor: "pointer" }}
           onClick={() => navigate("/")}
         />
       </Stack>

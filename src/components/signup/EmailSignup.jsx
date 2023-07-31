@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserAlreadyExistsModal from "./UserAlreadyExistsModal";
-import { hidden } from "../../styles";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
 
@@ -114,8 +113,11 @@ export default function EmailSignup() {
               <FormGroup>
                 <Typography variant="h3">Username</Typography>
                 <TextField
-                  style={{
+                  sx={{
                     backgroundColor: "white",
+                    width: "92vw",
+                    height: "44px",
+                    borderRadius: "8px",
                   }}
                   type="email"
                   name="email"
@@ -125,11 +127,14 @@ export default function EmailSignup() {
                   required
                 />
               </FormGroup>
-              <FormGroup>
+              <FormGroup sx={{ mt: 2 }}>
                 <Typography variant="h3">Confirm Password</Typography>
                 <TextField
-                  style={{
+                  sx={{
                     backgroundColor: "white",
+                    width: "92vw",
+                    height: "44px",
+                    borderRadius: "8px",
                   }}
                   type="password"
                   margin="normal"
@@ -139,15 +144,23 @@ export default function EmailSignup() {
                   required
                 />
               </FormGroup>
-              <div className={errorMessage === "" ? hidden : {}}>
-                <p>{errorMessage}</p>
+              <div
+                className={errorMessage === "" ? { visibility: "hidden" } : {}}
+              >
+                <Typography variant="h3">{errorMessage}</Typography>
               </div>
               <Stack sx={{ mt: 2 }}>
                 <Button
                   onClick={submitForm}
-                  style={{
+                  sx={{
+                    textTransform: "none",
                     backgroundColor: "#F26457",
                     color: "white",
+                    width: "92vw",
+                    height: "44px",
+                    "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                      backgroundColor: "#F26457",
+                    },
                   }}
                 >
                   Create New Account

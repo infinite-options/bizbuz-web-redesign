@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const EventInfo = () => {
   const location = useLocation();
@@ -15,7 +15,7 @@ const EventInfo = () => {
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")}/>
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
         <Back onClick={() => navigate(-1)} />
       </Box>
       <Stack
@@ -24,9 +24,8 @@ const EventInfo = () => {
         spacing={2}
         sx={{ mt: 10 }}
       >
-        <NewCardComponent
+        <EventCard
           event={event}
-          isRegisteredEventCard={false}
           onRegisterClick={() => {
             navigate("/eventQuestionnaire", {
               state: { event: event },
@@ -118,8 +117,7 @@ const EventInfo = () => {
           mt: "auto",
           marginLeft: "auto",
           marginRight: "auto",
-          position: "fixed",
-          bottom: "20px",
+          bottom: "-36px",
           left: "0",
           right: "0",
         }}

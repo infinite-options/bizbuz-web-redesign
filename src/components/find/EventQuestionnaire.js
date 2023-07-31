@@ -35,6 +35,11 @@ const EventQuestionnaire = () => {
   };
 
   const CreateEventReg = () => {
+
+    const isAnyAnswerEmpty = questions.some((question) => !question.answer);
+    if (isAnyAnswerEmpty) {
+      window.alert("You need to fill out all of the questions.");
+    } else {
     let eventObj = {
       eu_user_id: "",
       eu_event_id: event.event_uid,
@@ -77,6 +82,7 @@ const EventQuestionnaire = () => {
         },
       });
     }
+  }
   };
 
   return (
@@ -139,7 +145,7 @@ const EventQuestionnaire = () => {
                     sx={{
                       width: "350px",
                       height: "56px",
-                      marginLeft: "18dp",
+                      marginLeft: "2px",
                       fontSize: 12,
                       backgroundColor: "white",
                       borderRadius: "8px",

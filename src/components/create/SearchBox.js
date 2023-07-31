@@ -1,15 +1,8 @@
 import React, { Component } from "react";
 import isEmpty from "lodash.isempty";
-
-// components:
-import Marker from "../map/Marker";
-
-// examples:
-import GoogleMap from "../map/GoogleMap";
-import SearchBox from "../map/SearchBox";
-
-// consts
-// const center = { lat: 37.23672, lng: -121.88737 };
+import Marker from "../common/Marker";
+import GoogleMap from "../common/GoogleMap";
+import SearchBox from "../common/SearchBox";
 
 class Searchbox extends Component {
   constructor(props) {

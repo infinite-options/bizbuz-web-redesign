@@ -51,6 +51,10 @@ const EventImage = () => {
   };
 
   const handleContinue = async () => {
+    if (!isDefault && Object.keys(image).length === 0) {
+      alert("Please select an image");
+      return;
+    }
     if (!isDefault) event.img_cover = image.image;
     else event.img_cover = null;
     setEvent(event);
@@ -75,8 +79,15 @@ const EventImage = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={handleHomeClick} />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand onClick={handleHomeClick} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
@@ -172,7 +183,12 @@ const EventImage = () => {
                   }}
                 >
                   {
-                    <div>
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
                       {image.image ? (
                         <img
                           key={Date.now()}
@@ -180,7 +196,7 @@ const EventImage = () => {
                           style={{
                             width: "100%",
                             height: "100%",
-                            objectFit: "cover",
+                            objectFit: "contain",
                           }}
                           alt="event"
                         />

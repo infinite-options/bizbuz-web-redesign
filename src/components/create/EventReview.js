@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
@@ -9,13 +10,13 @@ import Grid from "@mui/material/Grid";
 import Map from "./Map";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-import { Card, CardContent, CardMedia, Icon } from "@mui/material";
+import { Card, CardContent, CardMedia } from "@mui/material";
 import { ReactComponent as ClockIcon } from "../../assets/clock.svg";
 import { ReactComponent as ClockBlackIcon } from "../../assets/clock-black.svg";
 import { ReactComponent as MarkerIcon } from "../../assets/marker.svg";
 import { ReactComponent as MarkerBlackIcon } from "../../assets/marker-black.svg";
 import DefaultEventImage from "../../assets/event-default.png";
-// import NewCardComponent from "../new-card-component";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -25,8 +26,10 @@ const EventReview = () => {
   const { user } = location.state;
   const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
   const event = getEvent();
+  const [isLoading, setLoading] = useState(false);
 
   const handleAddEvent = async () => {
+    setLoading(true);
     const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     event.user_timezone = user_timezone;
     const headers = {
@@ -49,6 +52,7 @@ const EventReview = () => {
     });
     removeEvent();
     const data = await response.json();
+    setLoading(false);
     navigate("/eventCode", { state: { event: data.result[0] } });
   };
 
@@ -151,9 +155,13 @@ const EventReview = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={handleHomeClick} />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand style={{ cursor: "pointer" }} onClick={handleHomeClick} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() => navigate(-1)}
+        />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
       </Typography>
@@ -161,10 +169,6 @@ const EventReview = () => {
         <Box display="flex" flexDirection="column" sx={{ minHeight: "62vh" }}>
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
-            {/* <NewCardComponent
-              event={event}
-              isRegisteredEventCard={true}
-            ></NewCardComponent> */}
             <Card sx={{ minWidth: 275 }}>
               <Box
                 bgcolor={eventTypeColor.backgroundColor}
@@ -225,28 +229,24 @@ const EventReview = () => {
                       <Typography
                         display={"flex"}
                         alignItems={"center"}
-                        gap={0.5}
                         color={eventTypeColor.textColor}
                         variant="body2"
                         my={1}
                         onClick={() => handleChange("/eventDetails")}
                       >
-                        {eventTypeColor.clockIcon}
-                        <span>
-                          {event.event_start_time} - {event.event_end_time}
-                        </span>
+                        {eventTypeColor.clockIcon}&nbsp;
+                        {event.event_start_time} - {event.event_end_time}
                       </Typography>
                       <Typography
                         display={"flex"}
                         alignItems={"center"}
-                        gap={0.5}
                         color={eventTypeColor.textColor}
                         variant="body2"
                         mb={1}
                         onClick={() => handleChange("/eventLocation")}
                       >
-                        <Icon>{eventTypeColor.markerIcon}</Icon>
-                        <span> {event.event_location}</span>
+                        {eventTypeColor.markerIcon}&nbsp;
+                        {event.event_location}
                       </Typography>
                     </Box>
                   </Stack>

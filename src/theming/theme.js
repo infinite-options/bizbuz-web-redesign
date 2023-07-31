@@ -129,6 +129,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: "#FFFFFF",
+          backgroundColor: "#143959",
         },
       },
     },

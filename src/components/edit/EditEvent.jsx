@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import useLocalStorage from "../../util/localStorage";
-import NewCardComponent from "../new-card-component";
+import EventCard from "../common/EventCard";
 
 const EditEvent = () => {
   const navigate = useNavigate();

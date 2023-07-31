@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Box, Button, Typography, Stack } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import GoogleLogin from "./GoogleLogin";
 import EmailLogin from "./EmailLogin";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Footer } from "../../assets/footer.svg";
-// import Back from "../../assets/Back.png";
-import { hidden } from "../../styles";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
+
 export default function Login() {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -22,17 +22,11 @@ export default function Login() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      {/* <UserDoesNotExistModal
-        isOpen={userDoesntExist}
-        onCancel={onCancelModal}
-        path={path}
-        eventObj={eventObj}
-      /> */}
+      <Stack direction="row" sx={{ mt: "36px", marginBottom: "2rem" }}>
+        <Brand onClick={() => navigate("/")} />
+        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+      </Stack>
 
-      <Brand
-        style={{ marginTop: "36px", marginBottom: "2rem" }}
-        onClick={() => navigate("/")}
-      />
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Login here"}
       </Typography>
@@ -82,8 +76,11 @@ export default function Login() {
         spacing={2}
         sx={{ mt: 2 }}
       >
-        <div className="text-center" style={errorMessage === "" ? hidden : {}}>
-          <p>{errorMessage || "error"}</p>
+        <div
+          className="text-center"
+          style={errorMessage === "" ? { visibility: "hidden" } : {}}
+        >
+          <Typography variant="h3">{errorMessage || "error"}</Typography>
         </div>
       </Stack>
 
@@ -97,7 +94,14 @@ export default function Login() {
           </Button>
         )}
       </Stack> */}
-      <Footer style={{ alignSelf: "center", position: "fixed", bottom: "0" }} />
+      <Footer
+        style={{
+          alignSelf: "center",
+          position: "fixed",
+          bottom: "0",
+          zIndex: -1,
+        }}
+      />
     </Box>
   );
 }

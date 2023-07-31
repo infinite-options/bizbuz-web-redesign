@@ -13,12 +13,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { DatePicker } from "@mui/x-date-pickers";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Globe } from "../../assets/globe.svg";
-import { ReactComponent as Back } from "../../assets/back.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import { ReactComponent as Location } from "../../assets/marker-black.svg";
-import NewCardComponent from "../new-card-component";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Down } from "../../assets/down.svg";
 import { Select, MenuItem } from "@mui/material";
+import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
@@ -32,6 +33,7 @@ export default function FindBy() {
   const [zipCode, setZipCode] = useState("");
   const [type, setType] = useState("");
   const [registionCode, setRegistionCode] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [userEvents, setUserEvents] = useState([]);
   //const [userDetails, setUserDetails] = useState();
   const [user_uid, setUserUid] = useState(null);
@@ -39,12 +41,13 @@ export default function FindBy() {
   const getEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let queries = [];
-
+    setLoading(true);
     if (!selectedDate && !city && !type && !registionCode && !zipCode) {
       axios
         .get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
         .then((response) => {
           setEvents(response.data.result);
+          setLoading(false);
           if (!showList) setShowList(!showList);
         });
     } else {
@@ -107,6 +110,7 @@ export default function FindBy() {
           });
 
           setEvents(mergedResults);
+          setLoading(false);
           if (!showList) setShowList(!showList);
           console.log(mergedResults);
         })
@@ -163,10 +167,14 @@ export default function FindBy() {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
-        <Back onClick={() => navigate("/")} />
-      </Box>
+      <Stack direction="row" sx={{ mt: "36px" }}>
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() => navigate("/")}
+        />
+      </Stack>
+      <Loading isLoading={isLoading} />
       <Box
         display="flex"
         justifyContent="center"
@@ -434,13 +442,10 @@ export default function FindBy() {
                       (item) => item.event_uid === event.event_uid
                     );
                     return (
-                      <NewCardComponent
+                      <EventCard
                         event={event}
-                        onRegisterClick={handleRegisterClick}
-                        isRegisteredEventCard={isEventRegistered}
-                        seatsRemaining={
-                          event.event_capacity - event.registrants
-                        }
+                        onButtonClick={handleRegisterClick}
+                        isList={true}
                       />
                     );
                   })}
@@ -452,10 +457,12 @@ export default function FindBy() {
                 style={{
                   backgroundColor: "white",
                   marginTop: "1rem",
-                  minWidth: "100%",
                   borderRadius: "25px 25px 0px 0px",
+                  alignSelf: "center",
                   position: "fixed",
-                  bottom: 0,
+                  bottom: "0",
+                  width: "100%",
+                  zIndex: -1,
                 }}
               >
                 {" "}

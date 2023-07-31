@@ -66,6 +66,10 @@ const EventQuestions = () => {
   };
 
   const handleContinue = () => {
+    if (selectedQuestions.length === 0) {
+      alert("Please select atleast one question");
+      return;
+    }
     const preEventQuestionnaire = selectedQuestions.map((q, index) => ({
       id: index + 1,
       question: q.question,
@@ -88,8 +92,15 @@ const EventQuestions = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={handleHomeClick} />
-        <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
+        <Brand style={{ cursor: "pointer" }} onClick={handleHomeClick} />
+        <BackIcon
+          style={{ marginLeft: "auto", cursor: "pointer" }}
+          onClick={() =>
+            navigate(-1, {
+              state: { user },
+            })
+          }
+        />
       </Stack>
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Create new Event"}
