@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -24,6 +24,7 @@ import Loading from "../common/Loading";
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [showList, setShowList] = useState(false);
   const [events, setEvents] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
@@ -33,6 +34,7 @@ export default function FindBy() {
   const [type, setType] = useState("");
   const [registionCode, setRegistionCode] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const [userEvents, setUserEvents] = useState([]);
 
   const getEvents = () => {
     let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -116,6 +118,28 @@ export default function FindBy() {
     }
     setSelectedDate("");
   };
+
+  const getUserRegisteredEvents = async () => {
+    if (location.state.isUserLoggedIn) {
+      let user = location.state.user;
+      let user_uid =
+        typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
+
+      let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      await axios
+        .get(
+          BASE_URL +
+            `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user_uid}`
+        )
+        .then((response) => {
+          setUserEvents(response.data.result);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getUserRegisteredEvents();
+  }, []);
 
   const handleRegisterClick = (event) => {
     navigate("/eventInfo", { state: { event } });
@@ -390,10 +414,14 @@ export default function FindBy() {
                   </div>
 
                   {events.map((event) => {
+                    const userEvent = userEvents.find(
+                      (item) => item.event_uid === event.event_uid
+                    );
                     return (
                       <EventCard
                         event={event}
                         onButtonClick={handleRegisterClick}
+                        isRegistered={userEvent === undefined ? false : true}
                         isList={true}
                       />
                     );

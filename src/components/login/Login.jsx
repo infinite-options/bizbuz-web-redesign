@@ -26,6 +26,7 @@ export default function Login() {
         <Brand onClick={() => navigate("/")} />
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
+
       <Typography variant="h1" sx={{ mt: "58px" }}>
         {"Login here"}
       </Typography>

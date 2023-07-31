@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -22,14 +22,51 @@ const Landing = () => {
     navigate("/");
   };
 
-
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Brand style={{ marginTop: "36px", marginBottom: "5rem" }} />
       <Grid container rowSpacing={{ xs: 1, sm: 10 }} columnSpacing={{ xs: 1 }}>
         <Grid item xs={6} align="center">
           <Search
-            onClick={() => navigate("/findEvent")}
+            onClick={() => {
+              if (
+                document.cookie !== "" &&
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn=")) !== undefined
+              ) {
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn="))
+                  .split("=")[1] === "true"
+                  ? navigate("/findEvent", {
+                      state: {
+                        email: document.cookie
+                          .split("; ")
+                          .find((row) => row.startsWith("user_email="))
+                          .split("=")[1],
+                        user: JSON.parse(
+                          document.cookie
+                            .split("; ")
+                            .find((row) => row.startsWith("user_details="))
+                            .split("=")[1]
+                        ),
+                        isUserLoggedIn: true,
+                      },
+                    })
+                  : navigate("/findEvent", {
+                      state: {
+                        isUserLoggedIn: false,
+                      },
+                    });
+              } else {
+                navigate("/findEvent", {
+                  state: {
+                    isUserLoggedIn: false,
+                  },
+                });
+              }
+            }}
             style={{ cursor: "pointer" }}
           />
         </Grid>

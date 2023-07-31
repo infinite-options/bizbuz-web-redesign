@@ -55,6 +55,10 @@ const App = () => {
   );
   return (
     <Container maxWidth="sm">
+      {/* <Brand
+        style={{ marginTop: "36px", marginBottom: "5rem" }}
+        onClick={() => navigate("/")}
+      /> */}
       <LoginContext.Provider
         value={{
           loginState: loginState,

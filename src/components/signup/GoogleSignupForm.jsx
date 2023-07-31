@@ -100,7 +100,7 @@ function GoogleSignupForm(props) {
           email={email}
         />
       }{" "}
-      <Brand style={{ marginTop: "36px" }} />
+      <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
       <Stack
         direction="column"
         justifyContent="center"

@@ -59,7 +59,11 @@ const EditEvent = () => {
         spacing={2}
         sx={{ mt: "8px" }}
       >
-        <EventCard event={event} isRegistered={true} />
+        <NewCardComponent
+          event={event}
+          isRegisteredEventCard={true}
+          totalRegistrants={event.registrants}
+        />
       </Stack>
       <Box sx={{ display: "flex" }}>
         <Button

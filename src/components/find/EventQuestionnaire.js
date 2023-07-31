@@ -9,6 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Back } from "../../assets/back.svg";
+import { TextField } from "@mui/material";
 const EventQuestionnaire = () => {
   const location = useLocation();
   const { event } = location.state;
@@ -35,60 +36,60 @@ const EventQuestionnaire = () => {
   };
 
   const CreateEventReg = () => {
-
     const isAnyAnswerEmpty = questions.some((question) => !question.answer);
     if (isAnyAnswerEmpty) {
       window.alert("You need to fill out all of the questions.");
     } else {
-    let eventObj = {
-      eu_user_id: "",
-      eu_event_id: event.event_uid,
-      eu_qas: JSON.stringify(questions),
-      eu_event: event,
-    };
-    if (
-      document.cookie !== "" &&
-      document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
-        undefined
-    ) {
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("loggedIn="))
-        .split("=")[1] === "true"
-        ? navigate("/registrationConfirmation", {
-            state: {
-              email: document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("user_email="))
-                .split("=")[1],
-              user: document.cookie
-                .split("; ")
-                .find((row) => row.startsWith("user_details="))
-                .split("=")[1],
-              eventObj: eventObj,
-            },
-          })
-        : navigate("/login", {
-            state: {
-              path: "/registrationConfirmation",
-              eventObj: eventObj,
-            },
-          });
-    } else {
-      navigate("/login", {
-        state: {
-          path: "/registrationConfirmation",
-          eventObj: eventObj,
-        },
-      });
+      let eventObj = {
+        eu_user_id: "",
+        eu_event_id: event.event_uid,
+        eu_qas: JSON.stringify(questions),
+        eu_event: event,
+      };
+      if (
+        document.cookie !== "" &&
+        document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("loggedIn=")) !== undefined
+      ) {
+        document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("loggedIn="))
+          .split("=")[1] === "true"
+          ? navigate("/registrationConfirmation", {
+              state: {
+                email: document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("user_email="))
+                  .split("=")[1],
+                user: document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("user_details="))
+                  .split("=")[1],
+                eventObj: eventObj,
+              },
+            })
+          : navigate("/login", {
+              state: {
+                path: "/registrationConfirmation",
+                eventObj: eventObj,
+              },
+            });
+      } else {
+        navigate("/login", {
+          state: {
+            path: "/registrationConfirmation",
+            eventObj: eventObj,
+          },
+        });
+      }
     }
-  }
   };
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")}/>
+        <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
         <Back onClick={() => navigate(-1)} />
       </Box>
       <Typography
@@ -142,6 +143,7 @@ const EventQuestionnaire = () => {
                     name="answer"
                     value={question.answer}
                     onChange={(e) => handleChange(e, index)}
+                    notched="false"
                     sx={{
                       width: "350px",
                       height: "56px",
@@ -150,6 +152,8 @@ const EventQuestionnaire = () => {
                       backgroundColor: "white",
                       borderRadius: "8px",
                       marginTop: "16px",
+                      "& legend": { display: "none" },
+                      "& fieldset": { top: 0 },
                     }}
                   />
                 </FormControl>
