@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
@@ -40,6 +40,7 @@ const EventDetails = () => {
   const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
+  const [invalidInput, setInvalidInput] = useState(false);
   const [eventType, setEventType] = useState(event.event_type);
   const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
   const [isDisabled, setDisabled] = useState(
@@ -77,9 +78,13 @@ const EventDetails = () => {
   };
 
   const handleEndTimeChange = (v) => {
-    setEndTime(v);
-    if (v < startTime && startDate === endDate)
-      setEndDate(dayjs(startDate).add(1, "day"));
+    setEndTime(startTime);
+    if (v.isBefore(startTime)) {
+      setInvalidInput(true);
+    } else {
+      setEndTime(v);
+      setInvalidInput(false);
+    }
   };
 
   const handleStartTimeChange = (v) => {
@@ -102,6 +107,10 @@ const EventDetails = () => {
       (eventLimit === "Set Limit" && !eventCapacity)
     ) {
       alert("Please fill out all the fields");
+      return;
+    }
+    if (invalidInput) {
+      window.alert("Please enter a valid input");
       return;
     }
     event.event_organizer_uid = user.user_uid;
@@ -235,7 +244,7 @@ const EventDetails = () => {
         </ToggleButtonGroup>
         <Typography variant="h2">{"Event Date & Time"}</Typography>
         <Grid container spacing={1} columnSpacing={2}>
-          <Grid item sx={{ pl: "0 !important" }}>
+          <Grid item sx={{ pl: "0 !important" }} xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"Start Date"}
@@ -272,7 +281,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"Start Time"}
@@ -308,7 +317,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item sx={{ pl: "0 !important" }}>
+          <Grid item sx={{ pl: "0 !important" }} xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"End Date"}
@@ -345,7 +354,7 @@ const EventDetails = () => {
               </LocalizationProvider>
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item xs={6}>
             <FormControl sx={{ width: "129px" }} variant="outlined">
               <Typography variant="body1" sx={{ color: "white" }}>
                 {"End Time"}
@@ -378,6 +387,11 @@ const EventDetails = () => {
                     },
                   }}
                 />
+                {invalidInput && (
+                  <p style={{ color: "red" }}>
+                    End time must be after start time.
+                  </p>
+                )}
               </LocalizationProvider>
             </FormControl>
           </Grid>
