@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import EventCard from "../common/EventCard";
+import dayjs from "dayjs";
 
 const RsvpEventInfo = () => {
   const location = useLocation();
@@ -13,6 +14,8 @@ const RsvpEventInfo = () => {
   const navigate = useNavigate();
 
   const userAnswers = JSON.parse(event.eu_qas);
+
+  const isEventToday = dayjs(event.event_start_date).isSame(dayjs(), "day");
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
@@ -112,27 +115,29 @@ const RsvpEventInfo = () => {
           </div>
         ))}
       </Box>
-      <Button
-        variant="contained"
-        sx={{
-          width: "352.5px",
-          height: "56px",
-          mt: "auto",
-          marginLeft: "auto",
-          marginRight: "auto",
-          position: "fixed",
-          bottom: "96px",
-          left: "0",
-          right: "0",
-        }}
-        onClick={() => {
-          navigate("/earlyArrival", {
-            state: { eventObj: event, user },
-          });
-        }}
-      >
-        {"Attend"}
-      </Button>
+      {isEventToday && (
+        <Button
+          variant="contained"
+          sx={{
+            width: "352.5px",
+            height: "56px",
+            mt: "auto",
+            marginLeft: "auto",
+            marginRight: "auto",
+            position: "fixed",
+            bottom: "96px",
+            left: "0",
+            right: "0",
+          }}
+          onClick={() => {
+            navigate("/earlyArrival", {
+              state: { eventObj: event, user },
+            });
+          }}
+        >
+          {"Attend Event"}
+        </Button>
+      )}
       <Button
         variant="contained"
         sx={{
