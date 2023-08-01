@@ -173,7 +173,6 @@ const CreateBizCard = () => {
     } else {
       document.getElementById("submitButton").setAttribute("disabled", true);
     }
-    console.log({ agreement });
   };
   useEffect(() => canBeSubmitted(), [agreement]);
   return (
@@ -479,7 +478,6 @@ const CreateBizCard = () => {
       </Grid>
 
       <UploadPhotos state={imageState} />
-
       <Box
         display="flex"
         flexDirection="column"

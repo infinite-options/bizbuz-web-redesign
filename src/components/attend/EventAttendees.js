@@ -50,7 +50,7 @@ const EventAttendees = () => {
 
   const handleClickAttendee = (attendee) => {
     navigate("/attendeeDetails", {
-      state: { event: eventObj, user: userObj, id: attendee.user_uid },
+      state: { event: eventObj, user: userObj, id: attendee.user_uid, },
     });
   };
 

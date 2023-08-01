@@ -21,7 +21,7 @@ const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const AttendeeDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { event, user, id } = location.state;
+  const { event, user, id,} = location.state;
   const [registrant, setRegistrant] = useState({ images: "[]" });
   const [qas, setQas] = useState([]);
 
@@ -258,10 +258,10 @@ const AttendeeDetails = () => {
           right: "0",
         }}
         onClick={() => {
-          navigate("/");
+          navigate("/overallNetwork", {state: { eventObj: event, userObj: user},});
         }}
       >
-        {"Return to Homepage"}
+        {"Go to Network"}
       </Button>
     </Box>
   );

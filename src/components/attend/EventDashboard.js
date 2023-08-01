@@ -187,7 +187,9 @@ const EventDashboard = () => {
           {"Home Page"}
         </Button>
       </Stack>
-      <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
+      <Dialog 
+        open={showDialog} 
+        onClose={() => setShowDialog(false)} maxWidth="md" fullWidth>
         <DialogTitle>{"Broadcast message"}</DialogTitle>
         <DialogContent>
           <TextField
@@ -200,9 +202,13 @@ const EventDashboard = () => {
             variant="standard"
             value={message}
             onChange={handleMessageChange}
+            InputLabelProps={{
+              style: { fontSize: 16 },
+            }}
+            sx={{ fontSize: 16 }}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
           <Button
             size="large"
             color="secondary"
