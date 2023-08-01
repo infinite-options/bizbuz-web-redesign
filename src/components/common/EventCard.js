@@ -48,7 +48,7 @@ const getEventTypeColor = (event) => {
       userAltIcon: <UserAltBlackIcon />,
       doneRingIcon: <DoneRingBlackIcon />,
     },
-    Other: {
+    "Other": {
       backgroundColor: "#AA0E00",
       textColor: "secondary",
       clockIcon: <ClockIcon />,
@@ -78,7 +78,7 @@ const EventCard = ({
   buttonLabel = "Register",
 }) => {
   const [eventObj, setEventObj] = useState(event);
-
+  const isFull = event.event_capacity - event.registrants > 0;
   const eventTypeColor = getEventTypeColor(event);
 
   const handleButtonClick = () => {
@@ -225,6 +225,19 @@ const EventCard = ({
                     }}
                   >
                     {`${eventObj.registrants} Registrants`}
+                  </Grid>
+                </Grid>
+              ) : isFull ? (
+                <Grid container spacing={1} sx={{ mt: 1 }}>
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      color: eventTypeColor.textColor,
+                      pt: "12px !important",
+                    }}
+                  >
+                    {"Registration closed"}
                   </Grid>
                 </Grid>
               ) : handleButtonClick ? (

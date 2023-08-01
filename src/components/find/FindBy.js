@@ -398,7 +398,7 @@ export default function FindBy() {
                     backgroundColor: "white",
                     marginTop: "1rem",
                     minWidth: "100%",
-                    borderRadius: "25px 0px 25px 0px",
+                    borderRadius: "25px 25px 0px 0px",
                   }}
                 >
                   <div
