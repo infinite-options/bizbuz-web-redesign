@@ -88,7 +88,7 @@ const CurrentRsvp = () => {
                   borderRadius: "25px 0px 25px 0px",
                 }}
               >
-                <div
+                {/* <div
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -98,10 +98,11 @@ const CurrentRsvp = () => {
                   onClick={() => setShowList(false)}
                 >
                   <Down />
-                </div>
+                </div> */}
 
                 {rsvpEvents.map((event) => (
                   <EventCard
+                    // key={event.event_uid}
                     event={event}
                     onCardClick={handleCardClick}
                     isRegistered={true}
