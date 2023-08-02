@@ -119,7 +119,7 @@ const RsvpEventInfo = () => {
             <Typography key={question.id} variant="body1">
               {`${index + 1}. ${question.question}`}
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body1">
               Your Answer - {userAnswers[index].answer}
             </Typography>
           </div>
@@ -139,6 +139,7 @@ const RsvpEventInfo = () => {
             left: "0",
             right: "0",
           }}
+          color="secondary"
           onClick={() => {
             navigate("/earlyArrival", {
               state: { eventObj: event, user },
