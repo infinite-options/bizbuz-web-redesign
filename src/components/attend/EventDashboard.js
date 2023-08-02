@@ -190,7 +190,7 @@ const EventDashboard = () => {
       <Dialog
         open={showDialog}
         onClose={() => setShowDialog(false)}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
       >
         <DialogTitle>{"Broadcast message"}</DialogTitle>
@@ -204,16 +204,20 @@ const EventDashboard = () => {
             variant="filled"
             value={message}
             onChange={handleMessageChange}
+            InputLabelProps={{
+              style: { fontSize: 16 },
+            }}
             hiddenLabel
             multiline
             maxRows={3}
             sx={{
+              fontSize: 16,
               backgroundColor: "#FFFFFF",
               borderRadius: "8px",
             }}
           />
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center" }}>
+        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
           <Button
             size="large"
             color="secondary"
