@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
@@ -8,6 +9,8 @@ import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import EventCard from "../common/EventCard";
 import dayjs from "dayjs";
 
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+
 const RsvpEventInfo = () => {
   const location = useLocation();
   const { event, user } = location.state;
@@ -16,6 +19,13 @@ const RsvpEventInfo = () => {
   const userAnswers = JSON.parse(event.eu_qas);
 
   const isEventToday = dayjs(event.event_start_date).isSame(dayjs(), "day");
+
+  const handleCancelRsvp = async () => {
+    await axios.delete(
+      BASE_URL + `/EventUser?userId=${user.user_uid}&eventId=${event.event_uid}`
+    );
+    navigate("/currentRsvp", { state: { user } });
+  };
 
   return (
     <Box display="flex" justifyContent="center" flexDirection="column">
@@ -151,9 +161,7 @@ const RsvpEventInfo = () => {
           left: "0",
           right: "0",
         }}
-        onClick={() => {
-          navigate("/eventQuestionnaire", { state: { event: event } });
-        }}
+        onClick={handleCancelRsvp}
       >
         {"Cancel RSVP"}
       </Button>

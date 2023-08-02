@@ -1,14 +1,26 @@
-import { useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useAbly from "../../util/ably";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import Snackbar from "@mui/material/Snackbar";
+import MUIAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
 import EventCard from "../common/EventCard";
+
+const SlideTransition = (props) => {
+  return <Slide {...props} direction="down" />;
+};
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MUIAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -16,7 +28,11 @@ const EarlyArrival = () => {
   const location = useLocation();
   const { eventObj, user: userObj } = location.state;
   const navigate = useNavigate();
-  const { addAttendee, isAttendeePresent } = useAbly(eventObj.event_uid);
+  const { addAttendee, isAttendeePresent, subscribe, unSubscribe } = useAbly(
+    eventObj.event_uid
+  );
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState("");
 
   const handleEnterWaitingRoom = async () => {
     const response = await axios.get(
@@ -65,18 +81,34 @@ const EarlyArrival = () => {
           navigate("/networkingActivity", {
             state: { eventObj, userObj },
           });
+        } else {
+          joinSubscribe();
         }
-        // } else {
-        //   navigate("/waiting", {
-        //     state: { eventObj, userObj },
-        //   });
-        // }
       });
     }
   };
 
+  const handleAlertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setShowAlert(false);
+  };
+
+  const joinSubscribe = () => {
+    subscribe((e) => {
+      if (e.data === "Event started") {
+        navigate("/networkingActivity", { state: { eventObj, userObj } });
+      } else {
+        setMessage(e.data);
+        setShowAlert(true);
+      }
+    });
+  };
+
   useEffect(() => {
     validateAndRoute();
+    return () => unSubscribe();
   }, []);
 
   return (
@@ -88,6 +120,17 @@ const EarlyArrival = () => {
           onClick={() => navigate("/")}
         />
       </Stack>
+      <Snackbar
+        open={showAlert}
+        autoHideDuration={15000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        TransitionComponent={SlideTransition}
+      >
+        <Alert onClose={handleAlertClose} severity="info">
+          {message}
+        </Alert>
+      </Snackbar>
       <Stack
         direction="column"
         justifyContent="center"

@@ -419,6 +419,7 @@ export default function FindBy() {
                     );
                     return (
                       <EventCard
+                        key={event.event_uid}
                         event={event}
                         onButtonClick={handleRegisterClick}
                         isRegistered={userEvent === undefined ? false : true}
@@ -430,8 +431,7 @@ export default function FindBy() {
               </Box>
             ) : (
               <Button
-                hide={showList}
-                style={{
+                sx={{
                   backgroundColor: "white",
                   marginTop: "1rem",
                   borderRadius: "25px 25px 0px 0px",
@@ -440,6 +440,7 @@ export default function FindBy() {
                   bottom: "0",
                   width: "100%",
                   zIndex: -1,
+                  visibility: showList ? "hidden" : "visble",
                 }}
               >
                 {" "}

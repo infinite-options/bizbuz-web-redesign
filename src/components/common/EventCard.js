@@ -134,6 +134,24 @@ const EventCard = ({
                   </Grid>
                 </Grid>
               </Box>
+            ) : buttonLabel === "Edit Event" ? (
+              <Box width="50%">
+                <Button
+                  component="a"
+                  variant="contained"
+                  color="buttonAlternative"
+                  size="large"
+                  sx={{
+                    width: "100%",
+                    height: 40,
+                    mb: 1,
+                    color: eventTypeColor.textColor,
+                  }}
+                  onClick={handleButtonClick}
+                >
+                  {buttonLabel}
+                </Button>
+              </Box>
             ) : (
               <Box width="50%"></Box>
             )}
@@ -193,7 +211,7 @@ const EventCard = ({
                 >
                   {`${eventObj.event_start_time} - ${eventObj.event_end_time}`}
                 </Grid>
-                <Grid item xs={2} sx={{ pt: "15px !important" }}>
+                <Grid item xs={2} sx={{ pt: "17px !important" }}>
                   {eventTypeColor.markerIcon}
                 </Grid>
                 <Grid
@@ -202,17 +220,25 @@ const EventCard = ({
                   sx={{
                     color: eventTypeColor.textColor,
                     pt: "12px !important",
-                    overflow: "hidden",
                     display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
+                    WebkitBoxOrient: "horizontal",
+                    WebkitBoxAlign: "center",
                   }}
                 >
-                  {eventObj.event_location}
+                  <span
+                    style={{
+                      display: "-webkit-box",
+                      overflow: "hidden",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                    }}
+                  >
+                    {eventObj.event_location}
+                  </span>
                 </Grid>
               </Grid>
               {isRegistered ? (
-                <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.5 }}>
                   <Grid item xs={2}>
                     {eventTypeColor.userAltIcon}
                   </Grid>
@@ -228,10 +254,13 @@ const EventCard = ({
                   </Grid>
                 </Grid>
               ) : isFull ? (
-                <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.5 }}>
+                  <Grid item xs={2}>
+                    {eventTypeColor.userAltIcon}
+                  </Grid>
                   <Grid
                     item
-                    xs={12}
+                    xs={10}
                     sx={{
                       color: eventTypeColor.textColor,
                       pt: "12px !important",
@@ -240,18 +269,37 @@ const EventCard = ({
                     {"Registration closed"}
                   </Grid>
                 </Grid>
-              ) : handleButtonClick ? (
+              ) : handleButtonClick && buttonLabel === "Register" ? (
                 <Button
                   variant="contained"
                   color="buttonAlternative"
                   size="large"
-                  sx={{ width: "100%", height: 40, mt: 1 }}
+                  sx={{
+                    width: "100%",
+                    height: 40,
+                    mt: 1,
+                    color: eventTypeColor.textColor,
+                  }}
                   onClick={handleButtonClick}
                 >
                   {buttonLabel}
                 </Button>
               ) : (
-                {}
+                <Grid container spacing={1} sx={{ mt: 0.5 }}>
+                  <Grid item xs={2}>
+                    {eventTypeColor.userAltIcon}
+                  </Grid>
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{
+                      color: eventTypeColor.textColor,
+                      pt: "12px !important",
+                    }}
+                  >
+                    {`${eventObj.registrants} Registrants`}
+                  </Grid>
+                </Grid>
               )}
             </Box>
           </Stack>

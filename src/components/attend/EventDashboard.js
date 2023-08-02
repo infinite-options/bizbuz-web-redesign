@@ -187,27 +187,39 @@ const EventDashboard = () => {
           {"Home Page"}
         </Button>
       </Stack>
-      <Dialog open={showDialog} onClose={() => setShowDialog(false)}>
+      <Dialog
+        open={showDialog}
+        onClose={() => setShowDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogTitle>{"Broadcast message"}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="broadcast"
-            label="Enter message here..."
             type="text"
             fullWidth
-            variant="standard"
+            variant="filled"
             value={message}
             onChange={handleMessageChange}
+            hiddenLabel
+            multiline
+            maxRows={3}
+            sx={{
+              backgroundColor: "#FFFFFF",
+              borderRadius: "8px",
+            }}
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ justifyContent: "center" }}>
           <Button
             size="large"
             color="secondary"
             variant="contained"
             onClick={handleBroadcast}
+            sx={{ height: "40px" }}
           >
             {"Send"}
           </Button>
@@ -216,6 +228,7 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() => setShowDialog(false)}
+            sx={{ height: "40px" }}
           >
             {"Cancel"}
           </Button>

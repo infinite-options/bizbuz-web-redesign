@@ -68,7 +68,7 @@ const CurrentEvents = () => {
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
-        <Brand onClick={() => navigate("/")} />
+        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
           style={{ marginLeft: "auto" }}
           onClick={() => navigate("/")}
@@ -85,6 +85,7 @@ const CurrentEvents = () => {
           events.map((event) => {
             return (
               <EventCard
+                key={event.event_uid}
                 event={event}
                 onCardClick={handleEventClick}
                 isRegistered={true}
@@ -106,7 +107,7 @@ const CurrentEvents = () => {
                 component="div"
                 style={{ color: "white" }}
               >
-                No Events Available For Now
+                {"No Events Available For Now"}
               </Typography>
             </Grid>
           </Box>
