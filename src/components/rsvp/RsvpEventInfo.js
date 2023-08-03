@@ -139,7 +139,7 @@ const RsvpEventInfo = () => {
             left: "0",
             right: "0",
           }}
-          color="secondary"
+          color="info"
           onClick={() => {
             navigate("/earlyArrival", {
               state: { eventObj: event, user },

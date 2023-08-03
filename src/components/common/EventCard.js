@@ -78,7 +78,7 @@ const EventCard = ({
   buttonLabel = "Register",
 }) => {
   const [eventObj, setEventObj] = useState(event);
-  const isFull = event.event_capacity - event.registrants > 0;
+  const isFull = parseInt(event.event_capacity) - parseInt(event.registrants) > 0;
   const eventTypeColor = getEventTypeColor(event);
 
   const handleButtonClick = () => {
