@@ -3,7 +3,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import ThreeDots from "../../assets/loading-dots.gif";
 
-const Loading = ({ isLoading }) => {
+const Loading = ({ isLoading, text = "Loading" }) => {
   return (
     <Dialog
       open={isLoading}
@@ -21,7 +21,7 @@ const Loading = ({ isLoading }) => {
             padding: "1rem",
           }}
         >
-          <h3 style={{ color: "#FFFFFF" }}>{"Loading"}</h3>
+          <h3 style={{ color: "#FFFFFF" }}>{text}</h3>
           <img src={ThreeDots} style={{ width: "20%" }} alt="loading..." />
         </div>
       </DialogContent>

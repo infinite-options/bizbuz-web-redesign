@@ -120,7 +120,7 @@ const EventReview = () => {
         clockIcon: <ClockBlackIcon />,
         markerIcon: <MarkerBlackIcon />,
       },
-      Other: {
+      "Other": {
         backgroundColor: "#AA0E00",
         textColor: "secondary",
         clockIcon: <ClockIcon />,
@@ -169,89 +169,112 @@ const EventReview = () => {
         <Box display="flex" flexDirection="column" sx={{ minHeight: "62vh" }}>
           <Stack direction="column" spacing={2}>
             <Typography variant="h2">{"Event Review"}</Typography>
-            <Card sx={{ minWidth: 275 }}>
-              <Box
-                bgcolor={eventTypeColor.backgroundColor}
-                justifyContent="flex-end"
-                alignItems="flex-start"
-              >
-                <CardContent>
-                  <Typography
-                    variant="h2"
-                    color={eventTypeColor.textColor}
-                    mb={1}
-                    align="right"
-                    onClick={() => handleChange("/eventDetails")}
-                  >
-                    {dayjs(event.event_start_date).format("MMMM DD")}
-                  </Typography>
+            <Card
+              sx={{
+                backgroundColor: eventTypeColor.backgroundColor,
+                minWidth: 275,
+              }}
+            >
+              <CardContent>
+                <Typography
+                  variant="h2"
+                  color={eventTypeColor.textColor}
+                  mb={1}
+                  align="right"
+                  onClick={() => handleChange("/eventDetails")}
+                  sx={{ cursor: "pointer" }}
+                >
+                  {dayjs(event.event_start_date).format("MMMM DD")}
+                </Typography>
 
-                  <Typography
-                    variant="h2"
-                    color={eventTypeColor.textColor}
-                    mb={1}
-                    onClick={() => handleChange("/eventTitle")}
-                  >
-                    {event.event_title}
-                  </Typography>
-                  <Stack direction="row" spacing={1}>
-                    <Box width="50%" mt={1}>
-                      {event.img_cover ? (
-                        <CardMedia
-                          component="img"
-                          height="120rem"
-                          image={event.img_cover}
-                          alt="default"
-                          sx={{ borderRadius: 3 }}
-                          onClick={() => handleChange("/eventImage")}
-                        />
-                      ) : event.isEdit ? (
-                        <CardMedia
-                          component="img"
-                          height="120rem"
-                          image={JSON.parse(event.event_photo)[0]}
-                          alt="event"
-                          sx={{ borderRadius: 3 }}
-                          onClick={() => handleChange("/eventImage")}
-                        />
-                      ) : (
-                        <CardMedia
-                          component="img"
-                          height="120rem"
-                          image={DefaultEventImage}
-                          alt="event"
-                          sx={{ borderRadius: 3 }}
-                          onClick={() => handleChange("/eventImage")}
-                        />
-                      )}
-                    </Box>
-                    <Box width="50%" gap={1}>
-                      <Typography
-                        display={"flex"}
-                        alignItems={"center"}
-                        color={eventTypeColor.textColor}
-                        variant="body2"
-                        my={1}
+                <Typography
+                  variant="h2"
+                  color={eventTypeColor.textColor}
+                  mb={1}
+                  onClick={() => handleChange("/eventTitle")}
+                  sx={{ cursor: "pointer" }}
+                >
+                  {event.event_title}
+                </Typography>
+                <Stack direction="row" spacing={1}>
+                  <Box width="50%" mt={1}>
+                    {event.img_cover ? (
+                      <CardMedia
+                        component="img"
+                        height="120rem"
+                        image={event.img_cover}
+                        alt="default"
+                        sx={{ borderRadius: 3, cursor: "pointer" }}
+                        onClick={() => handleChange("/eventImage")}
+                      />
+                    ) : event.isEdit ? (
+                      <CardMedia
+                        component="img"
+                        height="120rem"
+                        image={JSON.parse(event.event_photo)[0]}
+                        alt="event"
+                        sx={{ borderRadius: 3, cursor: "pointer" }}
+                        onClick={() => handleChange("/eventImage")}
+                      />
+                    ) : (
+                      <CardMedia
+                        component="img"
+                        height="120rem"
+                        image={DefaultEventImage}
+                        alt="event"
+                        sx={{ borderRadius: 3, cursor: "pointer" }}
+                        onClick={() => handleChange("/eventImage")}
+                      />
+                    )}
+                  </Box>
+                  <Box width="50%" sx={{ height: "134px", py: 2 }}>
+                    <Grid container spacing={1}>
+                      <Grid item xs={2}>
+                        {eventTypeColor.clockIcon}
+                      </Grid>
+                      <Grid
+                        item
+                        xs={10}
+                        sx={{
+                          color: eventTypeColor.textColor,
+                          pt: "12px !important",
+                          cursor: "pointer",
+                        }}
                         onClick={() => handleChange("/eventDetails")}
                       >
-                        {eventTypeColor.clockIcon}&nbsp;
-                        {event.event_start_time} - {event.event_end_time}
-                      </Typography>
-                      <Typography
-                        display={"flex"}
-                        alignItems={"center"}
-                        color={eventTypeColor.textColor}
-                        variant="body2"
-                        mb={1}
+                        {`${event.event_start_time} - ${event.event_end_time}`}
+                      </Grid>
+                      <Grid item xs={2} sx={{ pt: "17px !important" }}>
+                        {eventTypeColor.markerIcon}
+                      </Grid>
+                      <Grid
+                        item
+                        xs={10}
+                        sx={{
+                          color: eventTypeColor.textColor,
+                          pt: "12px !important",
+                          display: "-webkit-box",
+                          WebkitBoxOrient: "horizontal",
+                          WebkitBoxAlign: "center",
+                          cursor: "pointer",
+                        }}
                         onClick={() => handleChange("/eventLocation")}
                       >
-                        {eventTypeColor.markerIcon}&nbsp;
-                        {event.event_location}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Box>
+                        <span
+                          style={{
+                            display: "-webkit-box",
+                            overflow: "hidden",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                          }}
+                        >
+                          {event.event_location}
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                </Stack>
+              </CardContent>
             </Card>
             <Box
               sx={{
@@ -276,7 +299,7 @@ const EventReview = () => {
                   item
                   xs={6}
                   onClick={() => handleChange("/eventDetails")}
-                  sx={{ fontWeight: "normal" }}
+                  sx={{ fontWeight: "normal", cursor: "pointer" }}
                 >
                   {event.event_type}
                 </Grid>
@@ -287,7 +310,7 @@ const EventReview = () => {
                   item
                   xs={6}
                   onClick={() => handleChange("/eventTitle")}
-                  sx={{ fontWeight: "normal" }}
+                  sx={{ fontWeight: "normal", cursor: "pointer" }}
                 >
                   {event.event_visibility}
                 </Grid>
@@ -298,7 +321,7 @@ const EventReview = () => {
                   item
                   xs={6}
                   onClick={() => handleChange("/eventDetails")}
-                  sx={{ fontWeight: "normal" }}
+                  sx={{ fontWeight: "normal", cursor: "pointer" }}
                 >
                   {event.event_capacity}
                 </Grid>
@@ -329,7 +352,7 @@ const EventReview = () => {
                     key={q.id}
                     xs={12}
                     onClick={() => handleChange("/eventQuestions")}
-                    sx={{ fontWeight: "normal" }}
+                    sx={{ fontWeight: "normal", cursor: "pointer" }}
                   >
                     {q.question}
                   </Grid>
@@ -349,6 +372,7 @@ const EventReview = () => {
                 textTransform: "none",
                 fontSize: 16,
                 fontWeight: 600,
+                cursor: "pointer",
               }}
               onClick={() => handleChange("/eventLocation")}
             >

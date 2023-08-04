@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../util/localStorage";
 import Box from "@mui/material/Box";
@@ -78,7 +78,7 @@ const EventDetails = () => {
   };
 
   const handleEndTimeChange = (v) => {
-    setEndTime(startTime);
+    setEndTime(v);
     if (v.isBefore(startTime)) {
       setInvalidInput(true);
     } else {

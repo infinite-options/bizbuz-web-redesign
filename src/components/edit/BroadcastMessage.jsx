@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -24,7 +25,6 @@ const BroadcastMessage = () => {
     const [showSendingSuccess, setShowSendingSuccess] = useState(false);
     const [attendeesEmails, setAttendeesEmails] = useState([]);
     const [attendeesPhoneNumbers, setAttendeesPhoneNumbers] = useState([]);
-    console.log(event);
 
     const fetchAttendees = async () => {
         const response = await axios.get(
@@ -56,6 +56,7 @@ const BroadcastMessage = () => {
           recipient: attendeesPhoneNumbers,
           subject: subject,
           message: message,
+          user_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         };
         let newstate = Object.assign(obj, event);
         console.log(newstate);
@@ -83,6 +84,7 @@ const BroadcastMessage = () => {
           recipient: attendeesEmails,
           subject: subject,
           message: message,
+          user_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         };
         let newstate = Object.assign(obj, event);
         console.log(newstate);
@@ -111,6 +113,7 @@ const BroadcastMessage = () => {
                 <Brand onClick={() => navigate("/")}/>
                 <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
             </Stack>
+            <Loading isLoading={showDialogSendingEmail || showDialogSendingText} text="Sending" />
             <Typography variant="h1" sx={{ mt: "48px" }}>
                 {"Broadcast Message"}
             </Typography>

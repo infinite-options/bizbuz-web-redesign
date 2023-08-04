@@ -99,10 +99,10 @@ const EventImage = () => {
             onClick={() => setDefault(true)}
             variant="contained"
             sx={{
-              backgroundColor: "#FFFFFF",
               color: "#000000",
               height: "100%",
               p: 2,
+              backgroundColor: isDefault ? "#F26457" : "#FFFFFF",
             }}
           >
             <Stack spacing={2} direction="column">
@@ -129,13 +129,15 @@ const EventImage = () => {
             {"or"}
           </Divider>
           <Button
+            component="div"
             onClick={() => setDefault(false)}
             variant="contained"
+            align="center"
             sx={{
-              backgroundColor: "#FFFFFF",
               color: "#000000",
               height: "100%",
               p: 2,
+              backgroundColor: !isDefault ? "#F26457" : "#FFFFFF",
             }}
           >
             <Stack spacing={2} direction="column">
