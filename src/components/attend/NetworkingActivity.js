@@ -12,6 +12,7 @@ import MUIAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import NoUserImage from "../../assets/NoUserImage.png";
 import Highcharts from "../../util/networking";
+import { transformGraph } from "../../util/helper";
 import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
 
@@ -34,8 +35,14 @@ const NetworkingActivity = () => {
   const userObj = location.state
     ? location.state.userObj
     : JSON.parse(localStorage.getItem("user"));
-  const { removeAttendee, onAttendeeUpdate, subscribe, unSubscribe, detach } =
-    useAbly(eventObj.event_uid);
+  const {
+    isAttendeePresent,
+    removeAttendee,
+    onAttendeeUpdate,
+    subscribe,
+    unSubscribe,
+    detach,
+  } = useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [options, setOptions] = useState({
@@ -98,36 +105,14 @@ const NetworkingActivity = () => {
     return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
   };
 
-  const refreshGraph = async () => {
-    const response = await axios.get(
-      `${BASE_URL}/overallGraph?eventId=${eventObj.event_uid}`
+  const refreshGraph = async ({ data }) => {
+    const [nodesArr, linksArr] = transformGraph(
+      data["user_groups"],
+      data["users"],
+      false,
+      handleUserImage,
+      userObj.user_uid
     );
-    const data = response["data"];
-    let nodesArr = [];
-    for (const u of data["users"]) {
-      if (
-        u.user_uid === userObj.user_uid ||
-        (nodesArr.length <= 7 && u.user_uid !== userObj.user_uid)
-      ) {
-        nodesArr.push({
-          id: u.user_uid,
-          marker: {
-            symbol: `url(${handleUserImage(u.images)})`,
-            width: 50,
-            height: 50,
-          },
-          name: `${u.first_name} is ${u.role}`,
-          className: {
-            clipPath: "circle()",
-          },
-        });
-      }
-    }
-    let linksArr = [];
-    for (const l of data["links"]) {
-      if (l["from"] === userObj.user_uid || l["to"] === userObj.user_uid)
-        linksArr.push(l);
-    }
     setOptions({
       series: [
         {
@@ -152,7 +137,7 @@ const NetworkingActivity = () => {
 
   const broadcastAndExitSubscribe = () => {
     onAttendeeUpdate((m) => {
-      refreshGraph();
+      refreshGraph(m);
     });
     subscribe((e) => {
       if (e.data === "Event ended") {
@@ -174,7 +159,7 @@ const NetworkingActivity = () => {
   };
 
   useEffect(() => {
-    refreshGraph();
+    isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     broadcastAndExitSubscribe();
     return () => unSubscribe();
   }, []);

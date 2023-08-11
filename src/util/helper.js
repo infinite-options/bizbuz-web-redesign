@@ -21,4 +21,62 @@ const formatPhoneNumber = (value) => {
   )}-${phoneNumber.slice(6, 10)}`;
 };
 
-export { MaskCharacter, formatPhoneNumber };
+const transformGraph = (
+  userGroups,
+  users,
+  isOverall = false,
+  handleUserImage,
+  userId
+) => {
+  const nodesArr = [],
+    linksArr = [],
+    ug = userGroups[userId];
+  linksByUser(linksArr, ug, userId);
+  users.forEach((u) => {
+    if (
+      isOverall ||
+      (ug && (ug.hasOwnProperty(u.user_uid) || userId === u.user_uid))
+    ) {
+      nodesArr.push({
+        id: u.user_uid,
+        mass: 1,
+        marker: {
+          symbol: `url(${handleUserImage(u.images)})`,
+          width: 50,
+          height: 50,
+        },
+        name: `${u.first_name} is ${u.role}`,
+      });
+      if (isOverall) {
+        const oug = userGroups[u.user_uid];
+        linksByUser(linksArr, oug, u.user_uid);
+      }
+    }
+  });
+  return [nodesArr, linksArr];
+};
+
+const linksByUser = (linksArr, ug, userId) => {
+  if (!ug) return;
+  Object.keys(ug).forEach((uk) => {
+    if (
+      !["origin", "link_uids", "outward_links", "inward_links"].includes(uk)
+    ) {
+      const linkedUser = ug[uk];
+      if (linkedUser["is_outward"]) {
+        linksArr.push({
+          from: userId,
+          to: linkedUser.user_uid,
+        });
+      }
+      if (linkedUser["is_inward"]) {
+        linksArr.push({
+          from: linkedUser.user_uid,
+          to: userId,
+        });
+      }
+    }
+  });
+};
+
+export { MaskCharacter, formatPhoneNumber, transformGraph };

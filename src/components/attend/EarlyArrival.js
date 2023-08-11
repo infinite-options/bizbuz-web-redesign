@@ -56,12 +56,22 @@ const EarlyArrival = () => {
     addAttendee(userObj.user_uid);
   };
 
+  const handleNewAttendeeWithGraph = async () => {
+    await axios.put(
+      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
+    );
+    const response = await axios.get(
+      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+    );
+    addAttendee(userObj.user_uid, { ...response["data"] });
+  };
+
   const validateAndRoute = async () => {
     const response = await axios.get(
       `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
     );
     if (response.data.isOrganizer) {
-      handleNewAttendee();
+      handleNewAttendeeWithGraph();
       navigate("/eventDashboard", {
         state: { eventObj, userObj },
       });
@@ -75,13 +85,14 @@ const EarlyArrival = () => {
         });
         return;
       }
-      handleNewAttendee();
-      isAttendeePresent(eventObj.event_organizer_uid, () => {
+      isAttendeePresent(eventObj.event_organizer_uid, (m) => {
         if (response.data.eventStarted === "1") {
+          handleNewAttendeeWithGraph();
           navigate("/networkingActivity", {
             state: { eventObj, userObj },
           });
         } else {
+          handleNewAttendee();
           joinSubscribe();
         }
       });

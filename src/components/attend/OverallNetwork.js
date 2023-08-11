@@ -7,6 +7,7 @@ import Box from "@mui/material/Box";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Stack from "@mui/material/Stack";
+import { transformGraph } from "../../util/helper";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../assets/NoUserImage.png";
@@ -18,7 +19,9 @@ const OverallNetwork = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
-  const { onAttendeeUpdate, unSubscribe } = useAbly(eventObj.event_uid);
+  const { onAttendeeUpdate, unSubscribe, isAttendeePresent } = useAbly(
+    eventObj.event_uid
+  );
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -77,28 +80,27 @@ const OverallNetwork = () => {
     return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
   };
 
-  const refreshGraph = async () => {
-    const response = await axios.get(
-      `${BASE_URL}/overallGraph?eventId=${eventObj.event_uid}`
+  const refreshGraph = async ({ data }) => {
+    // let data = {};
+    // if (!message) {
+    //   const response = await axios.get(
+    //     `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+    //   );
+    //   data = response["data"];
+    // } else {
+    //   data = message["data"];
+    // }
+    const [nodesArr, linksArr] = transformGraph(
+      data["user_groups"],
+      data["users"],
+      true,
+      handleUserImage,
+      userObj.user_uid
     );
-    const data = response["data"];
-    let nodesArr = [];
-    data["users"].forEach((u) => {
-      nodesArr.push({
-        id: u.user_uid,
-        mass: 1,
-        marker: {
-          symbol: `url(${handleUserImage(u.images)})`,
-          width: 50,
-          height: 50,
-        },
-        name: `${u.first_name} is ${u.role}`,
-      });
-    });
     setOptions({
       series: [
         {
-          data: data["links"],
+          data: linksArr,
           nodes: nodesArr,
         },
       ],
@@ -112,9 +114,9 @@ const OverallNetwork = () => {
   };
 
   useEffect(() => {
-    refreshGraph();
+    isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
     onAttendeeUpdate((m) => {
-      refreshGraph();
+      refreshGraph(m);
     });
     return () => unSubscribe();
   }, []);

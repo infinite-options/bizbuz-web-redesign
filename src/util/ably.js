@@ -24,12 +24,12 @@ const useAbly = (() => {
     const isAttendeePresent = (clientId, callback) => {
       channel.presence.get({ clientId }, (err, members) => {
         if (err) console.error("Error when checking presence: " + err.message);
-        if (members.length > 0) callback();
+        if (members.length > 0) callback(members[0]);
       });
     };
 
-    const addAttendee = (clientId) => {
-      channel.presence.enterClient(clientId, (err) => {
+    const addAttendee = (clientId, clientData) => {
+      channel.presence.enterClient(clientId, clientData, (err) => {
         if (err) console.error("Error when entering: " + err.message);
       });
     };
