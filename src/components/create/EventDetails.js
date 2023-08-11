@@ -40,7 +40,6 @@ const EventDetails = () => {
   const { user } = location.state;
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
-  const [invalidInput, setInvalidInput] = useState(false);
   const [eventType, setEventType] = useState(event.event_type);
   const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
   const [isDisabled, setDisabled] = useState(
@@ -79,12 +78,6 @@ const EventDetails = () => {
 
   const handleEndTimeChange = (v) => {
     setEndTime(v);
-    if (v.isBefore(startTime)) {
-      setInvalidInput(true);
-    } else {
-      setEndTime(v);
-      setInvalidInput(false);
-    }
   };
 
   const handleStartTimeChange = (v) => {
@@ -109,8 +102,8 @@ const EventDetails = () => {
       alert("Please fill out all the fields");
       return;
     }
-    if (invalidInput) {
-      window.alert("Please enter a valid input");
+    if (endDate.isBefore(startDate) || endTime.isBefore(startTime)) {
+      alert("Please enter valid date/time values");
       return;
     }
     event.event_organizer_uid = user.user_uid;
@@ -395,11 +388,6 @@ const EventDetails = () => {
                     },
                   }}
                 />
-                {invalidInput && (
-                  <p style={{ color: "red" }}>
-                    End time must be after start time.
-                  </p>
-                )}
               </LocalizationProvider>
             </FormControl>
           </Grid>

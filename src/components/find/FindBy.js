@@ -410,7 +410,7 @@ export default function FindBy() {
                     }}
                     onClick={() => setShowList(false)}
                   >
-                    <Down />
+                    <Down style={{ cursor: "pointer" }} />
                   </div>
 
                   {events.map((event) => {
@@ -431,6 +431,7 @@ export default function FindBy() {
               </Box>
             ) : (
               <Button
+                component="div"
                 sx={{
                   backgroundColor: "white",
                   marginTop: "1rem",
@@ -439,11 +440,13 @@ export default function FindBy() {
                   position: "fixed",
                   bottom: "0",
                   width: "100%",
-                  zIndex: -1,
                   visibility: showList ? "hidden" : "visble",
+                  "&.MuiButtonBase-root:hover, &.Mui-selected": {
+                    backgroundColor: "white",
+                  },
                 }}
+                onClick={() => setShowList(true)}
               >
-                {" "}
                 <Globe />
               </Button>
             )}

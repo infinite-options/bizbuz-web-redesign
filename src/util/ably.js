@@ -34,6 +34,12 @@ const useAbly = (() => {
       });
     };
 
+    const updateAttendee = (clientId, clientData) => {
+      channel.presence.updateClient(clientId, clientData, (err) => {
+        if (err) console.error("Error when updating: " + err.message);
+      });
+    };
+
     const removeAttendee = (clientId) => {
       channel.presence.leaveClient(clientId, (err) => {
         if (err) console.error("Error when leaving: " + err.message);
@@ -64,6 +70,7 @@ const useAbly = (() => {
       publish,
       subscribe,
       addAttendee,
+      updateAttendee,
       removeAttendee,
       isAttendeePresent,
       onAttendeeUpdate,

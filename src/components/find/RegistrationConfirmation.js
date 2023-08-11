@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as Done } from "../../assets/done.svg";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -15,8 +16,9 @@ const RegistrationConfirmation = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
-  const [eventDet, setEventDet] = useState({});
   const [userDetails, setUserDetails] = useState();
+  const [isLoading, setLoading] = useState(false);
+
   let email = state.email;
   let user = state.user;
   const eventObj = state.eventObj !== undefined ? state.eventObj : "";
@@ -25,10 +27,6 @@ const RegistrationConfirmation = () => {
     typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
 
   const GetUserProfile = async () => {
-    let x = {
-      profile_user_id: user_uid,
-    };
-
     axios.get(BASE_URL + `/CheckUserProfile/${user_uid}`).then((response) => {
       setUserDetails(response.data.result[0]);
     });
@@ -55,22 +53,14 @@ const RegistrationConfirmation = () => {
       });
   };
   useEffect(() => {
+    setLoading(true);
     GetUserProfile();
     if (eventObj) {
       console.log("addEvent");
       addEventUser();
     }
-    getEventDetails();
+    setLoading(false);
   }, []);
-
-  const getEventDetails = async () => {
-    let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const response = await axios.get(
-      BASE_URL +
-        `/GetEvents?timeZone=${user_timezone}&event_uid=${event.event_uid}`
-    );
-    setEventDet(response.data.result[0]);
-  };
 
   console.log("Event:", JSON.stringify(event));
 
@@ -93,6 +83,7 @@ const RegistrationConfirmation = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Brand style={{ marginTop: "36px" }} onClick={() => navigate("/")} />
       </Box>
+      <Loading isLoading={isLoading} />
       <Stack
         direction="column"
         justifyContent="center"

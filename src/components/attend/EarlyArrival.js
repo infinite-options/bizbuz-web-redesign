@@ -13,6 +13,7 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const SlideTransition = (props) => {
   return <Slide {...props} direction="down" />;
@@ -28,11 +29,16 @@ const EarlyArrival = () => {
   const location = useLocation();
   const { eventObj, user: userObj } = location.state;
   const navigate = useNavigate();
-  const { addAttendee, isAttendeePresent, subscribe, unSubscribe } = useAbly(
-    eventObj.event_uid
-  );
+  const {
+    addAttendee,
+    updateAttendee,
+    isAttendeePresent,
+    subscribe,
+    unSubscribe,
+  } = useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const handleEnterWaitingRoom = async () => {
     const response = await axios.get(
@@ -64,6 +70,8 @@ const EarlyArrival = () => {
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
     addAttendee(userObj.user_uid, { ...response["data"] });
+    if (eventObj.event_organizer_uid !== userObj.user_uid)
+      updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
   };
 
   const validateAndRoute = async () => {
@@ -118,7 +126,9 @@ const EarlyArrival = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     validateAndRoute();
+    setLoading(false);
     return () => unSubscribe();
   }, []);
 
@@ -131,6 +141,7 @@ const EarlyArrival = () => {
           onClick={() => navigate("/")}
         />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Snackbar
         open={showAlert}
         autoHideDuration={15000}

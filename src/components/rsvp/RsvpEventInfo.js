@@ -33,7 +33,7 @@ const RsvpEventInfo = () => {
         <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
         <BackIcon
           style={{ marginLeft: "auto", cursor: "pointer" }}
-          onClick={() => navigate("/")}
+          onClick={() => navigate(-1, { state: { user } })}
         />
       </Stack>
       <Stack
