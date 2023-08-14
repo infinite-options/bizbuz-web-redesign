@@ -40,8 +40,8 @@ const useAbly = (() => {
       });
     };
 
-    const removeAttendee = (clientId) => {
-      channel.presence.leaveClient(clientId, (err) => {
+    const removeAttendee = (clientId, clientData) => {
+      channel.presence.leaveClient(clientId, clientData, (err) => {
         if (err) console.error("Error when leaving: " + err.message);
       });
     };

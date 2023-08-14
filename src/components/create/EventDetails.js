@@ -41,12 +41,16 @@ const EventDetails = () => {
   const [getEvent, setEvent] = useLocalStorage("event");
   const event = getEvent();
   const [eventType, setEventType] = useState(event.event_type);
-  const [eventCapacity, setEventCapacity] = useState(event.event_capacity);
+  const [eventCapacity, setEventCapacity] = useState(
+    event.event_capacity === "No Limit" ? "" : event.event_capacity
+  );
   const [isDisabled, setDisabled] = useState(
     !event.event_capacity || event.event_capacity === "No Limit"
   );
   const [eventLimit, setEventLimit] = useState(
-    event.event_capacity ? "Set Limit" : "No Limit"
+    !event.event_capacity || event.event_capacity === "No Limit"
+      ? "No Limit"
+      : "Set Limit"
   );
   const [startDate, setStartDate] = useState(
     event.event_start_date
@@ -102,7 +106,10 @@ const EventDetails = () => {
       alert("Please fill out all the fields");
       return;
     }
-    if (endDate.isBefore(startDate) || endTime.isBefore(startTime)) {
+    if (
+      endDate.isBefore(startDate) ||
+      (endDate.diff(startDate, "day") === 0 && endTime.isBefore(startTime))
+    ) {
       alert("Please enter valid date/time values");
       return;
     }

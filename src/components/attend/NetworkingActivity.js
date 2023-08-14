@@ -37,6 +37,7 @@ const NetworkingActivity = () => {
     : JSON.parse(localStorage.getItem("user"));
   const {
     isAttendeePresent,
+    updateAttendee,
     removeAttendee,
     onAttendeeUpdate,
     subscribe,
@@ -131,7 +132,11 @@ const NetworkingActivity = () => {
 
   const handleLeaveEvent = async () => {
     await handleEndEvent();
-    removeAttendee(userObj.user_uid);
+    const response = await axios.get(
+      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+    );
+    updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
+    removeAttendee(userObj.user_uid, { ...response["data"] });
     navigate("/");
   };
 
