@@ -40,7 +40,15 @@ function UploadPhotos(props) {
     reader.readAsDataURL(file.file);
   };
   return (
-    <Box sx={{ ml: "18px", mt: "32px", display: "flex", alignItems: "center" }}>
+    <Box
+      sx={{
+        ml: "32px",
+        my: "32px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <Avatar
         sx={{
           width: "67px",
@@ -96,7 +104,7 @@ function UploadPhotos(props) {
       <Button
         variant="contained"
         sx={{
-          ml: "100px",
+          ml: "60px",
           width: "235px",
           height: "56px",
           borderRadius: "10px",

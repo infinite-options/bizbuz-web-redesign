@@ -3,10 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import UploadPhotos from "./UploadPhotos";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import Button from "@mui/material/Button";
@@ -44,6 +42,7 @@ const CreateBizCard = () => {
     setPhrase(userDetails.catch_phrase);
     setCurrentRole(userDetails.role);
     loadImages();
+    setAgreement(true);
     isEdit.current = true;
   };
 
@@ -70,7 +69,7 @@ const CreateBizCard = () => {
     setAgreement(e.target.checked);
   };
 
-  const UpdateProfile = async () => {
+  const handleUpdateProfile = async () => {
     if (isEdit.current) {
       const body = {
         profile_uid: userDetails.profile_uid,
@@ -215,287 +214,223 @@ const CreateBizCard = () => {
           "Simply enter the information below and we’ll create a bizCard for you!"
         }
       </Typography>
-      <Box sx={{ mt: "32px", ml: "16px" }}>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="First Name"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Last Name"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-      </Box>
-      <Box sx={{ mt: "32px", ml: "16px" }}>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Company"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={company}
-              onChange={(e) => {
-                setCompany(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Title"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-      </Box>
-      <Box sx={{ mt: "32px", ml: "16px" }}>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Phone Number"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={phoneNumber}
-              onChange={(e) => {
-                setPhoneNumber(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Email"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-              disabled
-            />
-          </FormControl>
-        </Grid>
-      </Box>
-      <Box sx={{ mt: "48px", ml: "16px" }}>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <Select
-              value={currentRole}
-              onChange={(e) => {
-                setCurrentRole(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-              }}
-              displayEmpty
-            >
-              <MenuItem disabled value="">
-                <em>Current Role</em>
-              </MenuItem>
-              <MenuItem value="Looking for Next Opportunity">
-                Looking for Next Opportunity
-              </MenuItem>
-              <MenuItem value="Founder">Founder</MenuItem>
-              <MenuItem value="VC">VC</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item sx={{ pl: "0 !important" }}>
-          <FormControl sx={{ width: "129px" }} variant="outlined">
-            <OutlinedInput
-              placeholder="Words to live by"
-              startAdornment={
-                <InputAdornment position="start"></InputAdornment>
-              }
-              value={phrase}
-              onChange={(e) => {
-                setPhrase(e.target.value);
-              }}
-              sx={{
-                width: "355px",
-                fontWeight: 500,
-                height: "58px",
-                fontSize: "16px",
-                fontFamily: "Inter",
-                backgroundColor: "white",
-                borderRadius: "8px",
-                marginTop: "16px",
-                "& .MuiInputBase-input::placeholder": {
-                  color: "black",
-                },
-              }}
-            />
-          </FormControl>
-        </Grid>
-      </Box>
-      <Grid
-        container
-        alignItems="center"
-        sx={{
-          width: "355px",
-          height: "87px",
-          top: "938px",
-          left: "48px",
-          typography: {
-            fontFamily: "Inter",
-            fontSize: "15px",
-            fontWeight: 500,
-            lineHeight: "18px",
-            letterSpacing: "0em",
-            textAlign: "left",
-            color: "#FFFFFF",
-          },
-          m: 2,
-        }}
+      <Stack
+        spacing={1}
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox
-                color="default"
-                checked={agreement}
-                onChange={handleChange}
-              />
-            }
-            label="I agree to let this information be shared with other participants"
-          />
-        </Grid>
-      </Grid>
-
-      <UploadPhotos state={imageState} />
+        <UploadPhotos state={imageState} />
+        <OutlinedInput
+          placeholder="First Name"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={firstName}
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "16px",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <OutlinedInput
+          placeholder="Last Name"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "16px",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <OutlinedInput
+          placeholder="Company"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={company}
+          onChange={(e) => {
+            setCompany(e.target.value);
+          }}
+          sx={{
+            width: "355px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "32px !important",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <OutlinedInput
+          placeholder="Title"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+          sx={{
+            width: "355px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "16px",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <OutlinedInput
+          placeholder="Phone Number"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={phoneNumber}
+          onChange={(e) => {
+            setPhoneNumber(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "32px !important",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <OutlinedInput
+          placeholder="Email"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "16px",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+          disabled
+        />
+        <Select
+          value={currentRole}
+          onChange={(e) => {
+            setCurrentRole(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "32px !important",
+          }}
+          displayEmpty
+        >
+          <MenuItem disabled value="">
+            <em>Current Role</em>
+          </MenuItem>
+          <MenuItem value="Looking for Next Opportunity">
+            Looking for Next Opportunity
+          </MenuItem>
+          <MenuItem value="Founder">Founder</MenuItem>
+          <MenuItem value="VC">VC</MenuItem>
+        </Select>
+        <OutlinedInput
+          placeholder="Words to live by"
+          startAdornment={<InputAdornment position="start"></InputAdornment>}
+          value={phrase}
+          onChange={(e) => {
+            setPhrase(e.target.value);
+          }}
+          sx={{
+            width: "360px",
+            fontWeight: 500,
+            height: "58px",
+            fontSize: "16px",
+            fontFamily: "Inter",
+            backgroundColor: "white",
+            borderRadius: "8px",
+            marginTop: "16px",
+            "& .MuiInputBase-input::placeholder": {
+              color: "black",
+            },
+          }}
+        />
+        <FormControlLabel
+          control={<Checkbox checked={agreement} onChange={handleChange} />}
+          sx={{
+            width: "360px",
+            mt: "32px !important",
+            typography: {
+              fontFamily: "Inter",
+              fontSize: "15px",
+              fontWeight: 500,
+              lineHeight: "18px",
+              letterSpacing: "0em",
+              textAlign: "left",
+              color: "#FFFFFF",
+            },
+          }}
+          label="I agree to let this information be shared with other participants"
+        />
+      </Stack>
       <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
-        height="30vh"
       >
         <Button
           id="submitButton"
           variant="contained"
           color="primary"
           sx={{
-            width: "355px",
+            width: "360px",
             height: "56px",
-            mt: "56px",
+            mt: "32px",
             backgroundColor: "rgba(59, 140, 117, 1)",
+            "&:disabled": {
+              backgroundColor: "grey",
+            },
           }}
-          onClick={UpdateProfile}
+          onClick={handleUpdateProfile}
         >
           {"Save bizCard"}
         </Button>

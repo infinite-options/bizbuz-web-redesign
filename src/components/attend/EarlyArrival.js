@@ -70,8 +70,7 @@ const EarlyArrival = () => {
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
     addAttendee(userObj.user_uid, { ...response["data"] });
-    if (eventObj.event_organizer_uid !== userObj.user_uid)
-      updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
+    updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
   };
 
   const validateAndRoute = async () => {
