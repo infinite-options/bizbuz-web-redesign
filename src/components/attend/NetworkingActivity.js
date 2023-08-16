@@ -15,6 +15,7 @@ import Highcharts from "../../util/networking";
 import { transformGraph } from "../../util/helper";
 import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -46,6 +47,7 @@ const NetworkingActivity = () => {
   } = useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -107,6 +109,8 @@ const NetworkingActivity = () => {
   };
 
   const refreshGraph = async ({ data }) => {
+    if (Object.keys(data).length === 0) return;
+    setLoading(true);
     const [nodesArr, linksArr] = transformGraph(
       data["user_groups"],
       data["users"],
@@ -122,6 +126,7 @@ const NetworkingActivity = () => {
         },
       ],
     });
+    setLoading(false);
   };
 
   const handleEndEvent = async () => {
@@ -175,6 +180,7 @@ const NetworkingActivity = () => {
         style={{ marginTop: "36px", cursor: "pointer" }}
         onClick={handleLeaveEvent}
       />
+      <Loading isLoading={isLoading} />
       <Snackbar
         open={showAlert}
         autoHideDuration={15000}

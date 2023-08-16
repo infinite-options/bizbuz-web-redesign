@@ -32,6 +32,7 @@ const EarlyArrival = () => {
   const {
     addAttendee,
     updateAttendee,
+    removeAttendee,
     isAttendeePresent,
     subscribe,
     unSubscribe,
@@ -56,21 +57,24 @@ const EarlyArrival = () => {
   };
 
   const handleNewAttendee = async () => {
+    removeAttendee(userObj.user_uid, {});
     await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
     );
-    addAttendee(userObj.user_uid);
+    addAttendee(userObj.user_uid, {});
   };
 
   const handleNewAttendeeWithGraph = async () => {
+    removeAttendee(userObj.user_uid, {});
     await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
     );
     const response = await axios.get(
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
+    if (eventObj.event_organizer_uid !== userObj.user_uid)
+      updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
     addAttendee(userObj.user_uid, { ...response["data"] });
-    updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
   };
 
   const validateAndRoute = async () => {

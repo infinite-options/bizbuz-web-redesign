@@ -175,7 +175,7 @@ const AttendeeDetails = () => {
             </Card>
           </Grid>
         </Stack>
-        <Grid sx={{ mt: "64px", marginBottom: "32px" }}>
+        <Grid sx={{ mt: "32px", marginBottom: "32px" }}>
           {qas.map((qa) => (
             <Box
               key={qa.id}
@@ -188,6 +188,7 @@ const AttendeeDetails = () => {
             >
               <Typography
                 variant="body1"
+                align="center"
                 gutterBottom
                 sx={{
                   color: "#FFF",
@@ -196,7 +197,6 @@ const AttendeeDetails = () => {
                   fontStyle: "normal",
                   fontWeight: 400,
                   lineHeight: "normal",
-                  ml: "16px",
                   mt: "32px",
                 }}
               >
