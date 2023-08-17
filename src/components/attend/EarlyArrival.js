@@ -31,9 +31,9 @@ const EarlyArrival = () => {
   const navigate = useNavigate();
   const {
     addAttendee,
-    updateAttendee,
+    // updateAttendee,
     removeAttendee,
-    isAttendeePresent,
+    // isAttendeePresent,
     subscribe,
     unSubscribe,
   } = useAbly(eventObj.event_uid);
@@ -72,12 +72,13 @@ const EarlyArrival = () => {
     const response = await axios.get(
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
-    if (eventObj.event_organizer_uid !== userObj.user_uid)
-      updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
+    // if (eventObj.event_organizer_uid !== userObj.user_uid)
+    //   updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
     addAttendee(userObj.user_uid, { ...response["data"] });
   };
 
   const validateAndRoute = async () => {
+    setLoading(true);
     const response = await axios.get(
       `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
     );
@@ -96,18 +97,19 @@ const EarlyArrival = () => {
         });
         return;
       }
-      isAttendeePresent(eventObj.event_organizer_uid, (m) => {
-        if (response.data.eventStarted === "1") {
-          handleNewAttendeeWithGraph();
-          navigate("/networkingActivity", {
-            state: { eventObj, userObj },
-          });
-        } else {
-          handleNewAttendee();
-          joinSubscribe();
-        }
-      });
+      // isAttendeePresent(eventObj.event_organizer_uid, (m) => {
+      if (response.data.eventStarted === "1") {
+        await handleNewAttendeeWithGraph();
+        navigate("/networkingActivity", {
+          state: { eventObj, userObj },
+        });
+      } else {
+        await handleNewAttendee();
+        joinSubscribe();
+      }
+      // });
     }
+    setLoading(false);
   };
 
   const handleAlertClose = (event, reason) => {
@@ -129,9 +131,7 @@ const EarlyArrival = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     validateAndRoute();
-    setLoading(false);
     return () => unSubscribe();
   }, []);
 

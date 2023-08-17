@@ -21,22 +21,11 @@ const useAbly = (() => {
       });
     };
 
-    const isAttendeePresent = (clientId, callback, tries = 3) => {
-      if (tries-- === 0) {
-        alert("Ably synchronization incomplete after 3 tries");
-        return;
-      }
-      if (channel.presence.syncComplete) {
-        channel.presence.get({ clientId }, (err, members) => {
-          if (err)
-            console.error("Error when checking presence: " + err.message);
-          if (members.length > 0) callback(members[members.length - 1]);
-        });
-      } else {
-        setTimeout(() => {
-          isAttendeePresent(clientId, callback);
-        }, 1000);
-      }
+    const isAttendeePresent = (clientId, callback) => {
+      channel.presence.get({ clientId }, (err, members) => {
+        if (err) console.error("Error when checking presence: " + err.message);
+        if (members.length > 0) callback(members[0]);
+      });
     };
 
     const addAttendee = (clientId, clientData) => {
@@ -58,7 +47,7 @@ const useAbly = (() => {
     };
 
     const onAttendeeUpdate = (callback) => {
-      channel.presence.subscribe(["enter", "leave"], callback);
+      channel.presence.subscribe(["enter", "update", "leave"], callback);
     };
 
     const subscribe = (listener) => {
@@ -73,7 +62,7 @@ const useAbly = (() => {
     const detach = () => {
       channel.detach((err) => {
         if (err) console.error("Error when detaching: " + err.message);
-        else channel.release();
+        // else channel.release();
       });
     };
 

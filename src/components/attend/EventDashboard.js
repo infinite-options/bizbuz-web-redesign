@@ -19,9 +19,9 @@ const EventDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
-  const [eventStarted, setEventStarted] = useState(
-    eventObj.event_status === "1"
-  );
+  // const [eventStarted, setEventStarted] = useState(
+  //   eventObj.event_status === "1"
+  // );
   const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState("");
   const { publish } = useAbly(eventObj.event_uid);
@@ -49,34 +49,34 @@ const EventDashboard = () => {
       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=1`
     );
     eventObj.event_status = "1";
-    setEventStarted(true);
-    handleClearStorage(["event", "user"]);
-    localStorage.setItem("event", JSON.stringify(eventObj));
-    localStorage.setItem("user", JSON.stringify(userObj));
-    window.open("/networkingActivity", "_blank");
+    // setEventStarted(true);
+    // handleClearStorage(["event", "user"]);
+    // localStorage.setItem("event", JSON.stringify(eventObj));
+    // localStorage.setItem("user", JSON.stringify(userObj));
+    // window.open("/networkingActivity", "_blank");
     publish("Event started");
-    navigate(".", {
+    navigate("/networkingActivity", {
       state: { eventObj, userObj },
     });
   };
 
-  const handleStopEvent = () => {
-    setEventStarted(false);
-    publish("Event ended");
-    axios.put(
-      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=0`
-    );
-    eventObj.event_status = "0";
-    navigate(".", {
-      state: { eventObj, userObj },
-    });
-  };
+  // const handleStopEvent = () => {
+  //   setEventStarted(false);
+  //   publish("Event ended");
+  //   axios.put(
+  //     `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=0`
+  //   );
+  //   eventObj.event_status = "0";
+  //   navigate(".", {
+  //     state: { eventObj, userObj },
+  //   });
+  // };
 
-  const handleClearStorage = (items) => {
-    items.forEach((item) => {
-      localStorage.removeItem(item);
-    });
-  };
+  // const handleClearStorage = (items) => {
+  //   items.forEach((item) => {
+  //     localStorage.removeItem(item);
+  //   });
+  // };
 
   return (
     <Box display="flex" flexDirection="column">
@@ -157,18 +157,6 @@ const EventDashboard = () => {
           >
             {"Broadcast"}
           </Button>
-          {eventStarted && (
-            <Button
-              size="large"
-              color="secondary"
-              variant="contained"
-              onClick={handleStopEvent}
-            >
-              {"Stop Event"}
-            </Button>
-          )}
-        </Stack>
-        {!eventStarted && (
           <Button
             size="large"
             color="secondary"
@@ -177,7 +165,27 @@ const EventDashboard = () => {
           >
             {"Start Event"}
           </Button>
-        )}
+          {/* {eventStarted && (
+            <Button
+              size="large"
+              color="secondary"
+              variant="contained"
+              onClick={handleStopEvent}
+            >
+              {"Stop Event"}
+            </Button>
+          )} */}
+        </Stack>
+        {/* {!eventStarted && ( 
+        <Button
+          size="large"
+          color="secondary"
+          variant="contained"
+          onClick={handleStartEvent}
+        >
+          {"Start Event"}
+        </Button>
+        )} */}
         <Button
           size="large"
           color="secondary"

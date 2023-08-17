@@ -17,6 +17,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MUIAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -36,6 +37,7 @@ const EventAttendees = () => {
   const [attendees, setAttendees] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const { onAttendeeUpdate, subscribe, unSubscribe } = useAbly(
     eventObj.event_uid
   );
@@ -50,7 +52,7 @@ const EventAttendees = () => {
 
   const handleClickAttendee = (attendee) => {
     navigate("/attendeeDetails", {
-      state: { event: eventObj, user: userObj, id: attendee.user_uid, },
+      state: { event: eventObj, user: userObj, id: attendee.user_uid },
     });
   };
 
@@ -91,10 +93,16 @@ const EventAttendees = () => {
     });
   };
 
-  useEffect(() => {
-    fetchOrganizerProfile();
-    fetchAttendees();
+  const loadAndSubscribe = async () => {
+    setLoading(true);
+    await fetchOrganizerProfile();
+    await fetchAttendees();
     joinSubscribe();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadAndSubscribe();
     return () => unSubscribe();
   }, []);
 
@@ -107,6 +115,7 @@ const EventAttendees = () => {
           onClick={() => navigate(-1, { state: { eventObj, userObj } })}
         />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Snackbar
         open={showAlert}
         autoHideDuration={15000}

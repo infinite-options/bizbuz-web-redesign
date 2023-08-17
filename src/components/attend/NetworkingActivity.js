@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import useAbly from "../../util/ably";
 import Box from "@mui/material/Box";
@@ -30,13 +30,15 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const NetworkingActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const eventObj = location.state
-    ? location.state.eventObj
-    : JSON.parse(localStorage.getItem("event"));
-  const userObj = location.state
-    ? location.state.userObj
-    : JSON.parse(localStorage.getItem("user"));
+  const { eventObj, userObj } = location.state;
+  // const eventObj = location.state
+  //   ? location.state.eventObj
+  //   : JSON.parse(localStorage.getItem("event"));
+  // const userObj = location.state
+  //   ? location.state.userObj
+  //   : JSON.parse(localStorage.getItem("user"));
   const {
+    publish,
     isAttendeePresent,
     updateAttendee,
     removeAttendee,
@@ -48,6 +50,7 @@ const NetworkingActivity = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const isOrganizer = useRef(eventObj.event_organizer_uid === userObj.user_uid);
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -140,23 +143,30 @@ const NetworkingActivity = () => {
     const response = await axios.get(
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
-    updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
+    // updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
     removeAttendee(userObj.user_uid, { ...response["data"] });
     navigate("/");
   };
 
   const broadcastAndExitSubscribe = () => {
-    onAttendeeUpdate((m) => {
-      refreshGraph(m);
-    });
+    if (eventObj.event_organizer_uid === userObj.user_uid) {
+      onAttendeeUpdate(({ data }) => {
+        updateAttendee(userObj.user_uid, data);
+        publish("Refresh Graph");
+      });
+    }
     subscribe((e) => {
-      if (e.data === "Event ended") {
-        handleEndEvent();
-        detach();
-        navigate("/");
-      } else {
-        setMessage(e.data);
-        setShowAlert(true);
+      if (e.data === "Refresh Graph") {
+        isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
+      } else if (eventObj.event_organizer_uid !== userObj.user_uid) {
+        if (e.data === "Event ended") {
+          handleEndEvent();
+          detach();
+          navigate("/");
+        } else {
+          setMessage(e.data);
+          setShowAlert(true);
+        }
       }
     });
   };
@@ -168,17 +178,27 @@ const NetworkingActivity = () => {
     setShowAlert(false);
   };
 
+  const handleStopEvent = async () => {
+    publish("Event ended");
+    await handleEndEvent();
+    axios.put(
+      `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&eventStatus=0`
+    );
+    detach();
+    navigate("/");
+  };
+
   useEffect(() => {
     isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     broadcastAndExitSubscribe();
-    return () => unSubscribe();
+    // return () => unSubscribe();
   }, []);
 
   return (
     <Box display="flex" flexDirection="column">
       <Brand
         style={{ marginTop: "36px", cursor: "pointer" }}
-        onClick={handleLeaveEvent}
+        onClick={isOrganizer.current ? handleStopEvent : handleLeaveEvent}
       />
       <Loading isLoading={isLoading} />
       <Snackbar
@@ -209,9 +229,9 @@ const NetworkingActivity = () => {
         variant="contained"
         sx={{ mt: "16px" }}
         color="primary"
-        onClick={handleLeaveEvent}
+        onClick={isOrganizer.current ? handleStopEvent : handleLeaveEvent}
       >
-        {"Leave Event"}
+        {isOrganizer.current ? "Stop Event" : "Leave Event"}
       </Button>
     </Box>
   );
