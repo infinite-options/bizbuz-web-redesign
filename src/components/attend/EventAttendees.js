@@ -38,7 +38,7 @@ const EventAttendees = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const { onAttendeeUpdate, subscribe, unSubscribe } = useAbly(
+  const { onAttendeeEnterExit, subscribe, unSubscribe } = useAbly(
     eventObj.event_uid
   );
 
@@ -56,15 +56,6 @@ const EventAttendees = () => {
     });
   };
 
-  // const fetchOrganizers = async () => {
-  //   const response = await axios.get(`${BASE_URL}/GetOrganizers`);
-  //   const organizersData = response.data.result;
-  //   const eventHost = organizersData.find(
-  //     (organizer) => organizer.event_uid === eventObj.event_uid
-  //   );
-  //   setEventHost(eventHost);
-  // };
-
   const fetchOrganizerProfile = async () => {
     const response = await axios.get(
       `${BASE_URL}/profileByUserUID?userId=${eventObj.event_organizer_uid}`
@@ -80,7 +71,7 @@ const EventAttendees = () => {
   };
 
   const joinSubscribe = () => {
-    onAttendeeUpdate((m) => {
+    onAttendeeEnterExit((m) => {
       fetchAttendees();
     });
     subscribe((e) => {

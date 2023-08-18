@@ -16,6 +16,7 @@ import { ReactComponent as Phone } from "../../assets/phone.svg";
 import { ReactComponent as Mail } from "../../assets/mail-04.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import EventCard from "../common/EventCard";
+import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const AttendeeDetails = () => {
@@ -24,6 +25,7 @@ const AttendeeDetails = () => {
   const { event, user, id } = location.state;
   const [registrant, setRegistrant] = useState({ images: "[]" });
   const [qas, setQas] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   const fetchRegistrantDetails = async () => {
     try {
@@ -36,6 +38,7 @@ const AttendeeDetails = () => {
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -48,6 +51,7 @@ const AttendeeDetails = () => {
         <Brand onClick={() => navigate("/")} />
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
+      <Loading isLoading={isLoading} />
       <Stack
         direction="column"
         justifyContent="center"

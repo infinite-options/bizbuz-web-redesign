@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import useAbly from "../../util/ably";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -13,13 +12,11 @@ import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../assets/NoUserImage.png";
 import EventCard from "../common/EventCard";
 
-const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
 const OverallNetwork = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
-  const { onAttendeeUpdate, unSubscribe, isAttendeePresent } = useAbly(
+  const { onAttendeeEnterExit, unSubscribe, isAttendeePresent } = useAbly(
     eventObj.event_uid
   );
   const [options, setOptions] = useState({
@@ -81,15 +78,6 @@ const OverallNetwork = () => {
   };
 
   const refreshGraph = async ({ data }) => {
-    // let data = {};
-    // if (!message) {
-    //   const response = await axios.get(
-    //     `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-    //   );
-    //   data = response["data"];
-    // } else {
-    //   data = message["data"];
-    // }
     const [nodesArr, linksArr] = transformGraph(
       data["user_groups"],
       data["users"],
@@ -115,7 +103,7 @@ const OverallNetwork = () => {
 
   useEffect(() => {
     isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
-    onAttendeeUpdate((m) => {
+    onAttendeeEnterExit((m) => {
       refreshGraph(m);
     });
     return () => unSubscribe();
