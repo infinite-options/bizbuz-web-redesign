@@ -17,49 +17,49 @@ const RegistrationConfirmation = () => {
   const navigate = useNavigate();
   const [event, setEvent] = useState(state.eventObj.eu_event);
   const [userDetails, setUserDetails] = useState();
+  const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
-
-  let email = state.email;
-  let user = state.user;
+  const email = state.email;
+  const user = state.user;
   const eventObj = state.eventObj !== undefined ? state.eventObj : "";
-  console.log(eventObj);
   let user_uid =
     typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
 
-  const GetUserProfile = async () => {
-    axios.get(BASE_URL + `/CheckUserProfile/${user_uid}`).then((response) => {
-      setUserDetails(response.data.result[0]);
-    });
+  const getUserProfile = async () => {
+    const response = await axios.get(
+      BASE_URL + `/CheckUserProfile/${user_uid}`
+    );
+    setUserDetails(response.data.result[0]);
   };
 
-  const addEventUser = () => {
+  const addEventUser = async () => {
     let eObj = eventObj;
     eObj.eu_user_id = user_uid;
-    axios
-      .get(
-        BASE_URL +
-          `/CheckAlreadyRegistered/${eObj.eu_event_id},${eObj.eu_user_id}`
-      )
-      .then((response) => {
-        if (response.data.message === "Already Registered") {
-          console.log("Already Registered:", response.data.result[0]);
-          setEvent(response.data.result[0]);
-        } else {
-          axios.post(BASE_URL + "/EventUser", eObj).then((response) => {
-            console.log("Start Registering", response.data.result[0]);
-            setEvent(response.data.result[0]);
-          });
-        }
-      });
+    const chkResponse = await axios.get(
+      BASE_URL +
+        `/CheckAlreadyRegistered/${eObj.eu_event_id},${eObj.eu_user_id}`
+    );
+    if (chkResponse.data.message === "Already Registered") {
+      setMessage(chkResponse.data.message);
+      setEvent(chkResponse.data.result[0]);
+    } else {
+      const regResponse = await axios.post(BASE_URL + "/EventUser", eObj);
+      setEvent(regResponse.data.result[0]);
+      setMessage("Registration Confirmed!");
+    }
   };
-  useEffect(() => {
+
+  const loadAndRegister = async () => {
     setLoading(true);
-    GetUserProfile();
+    await getUserProfile();
     if (eventObj) {
-      console.log("addEvent");
-      addEventUser();
+      await addEventUser();
     }
     setLoading(false);
+  };
+
+  useEffect(() => {
+    loadAndRegister();
   }, []);
 
   console.log("Event:", JSON.stringify(event));
@@ -103,10 +103,10 @@ const RegistrationConfirmation = () => {
           fontStyle: "normal",
           fontWeight: 500,
           lineHeight: "normal",
-          marginBottom: "70px",
+          marginBottom: "15px",
         }}
       >
-        {"Registration Confirmed!"}
+        {message}
       </Typography>
       <Box
         display="flex"
@@ -131,36 +131,21 @@ const RegistrationConfirmation = () => {
           A confirmation email has been sent to the provided email address.
           Please check your inbox for further details.
         </Typography>
-
-        <Box
-          sx={{
-            marginTop: "96px",
-            position: "relative",
-            left: 0,
-            top: "50%",
-            transform: "translateY(-50%)",
-          }}
-        >
-          <Done />
-        </Box>
-        <Typography sx={{ mt: "8px" }}>
+        <Done style={{ marginTop: "15px" }} />
+        <Typography sx={{ my: "15px" }}>
           Make it easy to share your contact info by making a Free bizCard
         </Typography>
       </Box>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        height="40vh"
+      <Stack
+        spacing={1}
+        sx={{ position: "fixed", bottom: "30px", alignSelf: "center" }}
       >
         <Button
           variant="contained"
           sx={{
             width: "352.5px",
             height: "56px",
-            mt: "auto",
             backgroundColor: eventTypeColor,
           }}
           onClick={() => {
@@ -183,7 +168,6 @@ const RegistrationConfirmation = () => {
           sx={{
             width: "352.5px",
             height: "56px",
-            mt: "56px",
           }}
           onClick={() => {
             navigate("/");
@@ -191,7 +175,7 @@ const RegistrationConfirmation = () => {
         >
           {"Go Back to Homepage"}
         </Button>
-      </Box>
+      </Stack>
     </Box>
   );
 };
