@@ -46,8 +46,12 @@ const useAbly = (() => {
       });
     };
 
+    const onAttendeeEnterExit = (callback) => {
+      channel.presence.subscribe(["enter", "leave"], callback);
+    };
+
     const onAttendeeUpdate = (callback) => {
-      channel.presence.subscribe(["enter", "update", "leave"], callback);
+      channel.presence.subscribe(["update"], callback);
     };
 
     const subscribe = (listener) => {
@@ -73,6 +77,7 @@ const useAbly = (() => {
       updateAttendee,
       removeAttendee,
       isAttendeePresent,
+      onAttendeeEnterExit,
       onAttendeeUpdate,
       unSubscribe,
       detach,

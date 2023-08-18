@@ -31,12 +31,6 @@ const NetworkingActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { eventObj, userObj } = location.state;
-  // const eventObj = location.state
-  //   ? location.state.eventObj
-  //   : JSON.parse(localStorage.getItem("event"));
-  // const userObj = location.state
-  //   ? location.state.userObj
-  //   : JSON.parse(localStorage.getItem("user"));
   const {
     publish,
     isAttendeePresent,
@@ -44,6 +38,7 @@ const NetworkingActivity = () => {
     removeAttendee,
     onAttendeeUpdate,
     subscribe,
+    onAttendeeEnterExit,
     unSubscribe,
     detach,
   } = useAbly(eventObj.event_uid);
@@ -143,22 +138,23 @@ const NetworkingActivity = () => {
     const response = await axios.get(
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
-    // updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
     removeAttendee(userObj.user_uid, { ...response["data"] });
     navigate("/");
   };
 
   const broadcastAndExitSubscribe = () => {
     if (eventObj.event_organizer_uid === userObj.user_uid) {
-      onAttendeeUpdate(({ data }) => {
-        updateAttendee(userObj.user_uid, data);
-        publish("Refresh Graph");
+      onAttendeeEnterExit((m) => {
+        refreshGraph(m);
+        updateAttendee(userObj.user_uid, m.data);
+      });
+    } else {
+      onAttendeeUpdate((m) => {
+        refreshGraph(m);
       });
     }
     subscribe((e) => {
-      if (e.data === "Refresh Graph") {
-        isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
-      } else if (eventObj.event_organizer_uid !== userObj.user_uid) {
+      if (eventObj.event_organizer_uid !== userObj.user_uid) {
         if (e.data === "Event ended") {
           handleEndEvent();
           detach();
@@ -191,7 +187,7 @@ const NetworkingActivity = () => {
   useEffect(() => {
     isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     broadcastAndExitSubscribe();
-    // return () => unSubscribe();
+    return () => unSubscribe();
   }, []);
 
   return (

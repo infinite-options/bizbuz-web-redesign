@@ -29,14 +29,7 @@ const EarlyArrival = () => {
   const location = useLocation();
   const { eventObj, user: userObj } = location.state;
   const navigate = useNavigate();
-  const {
-    addAttendee,
-    // updateAttendee,
-    removeAttendee,
-    // isAttendeePresent,
-    subscribe,
-    unSubscribe,
-  } = useAbly(eventObj.event_uid);
+  const { addAttendee, subscribe, unSubscribe } = useAbly(eventObj.event_uid);
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
@@ -57,7 +50,6 @@ const EarlyArrival = () => {
   };
 
   const handleNewAttendee = async () => {
-    removeAttendee(userObj.user_uid, {});
     await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
     );
@@ -65,15 +57,12 @@ const EarlyArrival = () => {
   };
 
   const handleNewAttendeeWithGraph = async () => {
-    removeAttendee(userObj.user_uid, {});
     await axios.put(
       `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
     );
     const response = await axios.get(
       `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
     );
-    // if (eventObj.event_organizer_uid !== userObj.user_uid)
-    //   updateAttendee(eventObj.event_organizer_uid, { ...response["data"] });
     addAttendee(userObj.user_uid, { ...response["data"] });
   };
 
@@ -97,7 +86,6 @@ const EarlyArrival = () => {
         });
         return;
       }
-      // isAttendeePresent(eventObj.event_organizer_uid, (m) => {
       if (response.data.eventStarted === "1") {
         await handleNewAttendeeWithGraph();
         navigate("/networkingActivity", {
@@ -107,7 +95,6 @@ const EarlyArrival = () => {
         await handleNewAttendee();
         joinSubscribe();
       }
-      // });
     }
     setLoading(false);
   };
