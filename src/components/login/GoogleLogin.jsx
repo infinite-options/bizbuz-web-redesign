@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import LoginContext from "../../util/LoginContext";
+import GoogleIcon from "../../assets/GoogleSignup.png";
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.REACT_APP_GOOGLE_CLIENT_SECRET;
@@ -196,13 +197,15 @@ function GoogleLogin(props) {
         justifyContent: "center",
         alignItems: "center",
         marginTop: "2rem",
+        maxWidth:"600px",
+        width:"100%"
       }}
     >
-      <div className="w-100">
+      <div className="w-100" style={{width:"100%"}}>
         <div></div>
         <div>
           <div></div>
-          <div id="signUpDiv">
+          <div id="signUpDiv" style={{width:"100%"}}>
             <Button
               onClick={() => getAuthorizationCode()}
               role="button"
@@ -210,7 +213,7 @@ function GoogleLogin(props) {
                 textTransform: "none",
                 backgroundColor: "white",
                 color: "#000000",
-                width: "92vw",
+                width: "100%",
                 height: "44px",
                 "&.MuiButtonBase-root:hover, &.Mui-selected": {
                   backgroundColor: "white",
@@ -223,7 +226,7 @@ function GoogleLogin(props) {
                   padding: "1rem",
                 }}
                 alt="Google sign-up"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+                src={GoogleIcon}
               />
               {"Sign in with Google"}
             </Button>
@@ -237,6 +240,7 @@ function GoogleLogin(props) {
             width: "92vw",
             fontSize: 18,
             my: 3,
+            width:"100%"
           }}
           align="center"
         >

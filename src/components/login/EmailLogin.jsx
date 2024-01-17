@@ -185,19 +185,19 @@ export default function EmailLogin(props) {
       ""
     );
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", width:"100%" }}>
       <PasswordModal isOpen={passModal} onCancel={onCancel} />
       {showForm ? (
         <Stack direction="column" justifyContent="center" sx={{ mt: 2 }}>
           <FormControl>
             <FormGroup>
-              <Typography variant="h3" sx={{ width: "92vw" }}>
+              <Typography variant="h3" sx={{ width: "100%" }}>
                 {"Username"}
               </Typography>
               <TextField
                 sx={{
                   backgroundColor: "white",
-                  width: "92vw",
+                  width: "100%",
                   height: "44px",
                   borderRadius: "8px",
                 }}
@@ -209,13 +209,13 @@ export default function EmailLogin(props) {
               />
             </FormGroup>
             <FormGroup>
-              <Typography variant="h3" sx={{ width: "92vw" }}>
+              <Typography variant="h3" sx={{ width: "100%" }}>
                 {"Password"}
               </Typography>
               <TextField
                 sx={{
                   backgroundColor: "white",
-                  width: "92vw",
+                  width: "100%",
                   height: "44px",
                   borderRadius: "8px",
                 }}
@@ -250,7 +250,7 @@ export default function EmailLogin(props) {
             textTransform: "none",
             backgroundColor: "white",
             color: "#000000",
-            width: "92vw",
+            width: "100%",
             height: "44px",
             "&.MuiButtonBase-root:hover, &.Mui-selected": {
               backgroundColor: "white",
@@ -273,7 +273,7 @@ export default function EmailLogin(props) {
               backgroundColor: "#F26457",
               color: "white",
               marginTop: "-2rem",
-              width: "92vw",
+              width: "100%",
               height: "56px",
               borderRadius: "10px",
             }}

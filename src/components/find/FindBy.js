@@ -440,6 +440,7 @@ export default function FindBy() {
                   position: "fixed",
                   bottom: "0",
                   width: "100%",
+                  maxWidth:"600px",
                   visibility: showList ? "hidden" : "visble",
                   "&.MuiButtonBase-root:hover, &.Mui-selected": {
                     backgroundColor: "white",
