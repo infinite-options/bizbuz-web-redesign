@@ -24,7 +24,13 @@ const CurrentRsvp = () => {
       BASE_URL +
         `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user.user_uid}`
     );
-    setRsvpEvents(response.data.result);
+    // setRsvpEvents(response.data.result);
+
+    const res = await axios.get(
+      BASE_URL +
+        `/GetEvents?event_organizer_uid=${user.user_uid}&timeZone=${user_timezone}`
+    );
+    setRsvpEvents(response.data.result.concat(res.data.result.filter(event=>!rsvpEvents.some(rsvp=>rsvp.event_uid===event.event_uid))));
     setLoading(false);
     if (!showList) setShowList(!showList);
   };
