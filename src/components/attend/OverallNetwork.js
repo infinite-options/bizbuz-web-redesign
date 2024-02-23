@@ -19,6 +19,9 @@ const OverallNetwork = () => {
   const { onAttendeeEnterExit, unSubscribe, isAttendeePresent } = useAbly(
     eventObj.event_uid
   );
+  useEffect(()=>{
+    console.log("data:",eventObj,userObj);
+  },[])
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -78,6 +81,7 @@ const OverallNetwork = () => {
   };
 
   const refreshGraph = async ({ data }) => {
+    console.log("inside refresh",data)
     const [nodesArr, linksArr] = transformGraph(
       data["user_groups"],
       data["users"],
@@ -102,7 +106,7 @@ const OverallNetwork = () => {
   };
 
   useEffect(() => {
-    isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
+    isAttendeePresent(userObj.user_uid, (m) =>  (m));
     onAttendeeEnterExit((m) => {
       refreshGraph(m);
     });

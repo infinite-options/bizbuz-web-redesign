@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import useAbly from "../../util/ably";
@@ -25,7 +25,9 @@ const EventDashboard = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState("");
   const { publish } = useAbly(eventObj.event_uid);
-
+  useEffect(()=>{
+    console.log("event",eventObj)
+  },[]);
   const handleBroadcast = () => {
     publish(message);
     setShowDialog(false);
@@ -148,6 +150,16 @@ const EventDashboard = () => {
             }
           >
             {"View Network"}
+          </Button>
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={() =>
+              navigate("/tempGraph", { state: { eventObj, userObj } })
+            }
+          >
+            {"temp Graph"}
           </Button>
           <Button
             size="large"
