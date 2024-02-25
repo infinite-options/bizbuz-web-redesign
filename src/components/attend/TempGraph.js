@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from "react-router-dom";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
+import useAbly from "../../util/ably";
 import axios from "axios";
+import Loading from "../common/Loading";
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function TempGraph() {
     const location = useLocation();
     const { eventObj, userObj } = location.state;
+    const [isLoading, setLoading] = useState(false);
     const [eventUsers, setEventUsers] = useState();
     const [nodeData,setNodeData]=useState();
     const [nodesarr,setNodesarr]=useState([]);
+    const [attendees, setAttendees] = useState([]);
+    const { onAttendeeEnterExit, subscribe, unSubscribe } = useAbly(
+        eventObj.event_uid
+      );
     const getAllEventUsers = async ()=>{
         try{
             const response = await axios.get(
@@ -53,7 +60,8 @@ function TempGraph() {
         
     }
     const get_cosine_data = async ()=>{
-        // console.log("response",eventObj.event_uid);     
+        // console.log("response",eventObj.event_uid);   
+        setLoading(true);  
         try{
             if(eventUsers!==undefined){
                 console.log("before call",eventUsers);
@@ -89,19 +97,66 @@ function TempGraph() {
         catch(error){
             console.log("error in getting algorithm",error)
         }
+        setLoading(false);
     }
     useEffect(()=>{
         console.log("info:",eventObj,userObj,userObj.user_uid);
-        getAllEventUsers();
+        // getAllEventUsers();
         
     },[])    
-    useEffect(()=>{
-        console.log("nodes arr:",nodesarr[0]);
+    // useEffect(()=>{
+    //     console.log("nodes arr:",nodesarr[0]);
         
-    },[nodesarr])
+    // },[nodesarr])
     useEffect(()=>{
         get_cosine_data();
-    },[eventUsers])
+    },[eventUsers]);
+
+    const fetchAttendees = async () => {
+        setLoading(true);
+        const response = await axios.get(
+          `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}&attendFlag=1`
+        );
+        const data = response["data"];
+        console.log("attendees get:",data["attendees"]);
+        let updatedUsers = { ...eventUsers };
+        let nodesImg = [...nodesarr];
+        let users=data["attendees"];
+        for(let i=0;i<users.length;i++){
+            let user_obj=users[i];
+            console.log("logging:",users[i]);
+            const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
+            updatedUsers[user_obj.first_name]={
+                user_uid: user_obj.user_uid,
+                images: user_obj.images,
+                qas:JSON.parse(qa.data.registrant.eu_qas),
+                first_name:user_obj.first_name,
+                last_name:user_obj.last_name
+            }
+            
+            let img_url=user_obj.images.replace(/[\[\]"]/g,'')
+            nodesImg.push({
+                id:user_obj.first_name,
+                image:img_url,
+                marker:{
+                    radius:20
+                }
+            })
+        }
+        console.log("updated users",updatedUsers);
+        setEventUsers(updatedUsers);
+        setAttendees(data["attendees"]);
+
+        setNodesarr(nodesImg);
+        setLoading(false);
+    };
+    useEffect(async ()=>{
+        fetchAttendees();
+        onAttendeeEnterExit((m) => {
+            console.log("what is m",m);
+            fetchAttendees();
+        });
+    },[])
     const [options, setOptions] = useState({
         chart: {
             type: "networkgraph",
@@ -154,10 +209,14 @@ function TempGraph() {
 
     return (
         // <></>
-        <HighchartsReact
-            highcharts={Highcharts}
-            options={options}
-        />
+        <div>
+            <Loading isLoading={isLoading} />
+            <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+            />
+        </div>
+        
     );
 }
 
