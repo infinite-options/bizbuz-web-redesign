@@ -5,9 +5,14 @@ import HighchartsReact from "highcharts-react-official";
 import useAbly from "../../util/ably";
 import axios from "axios";
 import Loading from "../common/Loading";
+import Stack from "@mui/material/Stack";
+import { ReactComponent as Brand } from "../../assets/brand.svg";
+import { ReactComponent as BackIcon } from "../../assets/back.svg";
+
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function TempGraph() {
+    const navigate = useNavigate();
     const location = useLocation();
     const { eventObj, userObj } = location.state;
     const [isLoading, setLoading] = useState(false);
@@ -99,18 +104,16 @@ function TempGraph() {
         }
         setLoading(false);
     }
-    useEffect(()=>{
-        console.log("info:",eventObj,userObj,userObj.user_uid);
-        // getAllEventUsers();
+    // useEffect(()=>{
+    //     console.log("info:",eventObj,userObj,userObj.user_uid);
+    //     // getAllEventUsers();
         
-    },[])    
+    // },[])    
     // useEffect(()=>{
     //     console.log("nodes arr:",nodesarr[0]);
         
     // },[nodesarr])
-    useEffect(()=>{
-        get_cosine_data();
-    },[eventUsers]);
+
 
     const fetchAttendees = async () => {
         setLoading(true);
@@ -150,13 +153,16 @@ function TempGraph() {
         setNodesarr(nodesImg);
         setLoading(false);
     };
-    useEffect(async ()=>{
+    useEffect(()=>{
         fetchAttendees();
         onAttendeeEnterExit((m) => {
             console.log("what is m",m);
             fetchAttendees();
         });
     },[])
+    useEffect(()=>{
+        get_cosine_data();
+    },[eventUsers]);
     const [options, setOptions] = useState({
         chart: {
             type: "networkgraph",
@@ -210,6 +216,13 @@ function TempGraph() {
     return (
         // <></>
         <div>
+            <Stack direction="row" sx={{ mt: "36px" }}>
+                <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+                <BackIcon
+                style={{ marginLeft: "auto", cursor: "pointer" }}
+                onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+                />
+            </Stack>
             <Loading isLoading={isLoading} />
             <HighchartsReact
                 highcharts={Highcharts}

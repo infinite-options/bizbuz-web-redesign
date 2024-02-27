@@ -14,6 +14,7 @@ import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Button from "@mui/material/Button";
 import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
+import { TrySharp } from "@mui/icons-material";
 
 const SlideTransition = (props) => {
   return <Slide {...props} direction="down" />;
@@ -35,6 +36,7 @@ const EarlyArrival = () => {
   const [isLoading, setLoading] = useState(false);
 
   const handleEnterWaitingRoom = async () => {
+    
     const response = await axios.get(
       `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
     );
@@ -50,52 +52,69 @@ const EarlyArrival = () => {
   };
 
   const handleNewAttendee = async () => {
-    await axios.put(
-      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
-    );
-    addAttendee(userObj.user_uid, {});
+    try{
+      await axios.put(
+        `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
+      );
+      addAttendee(userObj.user_uid, {});
+    }
+    catch(error){
+      console.log("error in handle attendee",error)
+    }
   };
 
   const handleNewAttendeeWithGraph = async () => {
-    await axios.put(
-      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
-    );
-    const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-    );
-    addAttendee(userObj.user_uid, { ...response["data"] });
+    try{
+      await axios.put(
+        `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
+      );
+      const response = await axios.get(
+        `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      );
+      addAttendee(userObj.user_uid, { ...response["data"] });
+    }
+    catch(error){
+      console.log("error in attendee graph",error);
+    }
+
   };
 
   const validateAndRoute = async () => {
     setLoading(true);
-    const response = await axios.get(
-      `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
-    );
-    if (response.data.isOrganizer) {
-      handleNewAttendeeWithGraph();
-      navigate("/eventDashboard", {
-        state: { eventObj, userObj },
-      });
-    } else {
+    try{
       const response = await axios.get(
-        `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+        `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
       );
-      if (!response.data.hasRegistered) {
-        navigate("/eventQuestionnaire", {
-          state: { event: eventObj },
-        });
-        return;
-      }
-      if (response.data.eventStarted === "1") {
-        await handleNewAttendeeWithGraph();
-        navigate("/networkingActivity", {
+      if (response.data.isOrganizer) {
+        handleNewAttendeeWithGraph();
+        navigate("/eventDashboard", {
           state: { eventObj, userObj },
         });
       } else {
-        await handleNewAttendee();
-        joinSubscribe();
+        const response = await axios.get(
+          `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+        );
+        if (!response.data.hasRegistered) {
+          navigate("/eventQuestionnaire", {
+            state: { event: eventObj },
+          });
+          return;
+        }
+        if (response.data.eventStarted === "1") {
+          await handleNewAttendeeWithGraph();
+          navigate("/networkingActivity", {
+            state: { eventObj, userObj },
+          });
+        } else {
+          await handleNewAttendee();
+          joinSubscribe();
+        }
       }
     }
+    catch(error){
+      console.log(error,"validate error");
+    }
+    
     setLoading(false);
   };
 
