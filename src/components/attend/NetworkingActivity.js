@@ -133,29 +133,44 @@ const NetworkingActivity = () => {
   };
 
   const handleEndEvent = async () => {
-    await axios.put(
-      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
-    );
+    try{
+      console.log("before the put",userObj.user_uid,eventObj.event_uid)
+      await axios.put(
+        `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
+      );
+    }
+    catch(error){
+      console.log("error in end event handle",error);
+    }
   };
 
   const handleLeaveEvent = async () => {
-    await handleEndEvent();
-    const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-    );
-    removeAttendee(userObj.user_uid, { ...response["data"] });
-    navigate("/");
+    try{
+      await handleEndEvent();
+      // const response = await axios.get(
+      //   `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      // );
+      
+      // removeAttendee(userObj.user_uid, { ...response["data"] });
+      // navigate("/");
+    }
+    catch(error){
+      console.log("error in leaving",error);
+    }
   };
 
   const broadcastAndExitSubscribe = () => {
+    console.log("in broadcast");
     if (eventObj.event_organizer_uid === userObj.user_uid) {
       onAttendeeEnterExit((m) => {
-        refreshGraph(m);
+        // refreshGraph(m);
+        fetchAttendees();
         updateAttendee(userObj.user_uid, m.data);
       });
     } else {
       onAttendeeUpdate((m) => {
-        refreshGraph(m);
+        // refreshGraph(m);
+        fetchAttendees();
       });
     }
     subscribe((e) => {
@@ -209,24 +224,12 @@ const NetworkingActivity = () => {
             first_name:user_obj.first_name,
             last_name:user_obj.last_name
         }
-        
-        // let img_url=user_obj.images.replace(/[\[\]"]/g,'')
-        // nodesImg.push({
-        //     id:user_obj.first_name,
-        //     image:img_url,
-        //     marker:{
-        //         radius:20
-        //     }
-        // })
     }
     console.log("updated users",updatedUsers);
     setEventUsers(updatedUsers);
     setAttendees(data["attendees"]);
-
-    // setNodesarr(nodesImg);
   };
   const get_cosine_data = async ()=>{
-    // console.log("response",eventObj.event_uid);     
     setLoading(true);
     try{
         if(eventUsers!==undefined){
@@ -243,11 +246,12 @@ const NetworkingActivity = () => {
                 // console.log("inside",response.replace(/'/g, '"'));
                 
                 response = JSON.parse(response.replace(/'/g, '"'));
-                console.log("result of user response",response[userObj.first_name]);
+                console.log("the event obj",userObj,userObj.user_uid);
+                console.log("result of user response",response[userObj.user_uid]);
 
                 let graph_data=[]
-                for(let i=0;i<response[userObj.first_name].length;i++){
-                  graph_data.push([userObj.first_name,response[userObj.first_name][i][0]]);
+                for(let i=0;i<response[userObj.user_uid].length;i++){
+                  graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
                 }
                 console.log("what the graph",graph_data);
                   // for (let key in response) {
@@ -277,10 +281,13 @@ const NetworkingActivity = () => {
     setLoading(false);
   }
   useEffect(() => {
-    console.log("what is event",eventObj,userObj);
     fetchAttendees();
+    onAttendeeEnterExit((m) => {
+        console.log("in the attendee enter exit");
+        fetchAttendees();
+    });
     // isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
-    isAttendeePresent(eventObj.event_organizer_uid, (m) => get_cosine_data());
+    isAttendeePresent(eventObj.event_organizer_uid,(m) => refreshGraph(m));
     broadcastAndExitSubscribe();
     return () => unSubscribe();
   }, []);

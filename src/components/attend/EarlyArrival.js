@@ -68,10 +68,10 @@ const EarlyArrival = () => {
       await axios.put(
         `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=1`
       );
-      const response = await axios.get(
-        `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-      );
-      addAttendee(userObj.user_uid, { ...response["data"] });
+      // const response = await axios.get(
+      //   `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      // );
+      addAttendee(userObj.user_uid, {});
     }
     catch(error){
       console.log("error in attendee graph",error);

@@ -8,7 +8,7 @@ import Loading from "../common/Loading";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
-
+import pfp from "../../images/pfp.jpg"
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function TempGraph() {
@@ -79,17 +79,21 @@ function TempGraph() {
                 console.log("response of alg",response.data);
                 if(response!==undefined || response.data!==undefined){
                     response=response.data;
-                    // console.log("inside",response.replace(/'/g, '"'));
-                    
-                    response = JSON.parse(response.replace(/'/g, '"'));
+                    const jsonStr = response.replace(/'/g, '"')
+                    response = JSON.parse(jsonStr);
+                    console.log("inside",typeof(response),response);
                     let graph_data=[]
                     for (let key in response) {
+                        console.log("this the key",key);
                         for(let i=0;i<response[key].length;i++){
-                            graph_data.push([key,response[key][i][0]]);
+                            graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
                         }
                     }
+                    // for (const key of Object.keys(response)) {
+                    //     console.log("this is the key", key);
+                    // }
                     setNodeData(graph_data);
-                    
+                    console.log("nodesarr",nodesarr,graph_data);
                     setOptions({
                         series: [{
                             data:graph_data,
@@ -123,8 +127,9 @@ function TempGraph() {
         const data = response["data"];
         console.log("attendees get:",data["attendees"]);
         let updatedUsers = { ...eventUsers };
-        let nodesImg = [...nodesarr];
+        let nodesImg = [];
         let users=data["attendees"];
+        console.log("length of attendees",users.length);
         for(let i=0;i<users.length;i++){
             let user_obj=users[i];
             console.log("logging:",users[i]);
@@ -138,17 +143,24 @@ function TempGraph() {
             }
             
             let img_url=user_obj.images.replace(/[\[\]"]/g,'')
+            
+            if (img_url == ''){
+                img_url=pfp
+            }
+            console.log("images",users[i],"right here",img_url);
             nodesImg.push({
                 id:user_obj.first_name,
-                image:img_url,
+                // image:img_url,
                 marker:{
-                    radius:20
+                    symbol: `url(${img_url})`,
+                    width: 50,
+                    height: 50,
                 }
             })
         }
         console.log("updated users",updatedUsers);
         setEventUsers(updatedUsers);
-        setAttendees(data["attendees"]);
+        setAttendees(data["attendees"]);console.log("added new attendee in handle");
 
         setNodesarr(nodesImg);
         setLoading(false);
