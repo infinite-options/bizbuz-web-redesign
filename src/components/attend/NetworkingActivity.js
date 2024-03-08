@@ -16,6 +16,7 @@ import { transformGraph } from "../../util/helper";
 import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
+import pfp from "../../images/pfp.jpg"
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
@@ -213,6 +214,7 @@ const NetworkingActivity = () => {
     let updatedUsers = { ...eventUsers };
     // let nodesImg = [...nodesarr];
     let users=data["attendees"];
+    let nodesImg = {};
     for(let i=0;i<users.length;i++){
         let user_obj=users[i];
         console.log("logging:",users[i]);
@@ -224,10 +226,25 @@ const NetworkingActivity = () => {
             first_name:user_obj.first_name,
             last_name:user_obj.last_name
         }
+        let img_url=user_obj.images.replace(/[\[\]"]/g,'')
+            
+        if (img_url == ''){
+            img_url=pfp
+        }
+        nodesImg[user_obj.first_name]={
+            id:user_obj.first_name,
+            // image:img_url,
+            marker:{
+                symbol: `url(${img_url})`,
+                width: 50,
+                height: 50,
+            }
+        }
     }
     console.log("updated users",updatedUsers);
     setEventUsers(updatedUsers);
     setAttendees(data["attendees"]);
+    setNodesarr(nodesImg);
   };
   const get_cosine_data = async ()=>{
     setLoading(true);
@@ -240,19 +257,36 @@ const NetworkingActivity = () => {
             let response = await axios.get(
                 `${LOCAL_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
             )
-            console.log("response of alg",response.data);
+            console.log("response of alg",nodesarr);
+            let node_images=[];
             if(response!==undefined || response.data!==undefined){
                 response=response.data;
                 // console.log("inside",response.replace(/'/g, '"'));
                 
                 response = JSON.parse(response.replace(/'/g, '"'));
-                console.log("the event obj",userObj,userObj.user_uid);
+                console.log("the response",response);
                 console.log("result of user response",response[userObj.user_uid]);
 
-                let graph_data=[]
+                let graph_data=[];
+                let user_name=response[userObj.user_uid][0]["from"];
+                node_images.push(nodesarr[user_name]);
+                console.log("what is push",nodesarr[user_name]);
                 for(let i=0;i<response[userObj.user_uid].length;i++){
                   graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
+                  node_images.push(nodesarr[response[userObj.user_uid][i]["to"]]);
                 }
+                //pushes all nodes that point to the user to graph data
+                for(const key in response){
+                  for(let i=0;i<response[key].length;i++){
+                    console.log("here",response[key],response[key][i]);
+                    if(response[key][i]["to"]==user_name){
+                      graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
+                      node_images.push(nodesarr[response[key][i]["from"]]);
+                    }
+                  }
+                }
+
+                
                 console.log("what the graph",graph_data);
                   // for (let key in response) {
                   //     console.log("response in key",response[key],response);
@@ -262,11 +296,11 @@ const NetworkingActivity = () => {
                   // }
                 
                 setNodeData(graph_data);
-                
+                console.log("image graph",node_images);
                 setOptions({
                     series: [{
                         data:graph_data,
-                        nodes:nodesarr,
+                        nodes:node_images,
                         marker:{
                           radius:20,
                         }
