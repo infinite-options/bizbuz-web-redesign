@@ -111,7 +111,46 @@ const Landing = () => {
         </Grid>
         <Grid item xs={6} align="center">
           <Attend
-            onClick={() => navigate("/currentEvents")}
+            onClick={() => {
+              if (
+                document.cookie !== "" &&
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn=")) !== undefined
+              ) {
+                document.cookie
+                  .split("; ")
+                  .find((row) => row.startsWith("loggedIn="))
+                  .split("=")[1] === "true"
+                  ? navigate("/currentEvents", {
+                      state: {
+                        email: document.cookie
+                          .split("; ")
+                          .find((row) => row.startsWith("user_email="))
+                          .split("=")[1],
+                        user: JSON.parse(
+                          document.cookie
+                            .split("; ")
+                            .find((row) => row.startsWith("user_details="))
+                            .split("=")[1]
+                        ),
+                        isUserLoggedIn: true,
+                      },
+                    })
+                  : navigate("/currentEvents", {
+                      state: {
+                        isUserLoggedIn: false,
+                      },
+                    });
+              } else {
+                navigate("/currentEvents", {
+                  state: {
+                    isUserLoggedIn: false,
+                  },
+                });
+              }
+            }}
+            // onClick={() => navigate("/currentEvents")}
             style={{ cursor: "pointer" }}
           />
         </Grid>
