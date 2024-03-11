@@ -17,6 +17,7 @@ import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
 import pfp from "../../images/pfp.jpg"
+import GraphOfRegistered from "./Graphs/GraphOfRegistered";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
@@ -355,9 +356,17 @@ const NetworkingActivity = () => {
       >
         <EventCard event={eventObj} isRegistered={true} />
       </Stack>
-
+      <h1>Personal Graph</h1>
       <Stack spacing={2} direction="column">
         <HighchartsReact highcharts={Highcharts} options={options} />
+      </Stack>
+      <h1>Graph of the overall Registrants</h1>
+      <Stack spacing={2} direction="column">
+        <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={true}/>
+      </Stack>
+      <h1>Graph of the overall Attendees</h1>
+      <Stack spacing={2} direction="column">
+        <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={false}/>
       </Stack>
 
       <Button

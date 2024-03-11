@@ -159,7 +159,17 @@ const EventDashboard = () => {
               navigate("/tempGraph", { state: { eventObj, userObj } })
             }
           >
-            {"temp Graph"}
+            {"Attendee Graph"}
+          </Button>
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={() =>
+              navigate("/registrantgraph", { state: { eventObj, userObj } })
+            }
+          >
+            {"Registrant Graph"}
           </Button>
           <Button
             size="large"

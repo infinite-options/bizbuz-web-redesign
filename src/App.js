@@ -36,6 +36,7 @@ import LoginContext, { LoginInitState } from "./util/LoginContext";
 import CurrentRsvp from "./components/rsvp/CurrentRsvp";
 import RsvpEventInfo from "./components/rsvp/RsvpEventInfo";
 import TempGraph from "./components/attend/TempGraph";
+import RegisteredGraph from "./components/attend/RegisteredGraph";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -94,6 +95,7 @@ const App = () => {
           <Route path="/eventInfo" element={<EventInfo />} />
           <Route path="/eventQuestionnaire" element={<EventQuestionnaire />} />
           <Route path="/tempGraph" element={<TempGraph/>} />
+          <Route path="/registrantgraph" element={<RegisteredGraph />} />
           <Route
             path="/registrationConfirmation"
             element={<RegistrationConfirmation />}
