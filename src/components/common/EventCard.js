@@ -129,7 +129,7 @@ const EventCard = ({
                     }}
                   >
                     <Typography component="span" sx={{ pl: "12px" }}>
-                      {"Attending"}
+                      {"Registered"}
                     </Typography>
                   </Grid>
                 </Grid>
