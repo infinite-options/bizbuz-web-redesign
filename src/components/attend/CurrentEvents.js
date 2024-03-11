@@ -20,7 +20,6 @@ const CurrentEvents = () => {
   const [userEvents, setUserEvents] = useState([]);
 
   const handleEventClick = (event) => {
-    console.log("clicked");
     if (
       document.cookie !== "" &&
       document.cookie.split("; ").find((row) => row.startsWith("loggedIn=")) !==
