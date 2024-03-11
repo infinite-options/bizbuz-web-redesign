@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -16,6 +16,8 @@ const CurrentEvents = () => {
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const location = useLocation();
+  const [userEvents, setUserEvents] = useState([]);
 
   const handleEventClick = (event) => {
     if (
@@ -65,6 +67,27 @@ const CurrentEvents = () => {
     getEventsByUser();
   }, []);
 
+  const getUserRegisteredEvents = async () => {
+    if (location.state.isUserLoggedIn) {
+      let user = location.state.user;
+      let user_uid =
+        typeof user === "string" ? JSON.parse(user).user_uid : user.user_uid;
+
+      let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      await axios
+        .get(
+          BASE_URL +
+            `/GetEventUser?timeZone=${user_timezone}&eu_user_id=${user_uid}`
+        )
+        .then((response) => {
+          setUserEvents(response.data.result);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getUserRegisteredEvents();
+  }, []);
   return (
     <Box display="flex" flexDirection="column">
       <Stack direction="row" sx={{ mt: "36px" }}>
@@ -83,12 +106,15 @@ const CurrentEvents = () => {
       >
         {events.length > 0 ? (
           events.map((event) => {
+            const userEvent = userEvents.find(
+              (item) => item.event_uid === event.event_uid
+            );
             return (
               <EventCard
                 key={event.event_uid}
                 event={event}
                 onCardClick={handleEventClick}
-                isRegistered={true}
+                isRegistered={userEvent === undefined ? false : true}
                 isList={true}
               />
             );

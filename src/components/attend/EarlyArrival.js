@@ -72,10 +72,21 @@ const EarlyArrival = () => {
       `${BASE_URL}/isOrganizer?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}`
     );
     if (response.data.isOrganizer) {
-      handleNewAttendeeWithGraph();
-      navigate("/eventDashboard", {
-        state: { eventObj, userObj },
-      });
+      const res = await axios.get(
+        `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
+      );
+      if (!res.data.hasRegistered) {
+        navigate("/eventQuestionnaire", {
+          state: { event: eventObj },
+        });
+        return;
+      }
+      else{      
+        handleNewAttendeeWithGraph();
+        navigate("/eventDashboard", {
+          state: { eventObj, userObj },
+        });
+      }
     } else {
       const response = await axios.get(
         `${BASE_URL}/eventStatus?eventId=${eventObj.event_uid}&userId=${userObj.user_uid}`
