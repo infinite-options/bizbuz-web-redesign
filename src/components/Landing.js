@@ -13,6 +13,7 @@ import { ReactComponent as Logout } from "../assets/logout.svg";
 import { ReactComponent as RSVPs } from "../assets/rsvps.svg";
 import { ReactComponent as Search } from "../assets/search.svg";
 import axios from "axios";
+import { getCookieParam } from "../util/helper";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
@@ -30,20 +31,8 @@ const Landing = () => {
 	const [email, setEmail] = useState();
 	const [userUID, setUserUID] = useState();
 
-	const getCookieParam = (param) => {
-		if (document.cookie === "") return undefined;
-
-		const str = document.cookie
-			.split("; ")
-			.find((row) => row.startsWith(param));
-
-		if (str === undefined) return undefined;
-
-		return str.split("=")[1];
-	};
-
 	const handleGlobeClick = (event) => {
-		if (getCookieParam("loggedIn=") === "true") {
+		if (getCookieParam(document, "loggedIn=") === "true") {
 			// If logged in
 			setAnchor(event.currentTarget); // Open popup
 		} else {
@@ -83,9 +72,9 @@ const Landing = () => {
 
 	useEffect(() => {
 		setEvent("");
-		setUser(getCookieParam("user_details="));
-		setEmail(getCookieParam("user_email="));
-		setUserUID(getCookieParam("user_uid="));
+		setUser(getCookieParam(document, "user_details="));
+		setEmail(getCookieParam(document, "user_email="));
+		setUserUID(getCookieParam(document, "user_uid="));
 	}, []);
 
 	return (
@@ -100,15 +89,20 @@ const Landing = () => {
 				<Grid item xs={6} align="center">
 					<Search
 						onClick={() => {
-							if (getCookieParam("loggedIn=") !== undefined) {
-								getCookieParam("loggedIn=") === "true"
+							if (
+								getCookieParam(document, "loggedIn=") !==
+								undefined
+							) {
+								getCookieParam(document, "loggedIn=") === "true"
 									? navigate("/findEvent", {
 											state: {
 												email: getCookieParam(
+													document,
 													"user_email="
 												),
 												user: JSON.parse(
 													getCookieParam(
+														document,
 														"user_details="
 													)
 												),
@@ -134,15 +128,20 @@ const Landing = () => {
 				<Grid item xs={6} align="center">
 					<RSVPs
 						onClick={() => {
-							if (getCookieParam("loggedIn=") !== undefined) {
-								getCookieParam("loggedIn=") === "true"
+							if (
+								getCookieParam(document, "loggedIn=") !==
+								undefined
+							) {
+								getCookieParam(document, "loggedIn=") === "true"
 									? navigate("/currentRsvp", {
 											state: {
 												email: getCookieParam(
+													document,
 													"user_email="
 												),
 												user: JSON.parse(
 													getCookieParam(
+														document,
 														"user_details="
 													)
 												),
@@ -164,36 +163,21 @@ const Landing = () => {
 					<Attend
 						onClick={() => {
 							if (
-								document.cookie !== "" &&
-								document.cookie
-									.split("; ")
-									.find((row) =>
-										row.startsWith("loggedIn=")
-									) !== undefined
+								getCookieParam(document, "loggedIn=") !==
+								undefined
 							) {
-								document.cookie
-									.split("; ")
-									.find((row) => row.startsWith("loggedIn="))
-									.split("=")[1] === "true"
+								getCookieParam(document, "loggedIn=") === "true"
 									? navigate("/currentEvents", {
 											state: {
-												email: document.cookie
-													.split("; ")
-													.find((row) =>
-														row.startsWith(
-															"user_email="
-														)
-													)
-													.split("=")[1],
+												email: getCookieParam(
+													document,
+													"user_email="
+												),
 												user: JSON.parse(
-													document.cookie
-														.split("; ")
-														.find((row) =>
-															row.startsWith(
-																"user_details="
-															)
-														)
-														.split("=")[1]
+													getCookieParam(
+														document,
+														"user_details="
+													)
 												),
 												isUserLoggedIn: true,
 											},
@@ -211,15 +195,17 @@ const Landing = () => {
 								});
 							}
 						}}
-						// onClick={() => navigate("/currentEvents")}
 						style={{ cursor: "pointer" }}
 					/>
 				</Grid>
 				<Grid item xs={6} align="center">
 					<Create
 						onClick={() => {
-							if (getCookieParam("loggedIn=") !== undefined) {
-								getCookieParam("loggedIn=") === "true"
+							if (
+								getCookieParam(document, "loggedIn=") !==
+								undefined
+							) {
+								getCookieParam(document, "loggedIn=") === "true"
 									? navigate("/createEvent", {
 											state: {
 												email: getCookieParam(
@@ -227,6 +213,7 @@ const Landing = () => {
 												),
 												user: JSON.parse(
 													getCookieParam(
+														document,
 														"user_details="
 													)
 												),

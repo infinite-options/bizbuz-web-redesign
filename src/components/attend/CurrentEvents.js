@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
@@ -10,6 +10,7 @@ import Loading from "../common/Loading";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
+import { getCookieParam } from "../../util/helper";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 
@@ -20,37 +21,34 @@ const CurrentEvents = () => {
 	const location = useLocation();
 	const [userEvents, setUserEvents] = useState([]);
 
-	const handleEventClick = (event) => {
-		if (
-			document.cookie !== "" &&
-			document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("loggedIn=")) !== undefined
-		) {
-			document.cookie
-				.split("; ")
-				.find((row) => row.startsWith("loggedIn="))
-				.split("=")[1] === "true"
-				? navigate("/earlyArrival", {
+	const handleEventClick = async (event) => {
+		if (getCookieParam(document, "loggedIn=") !== undefined) {
+			if (getCookieParam(document, "loggedIn=") === "true") {
+				setLoading(true);
+				const userObj = JSON.parse(
+					getCookieParam(document, "user_details=")
+				);
+				const response = await axios.get(
+					`${BASE_URL}/eventStatus?eventId=${event.event_uid}&userId=${userObj.user_uid}`
+				);
+				if (response.data.hasRegistered) {
+					navigate("/earlyArrival", {
 						state: {
-							email: document.cookie
-								.split("; ")
-								.find((row) => row.startsWith("user_email="))
-								.split("=")[1],
-							user: JSON.parse(
-								document.cookie
-									.split("; ")
-									.find((row) =>
-										row.startsWith("user_details=")
-									)
-									.split("=")[1]
-							),
+							email: getCookieParam(document, "user_email="),
+							user: userObj,
 							eventObj: event,
 						},
-				  })
-				: navigate("/login", {
-						state: { path: "/earlyArrival", eventObj: event },
-				  });
+					});
+				} else {
+					navigate("/eventQuestionnaire", {
+						state: { event: event },
+					});
+				}
+			} else {
+				navigate("/login", {
+					state: { path: "/earlyArrival", eventObj: event },
+				});
+			}
 		} else {
 			navigate("/login", {
 				state: { path: "/earlyArrival", eventObj: event },
@@ -71,7 +69,7 @@ const CurrentEvents = () => {
 		getEventsByUser();
 	}, []);
 
-	const getUserRegisteredEvents = async () => {
+	const getUserRegisteredEvents = useCallback(async () => {
 		if (location.state.isUserLoggedIn) {
 			let user = location.state.user;
 			let user_uid =
@@ -90,11 +88,11 @@ const CurrentEvents = () => {
 					setUserEvents(response.data.result);
 				});
 		}
-	};
+	}, [location.state.isUserLoggedIn, location.state.user]);
 
 	useEffect(() => {
 		getUserRegisteredEvents();
-	}, []);
+	}, [getUserRegisteredEvents]);
 	return (
 		<Box display="flex" flexDirection="column">
 			<Stack direction="row" sx={{ mt: "36px" }}>
@@ -115,45 +113,40 @@ const CurrentEvents = () => {
 				sx={{ mt: 6 }}
 			>
 				{events.length > 0 ? (
-					<Box
-						display="flex"
-						justifyContent="center"
-						flexDirection="column"
-						spacing={2}
-					>
-						<Grid item xs={5} align="center">
-							<Typography
-								gutterBottom
-								variant="h2"
-								component="div"
-								style={{ color: "white", marginBottom: 20 }}
-							>
-								{"Today's Events"}
-							</Typography>
-						</Grid>
-						<Grid item xs={5} align="center" spacing={5}>
-							{events.map((event) => {
-								const userEvent = userEvents.find(
-									(item) => item.event_uid === event.event_uid
-								);
-								return (
-									<div style={{ padding: 10 }}>
-										<EventCard
-											key={event.event_uid}
-											event={event}
-											onCardClick={handleEventClick}
-											isRegistered={
-												userEvent === undefined
-													? false
-													: true
-											}
-											isList={true}
-										/>
-									</div>
-								);
-							})}
-						</Grid>
-					</Box>
+					<div>
+						<Typography
+							gutterBottom
+							variant="h2"
+							component="div"
+							style={{
+								textAlign: "center",
+								color: "white",
+								marginBottom: 10,
+							}}
+						>
+							{"Today's Events"}
+						</Typography>
+						{events.map((event) => {
+							const userEvent = userEvents.find(
+								(item) => item.event_uid === event.event_uid
+							);
+							return (
+								<div style={{ padding: 10 }}>
+									<EventCard
+										key={event.event_uid}
+										event={event}
+										onCardClick={handleEventClick}
+										isRegistered={
+											userEvent === undefined
+												? false
+												: true
+										}
+										isList={true}
+									/>
+								</div>
+							);
+						})}
+					</div>
 				) : (
 					<Box
 						display="flex"
