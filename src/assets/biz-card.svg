@@ -1,0 +1,20 @@
+<svg width="175" height="159" viewBox="0 0 175 159" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- <rect width="175" height="159" fill="#D0D5DD"/> -->
+<g clip-path="url(#clip0_0_1)">
+<!-- <rect width="390" height="844" transform="translate(-13 -165)" fill="#143959"/> -->
+<rect width="175" height="159" rx="10" fill="#e357f2"/>
+
+<text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="'Fira Sans', sans-serif" font-size="18" font-weight="bold">Edit bizCard</text>
+<!-- <text x="50%" y="66%" dominant-baseline="middle" text-anchor="middle" fill="black" font-family="'Fira Sans', sans-serif" font-size="14" font-weight="normal">for an event</text> -->
+
+<circle cx="85.625" cy="45.625" r="13.125" stroke="#33363F" stroke-width="2"/>
+<path d="M85.625 40C84.8863 40 84.1549 40.1455 83.4724 40.4282C82.7899 40.7109 82.1699 41.1252 81.6475 41.6475C81.1252 42.1699 80.7109 42.7899 80.4282 43.4724C80.1455 44.1549 80 44.8863 80 45.625" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
+<path d="M102.5 62.5L96.875 56.875" stroke="#33363F" stroke-width="2" stroke-linecap="round"/>
+
+</g>
+<defs>
+<clipPath id="clip0_0_1">
+<rect width="390" height="844" fill="white" transform="translate(-13 -165)"/>
+</clipPath>
+</defs>
+</svg>
