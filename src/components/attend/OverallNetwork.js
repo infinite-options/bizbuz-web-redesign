@@ -106,7 +106,9 @@ const OverallNetwork = () => {
   };
 
   useEffect(() => {
-    isAttendeePresent(userObj.user_uid, (m) =>  (m));
+    //need
+    // isAttendeePresent(userObj.user_uid, (m) =>  (m));
+    isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
     onAttendeeEnterExit((m) => {
       refreshGraph(m);
     });

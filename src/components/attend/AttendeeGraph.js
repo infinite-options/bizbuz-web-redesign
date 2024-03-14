@@ -11,7 +11,7 @@ import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import pfp from "../../images/pfp.jpg"
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
-function TempGraph() {
+function AttendeeGraph() {
     const navigate = useNavigate();
     const location = useLocation();
     const { eventObj, userObj } = location.state;
@@ -245,4 +245,4 @@ function TempGraph() {
     );
 }
 
-export default TempGraph
+export default AttendeeGraph

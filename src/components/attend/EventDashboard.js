@@ -136,6 +136,16 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() =>
+              navigate("/registrantgraph", { state: { eventObj, userObj } })
+            }
+          >
+            {"Registrant Graph"}
+          </Button>
+          <Button
+            size="large"
+            color="secondary"
+            variant="contained"
+            onClick={() =>
               navigate("/eventAttendees", { state: { eventObj, userObj } })
             }
           >
@@ -146,17 +156,7 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() =>
-              navigate("/overallNetwork", { state: { eventObj, userObj } })
-            }
-          >
-            {"View Network"}
-          </Button>
-          <Button
-            size="large"
-            color="secondary"
-            variant="contained"
-            onClick={() =>
-              navigate("/tempGraph", { state: { eventObj, userObj } })
+              navigate("/attendeegraph", { state: { eventObj, userObj } })
             }
           >
             {"Attendee Graph"}
@@ -166,10 +166,10 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() =>
-              navigate("/registrantgraph", { state: { eventObj, userObj } })
+              navigate("/overallNetwork", { state: { eventObj, userObj } })
             }
           >
-            {"Registrant Graph"}
+            {"View Network"}
           </Button>
           <Button
             size="large"

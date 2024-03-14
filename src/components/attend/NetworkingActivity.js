@@ -254,7 +254,7 @@ const NetworkingActivity = () => {
             console.log("before call",eventUsers);
             let arg=JSON.stringify(eventUsers);
             console.log("before call",encodeURIComponent(JSON.stringify(eventUsers)));
-            // let temp="%7B%22marty1%22%3A%7B%22user_uid%22%3A%22100-000077%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000077%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22swimming%22%7D%5D%2C%22first_name%22%3A%22marty1%22%2C%22last_name%22%3A%22%22%7D%2C%22mart3%22%3A%7B%22user_uid%22%3A%22100-000080%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22surfing%22%7D%5D%2C%22first_name%22%3A%22mart3%22%2C%22last_name%22%3A%22%22%7D%2C%22mart2%22%3A%7B%22user_uid%22%3A%22100-000081%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22running%22%7D%5D%2C%22first_name%22%3A%22mart2%22%2C%22last_name%22%3A%22%22%7D%7D"
+            
             let response = await axios.get(
                 `${LOCAL_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
             )
@@ -289,12 +289,6 @@ const NetworkingActivity = () => {
 
                 
                 console.log("what the graph",graph_data);
-                  // for (let key in response) {
-                  //     console.log("response in key",response[key],response);
-                  //     for(let i=0;i<response[key].length;i++){
-                  //         graph_data.push([key,response[key][i][0]]);
-                  //     }
-                  // }
                 
                 setNodeData(graph_data);
                 console.log("image graph",node_images);
@@ -360,14 +354,22 @@ const NetworkingActivity = () => {
       <Stack spacing={2} direction="column">
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>
-      <h1>Graph of the overall Registrants</h1>
-      <Stack spacing={2} direction="column">
-        <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={true}/>
-      </Stack>
-      <h1>Graph of the overall Attendees</h1>
-      <Stack spacing={2} direction="column">
-        <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={false}/>
-      </Stack>
+      {(isOrganizer.current) ?  
+        <>
+          <h1>Graph of the overall Attendees</h1>
+          <Stack spacing={2} direction="column">
+            <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={false}/>
+          </Stack>
+          <h1>Graph of the overall Registrants</h1>
+          <Stack spacing={2} direction="column">
+            <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={true}/>
+          </Stack>
+        </>
+         :
+         <></>
+      }
+      
+
 
       <Button
         variant="contained"
