@@ -17,7 +17,8 @@ import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
 import pfp from "../../images/pfp.jpg"
-import GraphOfRegistered from "./Graphs/GraphOfRegistered";
+import CosineGraph from "./Graphs/CosineGraph";
+import ClassGraph from "./Graphs/ClassGraph";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
@@ -37,7 +38,7 @@ const NetworkingActivity = () => {
   const [nodesarr,setNodesarr]=useState([]);
   const [attendees, setAttendees] = useState([]);
   const [nodeData,setNodeData]=useState();
-  const { eventObj, userObj } = location.state;
+  const { eventObj, userObj, isBusiness } = location.state;
   const {
     publish,
     isAttendeePresent,
@@ -123,14 +124,17 @@ const NetworkingActivity = () => {
       handleUserImage,
       userObj.user_uid
     );
-    // setOptions({
-    //   series: [
-    //     {
-    //       data: linksArr,
-    //       nodes: nodesArr,
-    //     },
-    //   ],
-    // });
+    if(isBusiness){
+      setOptions({
+        series: [
+          {
+            data: linksArr,
+            nodes: nodesArr,
+          },
+        ],
+      });
+    }
+    
     setLoading(false);
   };
 
@@ -149,12 +153,14 @@ const NetworkingActivity = () => {
   const handleLeaveEvent = async () => {
     try{
       await handleEndEvent();
-      // const response = await axios.get(
-      //   `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-      // );
-      
-      // removeAttendee(userObj.user_uid, { ...response["data"] });
-      // navigate("/");
+      if(isBusiness){
+        const response = await axios.get(
+          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+        );
+        
+        removeAttendee(userObj.user_uid, { ...response["data"] });
+        navigate("/");
+      }     
     }
     catch(error){
       console.log("error in leaving",error);
@@ -165,14 +171,23 @@ const NetworkingActivity = () => {
     console.log("in broadcast");
     if (eventObj.event_organizer_uid === userObj.user_uid) {
       onAttendeeEnterExit((m) => {
-        // refreshGraph(m);
-        fetchAttendees();
+        if(isBusiness){
+          refreshGraph(m);
+        }
+        else{
+          fetchAttendees();
+        }
+        
         updateAttendee(userObj.user_uid, m.data);
       });
     } else {
       onAttendeeUpdate((m) => {
-        // refreshGraph(m);
-        fetchAttendees();
+        if(isBusiness){
+          refreshGraph(m);
+        }
+        else{
+          fetchAttendees();
+        }
       });
     }
     subscribe((e) => {
@@ -310,18 +325,22 @@ const NetworkingActivity = () => {
     setLoading(false);
   }
   useEffect(() => {
-    fetchAttendees();
-    onAttendeeEnterExit((m) => {
-        console.log("in the attendee enter exit");
-        fetchAttendees();
-    });
+    if(!isBusiness){
+      fetchAttendees();
+      onAttendeeEnterExit((m) => {
+          console.log("in the attendee enter exit");
+          fetchAttendees();
+      });
+    }
     // isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     isAttendeePresent(eventObj.event_organizer_uid,(m) => refreshGraph(m));
     broadcastAndExitSubscribe();
     return () => unSubscribe();
   }, []);
   useEffect(()=>{
-    get_cosine_data();
+    if(!isBusiness){
+      get_cosine_data();
+    }
   },[eventUsers]);
 
   return (
@@ -355,18 +374,31 @@ const NetworkingActivity = () => {
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>
       {(isOrganizer.current) ?  
-        <>
-          <h1>Graph of the overall Attendees</h1>
-          <Stack spacing={2} direction="column">
-            <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={false}/>
-          </Stack>
-          <h1>Graph of the overall Registrants</h1>
-          <Stack spacing={2} direction="column">
-            <GraphOfRegistered eventObj={eventObj} userObj={userObj} registergraph={true}/>
-          </Stack>
-        </>
-         :
-         <></>
+        (isBusiness ?
+          <>
+            <h1>Graph of the overall Attendees</h1>
+            <Stack spacing={2} direction="column">
+              <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={false}/>
+            </Stack>
+            <h1>Graph of the overall Registrants</h1>
+            <Stack spacing={2} direction="column">
+              <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={true}/>
+            </Stack>
+          </>
+          :
+          <>
+            <h1>Graph of the overall Attendees</h1>
+            <Stack spacing={2} direction="column">
+              <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={false}/>
+            </Stack>
+            <h1>Graph of the overall Registrants</h1>
+            <Stack spacing={2} direction="column">
+              <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true}/>
+            </Stack>
+          </>
+        )
+        :
+        <></>
       }
       
 

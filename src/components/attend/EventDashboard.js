@@ -25,9 +25,18 @@ const EventDashboard = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [message, setMessage] = useState("");
   const { publish } = useAbly(eventObj.event_uid);
+  const [isBusiness,setIsBusiness]=useState(false);
   useEffect(()=>{
-    console.log("event",eventObj)
+    console.log("event",eventObj);
+    if(eventObj!==undefined){
+      if(eventObj.event_type=="Business Marketing"){
+        setIsBusiness(true);
+      }
+    }
   },[]);
+  useEffect(()=>{
+    console.log("isbusiness",isBusiness);
+  },[isBusiness]);
   const handleBroadcast = () => {
     publish(message);
     setShowDialog(false);
@@ -58,7 +67,7 @@ const EventDashboard = () => {
     // window.open("/networkingActivity", "_blank");
     publish("Event started");
     navigate("/networkingActivity", {
-      state: { eventObj, userObj },
+      state: { eventObj, userObj, isBusiness },
     });
   };
 
@@ -136,7 +145,7 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() =>
-              navigate("/registrantgraph", { state: { eventObj, userObj } })
+              navigate("/registrantgraph", { state: { eventObj, userObj, isBusiness } })
             }
           >
             {"Registrant Graph"}
@@ -156,12 +165,12 @@ const EventDashboard = () => {
             color="secondary"
             variant="contained"
             onClick={() =>
-              navigate("/attendeegraph", { state: { eventObj, userObj } })
+              navigate("/attendeegraph", { state: { eventObj, userObj, isBusiness } })
             }
           >
             {"Attendee Graph"}
           </Button>
-          <Button
+          {/* <Button
             size="large"
             color="secondary"
             variant="contained"
@@ -170,7 +179,7 @@ const EventDashboard = () => {
             }
           >
             {"View Network"}
-          </Button>
+          </Button> */}
           <Button
             size="large"
             color="secondary"

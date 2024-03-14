@@ -11,7 +11,7 @@ import useAbly from "../../../util/ably";
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 
-export default function GraphOfRegistered({registergraph}) {
+export default function CosineGraph({registergraph}) {
     const navigate = useNavigate();
     const location = useLocation();
     const { eventObj, userObj } = location.state;
@@ -191,6 +191,6 @@ export default function GraphOfRegistered({registergraph}) {
                 highcharts={Highcharts}
                 options={options}
             />
-    </div>
+        </div>
     )
 }
