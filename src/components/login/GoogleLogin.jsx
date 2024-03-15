@@ -222,11 +222,15 @@ function GoogleLogin(props) {
             >
               <img
                 style={{
-                  width: "3rem",
-                  padding: "1rem",
+                  width: "2.5rem",
+                  padding: "0.5rem",
+                  backgroundColor: "white"
                 }}
                 alt="Google sign-up"
-                src={GoogleIcon}
+                src="https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png"
+                // src="https://e7.pngegg.com/pngimages/140/496/png-clipart-google-logo-google-search-google-s-g-suite-google-text-trademark.png"
+                
+                // src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
               />
               {"Sign in with Google"}
             </Button>
