@@ -209,7 +209,6 @@ const Landing = () => {
 									? navigate("/createEvent", {
 											state: {
 												email: getCookieParam(
-													document,
 													"user_email="
 												),
 												user: JSON.parse(
