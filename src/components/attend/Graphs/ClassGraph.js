@@ -13,6 +13,8 @@ import HighchartsReact from "highcharts-react-official";
 import NoUserImage from "../../../assets/NoUserImage.png";
 import EventCard from "../../common/EventCard";
 import Loading from '../../common/Loading';
+import axios from 'axios';
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function ClassGraph({registergraph}) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -81,9 +83,16 @@ function ClassGraph({registergraph}) {
       const imagesArr = JSON.parse(images);
       return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
     };
-  
+    
     const refreshGraph = async ({ data }) => {
       console.log("inside refresh",data)
+      if(registergraph){
+        const response = await axios.get(
+          `${LOCAL_URL}/networkingGraph?eventId=${eventObj.event_uid}&registrant="True"`
+        );
+        console.log("response of register",response);
+        data=response["data"];
+      }
       const [nodesArr, linksArr] = transformGraph(
         data["user_groups"],
         data["users"],
@@ -91,6 +100,7 @@ function ClassGraph({registergraph}) {
         handleUserImage,
         userObj.user_uid
       );
+      
       setOptions({
         series: [
           {
@@ -106,10 +116,10 @@ function ClassGraph({registergraph}) {
         state: { event: eventObj, user: userObj, id: e.id },
       });
     };
-  
     useEffect(() => {
       //need
       // isAttendeePresent(userObj.user_uid, (m) =>  (m));
+      // registergraphdata();
       isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
       onAttendeeEnterExit((m) => {
         refreshGraph(m);

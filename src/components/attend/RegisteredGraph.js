@@ -5,6 +5,7 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import OverallNetwork from './OverallNetwork';
+import ClassGraph from './Graphs/ClassGraph';
 function RegisteredGraph() {
     const navigate = useNavigate();
     const location = useLocation();
@@ -13,23 +14,33 @@ function RegisteredGraph() {
         console.log("isbusiness",isBusiness);
     },[]);
     return (
-        <>
-            {isBusiness ?  
-                <OverallNetwork eventObj={eventObj} userObj={userObj}/>
-                : 
-                <div>
-                    <Stack direction="row" sx={{ mt: "36px" }}>
-                        <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
-                        <BackIcon
-                            style={{ marginLeft: "auto", cursor: "pointer" }}
-                            onClick={() => navigate(-1, { state: { eventObj, userObj } })}
-                        />
-                    </Stack>
-                    <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true} />
+        <div>
+            <Stack direction="row" sx={{ mt: "36px" }}>
+                <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+                <BackIcon
+                    style={{ marginLeft: "auto", cursor: "pointer" }}
+                    onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+                />
+            </Stack>
+            {isBusiness? <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={true}/> :<CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true} />}            
+        </div>
+        // <>
+        //     {isBusiness ?  
+        //         <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={true}/>
+        //         : 
+        //         <div>
+        //             <Stack direction="row" sx={{ mt: "36px" }}>
+        //                 <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+        //                 <BackIcon
+        //                     style={{ marginLeft: "auto", cursor: "pointer" }}
+        //                     onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+        //                 />
+        //             </Stack>
+        //             <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true} />
                     
-                </div>
-            }
-        </>
+        //         </div>
+        //     }
+        // </>
         
     )
 }
