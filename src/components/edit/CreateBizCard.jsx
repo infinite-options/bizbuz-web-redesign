@@ -159,12 +159,14 @@ const CreateBizCard = () => {
 				body: requestBody,
 			});
 
-			const data = await response.json();
-			console.log(data);
-		}
-		if (path) navigate(path, { state: { event, eventObj: event, user } });
-		else navigate("/");
-	};
+      const data = await response.json();
+      console.log(data);
+
+    }
+
+    if (path) navigate(path, { state: { event, eventObj: location.state.eventObj, user } });
+    else navigate("/");
+  };
 
 	const canBeSubmitted = () => {
 		const isValid = agreement; // checkbox for terms
