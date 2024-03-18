@@ -219,16 +219,17 @@ export default function FindBy() {
 					</Typography>
 
 					<Button
+						color="info"
 						variant="contained"
 						sx={{
 							width: "355px",
 							height: "56px",
 							mt: "16px",
-							marginBottom: "40px",
+							marginBottom: "20px",
 						}}
 						onClick={getEvents}
 					>
-						{"Get Events"}
+						{"View All Events"}
 					</Button>
 
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -418,7 +419,7 @@ export default function FindBy() {
 						}}
 						onClick={getFilteredEvents}
 					>
-						{"Get Filtered Events"}
+						{"View Filtered Events"}
 					</Button>
 				</Box>
 
