@@ -254,9 +254,14 @@ const Landing = () => {
 					position: "fixed",
 					bottom: "0",
 					height: "25%",
-					width: "100%",
+					width: "15%",
+					borderTopLeftRadius: "100%",
+					borderTopRightRadius: "100%",
+					borderBottomLeftRadius: "20%",
+					borderBottomRightRadius: "20%",
 					zIndex: "auto",
 					cursor: "pointer",
+					// backgroundColor: "red",
 				}}
 				ref={globeRef}
 				onClick={(event) => handleGlobeClick(event)}
