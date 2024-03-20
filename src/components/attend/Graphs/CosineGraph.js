@@ -9,7 +9,7 @@ import HighchartsReact from "highcharts-react-official";
 import useAbly from "../../../util/ably";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 
 export default function CosineGraph({registergraph}) {
     const navigate = useNavigate();
@@ -36,14 +36,14 @@ export default function CosineGraph({registergraph}) {
             );
         }
         const data = response["data"];
-        console.log("attendees get:",data["attendees"]);
+        // console.log("attendees get:",data["attendees"]);
         let updatedUsers = { ...eventUsers };
         let nodesImg = [];
         let users=data["attendees"];
-        console.log("length of attendees",users.length);
+        // console.log("length of attendees",users.length);
         for(let i=0;i<users.length;i++){
             let user_obj=users[i];
-            console.log("logging:",users[i]);
+            // console.log("logging:",users[i]);
             const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
             updatedUsers[user_obj.first_name]={
                 user_uid: user_obj.user_uid,
@@ -58,7 +58,7 @@ export default function CosineGraph({registergraph}) {
             if (img_url == ''){
                 img_url=pfp
             }
-            console.log("images",users[i],"right here",img_url);
+            // console.log("images",users[i],"right here",img_url);
             nodesImg.push({
                 id:user_obj.first_name,
                 // image:img_url,
@@ -69,9 +69,9 @@ export default function CosineGraph({registergraph}) {
                 }
             })
         }
-        console.log("updated users",updatedUsers);
         setEventUsers(updatedUsers);
-        setAttendees(data["attendees"]);console.log("added new attendee in handle");
+        setAttendees(data["attendees"]);
+        // console.log("added new attendee in handle");
 
         setNodesarr(nodesImg);
         setLoading(false);
@@ -81,22 +81,18 @@ export default function CosineGraph({registergraph}) {
         setLoading(true);  
         try{
             if(eventUsers!==undefined){
-                console.log("before call",eventUsers);
                 let arg=JSON.stringify(eventUsers);
-                console.log("before call",encodeURIComponent(JSON.stringify(eventUsers)));
                 // let temp="%7B%22marty1%22%3A%7B%22user_uid%22%3A%22100-000077%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000077%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22swimming%22%7D%5D%2C%22first_name%22%3A%22marty1%22%2C%22last_name%22%3A%22%22%7D%2C%22mart3%22%3A%7B%22user_uid%22%3A%22100-000080%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22surfing%22%7D%5D%2C%22first_name%22%3A%22mart3%22%2C%22last_name%22%3A%22%22%7D%2C%22mart2%22%3A%7B%22user_uid%22%3A%22100-000081%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22running%22%7D%5D%2C%22first_name%22%3A%22mart2%22%2C%22last_name%22%3A%22%22%7D%7D"
                 let response = await axios.get(
-                    `${LOCAL_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
+                    `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
                 )
-                console.log("response of alg",response.data);
+                // console.log("response of alg",response.data);
                 if(response!==undefined || response.data!==undefined){
                     response=response.data;
                     const jsonStr = response.replace(/'/g, '"')
                     response = JSON.parse(jsonStr);
-                    console.log("inside",typeof(response),response);
                     let graph_data=[]
                     for (let key in response) {
-                        console.log("this the key",key);
                         for(let i=0;i<response[key].length;i++){
                             graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
                         }
@@ -105,7 +101,6 @@ export default function CosineGraph({registergraph}) {
                     //     console.log("this is the key", key);
                     // }
                     // setNodeData(graph_data);
-                    console.log("nodesarr",nodesarr,graph_data);
                     setOptions({
                         series: [{
                             data:graph_data,
@@ -170,10 +165,8 @@ export default function CosineGraph({registergraph}) {
         },
     });
     useEffect(()=>{
-        console.log("obj",eventObj,userObj);
         fetchAttendees();
         onAttendeeEnterExit((m) => {
-            console.log("what is m",m);
             fetchAttendees();
         });
     },[])

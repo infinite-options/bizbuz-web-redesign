@@ -11,15 +11,15 @@ import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import OverallNetwork from './OverallNetwork';
 import CosineGraph from './Graphs/CosineGraph'
 import pfp from "../../images/pfp.jpg"
-const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+// const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function AttendeeGraph() {
     const navigate = useNavigate();
     const location = useLocation();
     const { eventObj, userObj, isBusiness } = location.state;
-    useEffect(()=>{
-        console.log("isbusiness",isBusiness);
-    },[]);
+    // useEffect(()=>{
+    //     console.log("isbusiness",isBusiness);
+    // },[]);
     return (
         <>
             {isBusiness ?  

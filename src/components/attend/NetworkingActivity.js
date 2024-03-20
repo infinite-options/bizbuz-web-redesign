@@ -21,7 +21,7 @@ import CosineGraph from "./Graphs/CosineGraph";
 import ClassGraph from "./Graphs/ClassGraph";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 
 const SlideTransition = (props) => {
   return <Slide {...props} direction="down" />;
@@ -140,11 +140,9 @@ const NetworkingActivity = () => {
 
   const handleEndEvent = async () => {
     try{
-      console.log("before the put",userObj.user_uid,eventObj.event_uid)
       await axios.put(
         `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
       );
-      console.log(" handle");
     }
     catch(error){
       console.log("error in end event handle",error);
@@ -168,7 +166,6 @@ const NetworkingActivity = () => {
   };
 
   const broadcastAndExitSubscribe = () => {
-    console.log("in broadcast");
     if (eventObj.event_organizer_uid === userObj.user_uid) {
       onAttendeeEnterExit((m) => {
         if(isBusiness){
@@ -226,14 +223,12 @@ const NetworkingActivity = () => {
       `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}&attendFlag=1`
     );
     const data = response["data"];
-    console.log("attendees get:",data["attendees"]);
     let updatedUsers = { ...eventUsers };
     // let nodesImg = [...nodesarr];
     let users=data["attendees"];
     let nodesImg = {};
     for(let i=0;i<users.length;i++){
         let user_obj=users[i];
-        console.log("logging:",users[i]);
         const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
         updatedUsers[user_obj.first_name]={
             user_uid: user_obj.user_uid,
@@ -257,7 +252,6 @@ const NetworkingActivity = () => {
             }
         }
     }
-    console.log("updated users",updatedUsers);
     setEventUsers(updatedUsers);
     setAttendees(data["attendees"]);
     setNodesarr(nodesImg);
@@ -266,26 +260,22 @@ const NetworkingActivity = () => {
     setLoading(true);
     try{
         if(eventUsers!==undefined){
-            console.log("before call",eventUsers);
             let arg=JSON.stringify(eventUsers);
-            console.log("before call",encodeURIComponent(JSON.stringify(eventUsers)));
             
             let response = await axios.get(
-                `${LOCAL_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
+                `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
             )
-            console.log("response of alg",nodesarr);
             let node_images=[];
             if(response!==undefined || response.data!==undefined){
                 response=response.data;
                 // console.log("inside",response.replace(/'/g, '"'));
                 
                 response = JSON.parse(response.replace(/'/g, '"'));
-                console.log("the response",response);
-                console.log("result of user response",response[userObj.user_uid]);
+
                 if (response[userObj.user_uid].length==0){
                   // console.log("user",userObj);
                   let node_img=[nodesarr[userObj.first_name]];
-                  console.log("the node_img",node_img);
+
                   setOptions({
                     series: [{
                         data:[userObj.first_name],
@@ -299,7 +289,6 @@ const NetworkingActivity = () => {
                 let graph_data=[];
                 let user_name=response[userObj.user_uid][0]["from"];
                 node_images.push(nodesarr[user_name]);
-                console.log("what is push",nodesarr[user_name]);
                 for(let i=0;i<response[userObj.user_uid].length;i++){
                   graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
                   node_images.push(nodesarr[response[userObj.user_uid][i]["to"]]);
@@ -307,7 +296,6 @@ const NetworkingActivity = () => {
                 //pushes all nodes that point to the user to graph data
                 for(const key in response){
                   for(let i=0;i<response[key].length;i++){
-                    console.log("here",response[key],response[key][i]);
                     if(response[key][i]["to"]==user_name){
                       graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
                       node_images.push(nodesarr[response[key][i]["from"]]);
@@ -316,10 +304,8 @@ const NetworkingActivity = () => {
                 }
 
                 
-                console.log("what the graph",graph_data);
                 
                 setNodeData(graph_data);
-                console.log("image graph",node_images);
                 setOptions({
                     series: [{
                         data:graph_data,

@@ -14,7 +14,8 @@ import NoUserImage from "../../../assets/NoUserImage.png";
 import EventCard from "../../common/EventCard";
 import Loading from '../../common/Loading';
 import axios from 'axios';
-const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function ClassGraph({registergraph}) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,9 +24,9 @@ function ClassGraph({registergraph}) {
       eventObj.event_uid
     );
     const [isLoading, setLoading] = useState(false);
-    useEffect(()=>{
-      console.log("data:",eventObj,userObj);
-    },[])
+    // useEffect(()=>{
+    //   console.log("data:",eventObj,userObj);
+    // },[])
     const [options, setOptions] = useState({
       chart: {
         type: "networkgraph",
@@ -85,12 +86,10 @@ function ClassGraph({registergraph}) {
     };
     
     const refreshGraph = async ({ data }) => {
-      console.log("inside refresh",data)
       if(registergraph){
         const response = await axios.get(
-          `${LOCAL_URL}/networkingGraph?eventId=${eventObj.event_uid}&registrant="True"`
+          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}&registrant="True"`
         );
-        console.log("response of register",response);
         data=response["data"];
       }
       const [nodesArr, linksArr] = transformGraph(
