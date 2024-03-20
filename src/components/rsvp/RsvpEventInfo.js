@@ -152,7 +152,8 @@ const RsvpEventInfo = () => {
       <Button
         variant="contained"
         sx={{
-          width: "352.5px",
+          maxWidth:"600px",
+          width: "100%",
           height: "56px",
           mt: "auto",
           marginLeft: "auto",

@@ -42,6 +42,7 @@ export default function Login() {
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "column",
+            maxWidth:"600px"
           }}
         >
           {showForm ? (

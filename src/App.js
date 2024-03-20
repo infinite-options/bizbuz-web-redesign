@@ -35,6 +35,8 @@ import EventCode from "./components/create/EventCode";
 import LoginContext, { LoginInitState } from "./util/LoginContext";
 import CurrentRsvp from "./components/rsvp/CurrentRsvp";
 import RsvpEventInfo from "./components/rsvp/RsvpEventInfo";
+import AttendeeGraph from "./components/attend/AttendeeGraph";
+import RegisteredGraph from "./components/attend/RegisteredGraph";
 
 const App = () => {
   const [loginState, setLoginState] = useState(LoginInitState);
@@ -54,7 +56,7 @@ const App = () => {
     [loginState.user_uid]
   );
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm"> 
       <LoginContext.Provider
         value={{
           loginState: loginState,
@@ -92,6 +94,8 @@ const App = () => {
           <Route path="/networkingActivity" element={<NetworkingActivity />} />
           <Route path="/eventInfo" element={<EventInfo />} />
           <Route path="/eventQuestionnaire" element={<EventQuestionnaire />} />
+          <Route path="/attendeegraph" element={<AttendeeGraph/>} />
+          <Route path="/registrantgraph" element={<RegisteredGraph />} />
           <Route
             path="/registrationConfirmation"
             element={<RegistrationConfirmation />}

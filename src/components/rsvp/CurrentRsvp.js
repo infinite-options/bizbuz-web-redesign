@@ -119,5 +119,4 @@ const CurrentRsvp = () => {
     </>
   );
 };
-
 export default CurrentRsvp;

@@ -33,6 +33,7 @@ const EventRegistrants = () => {
       `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}`
     );
     const data = response["data"];
+    // console.log("attendees",data)
     setRegistrants(data["attendees"]);
   };
 

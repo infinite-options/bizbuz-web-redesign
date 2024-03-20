@@ -16,8 +16,12 @@ import { transformGraph } from "../../util/helper";
 import HighchartsReact from "highcharts-react-official";
 import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
+import pfp from "../../images/pfp.jpg"
+import CosineGraph from "./Graphs/CosineGraph";
+import ClassGraph from "./Graphs/ClassGraph";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 
 const SlideTransition = (props) => {
   return <Slide {...props} direction="down" />;
@@ -30,7 +34,11 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const NetworkingActivity = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { eventObj, userObj } = location.state;
+  const [eventUsers, setEventUsers] = useState();
+  const [nodesarr,setNodesarr]=useState([]);
+  const [attendees, setAttendees] = useState([]);
+  const [nodeData,setNodeData]=useState();
+  const { eventObj, userObj, isBusiness } = location.state;
   const {
     publish,
     isAttendeePresent,
@@ -116,41 +124,67 @@ const NetworkingActivity = () => {
       handleUserImage,
       userObj.user_uid
     );
-    setOptions({
-      series: [
-        {
-          data: linksArr,
-          nodes: nodesArr,
-        },
-      ],
-    });
+    if(isBusiness){
+      setOptions({
+        series: [
+          {
+            data: linksArr,
+            nodes: nodesArr,
+          },
+        ],
+      });
+    }
+    
     setLoading(false);
   };
 
   const handleEndEvent = async () => {
-    await axios.put(
-      `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
-    );
+    try{
+      await axios.put(
+        `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
+      );
+    }
+    catch(error){
+      console.log("error in end event handle",error);
+    }
   };
 
   const handleLeaveEvent = async () => {
-    await handleEndEvent();
-    const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-    );
-    removeAttendee(userObj.user_uid, { ...response["data"] });
-    navigate("/");
+    try{
+      await handleEndEvent();
+      const response = await axios.get(
+        `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      );
+      
+      removeAttendee(userObj.user_uid, { ...response["data"] });
+      fetchAttendees()
+      navigate("/");
+    }
+    catch(error){
+      console.log("error in leaving",error);
+    }
   };
 
   const broadcastAndExitSubscribe = () => {
     if (eventObj.event_organizer_uid === userObj.user_uid) {
       onAttendeeEnterExit((m) => {
-        refreshGraph(m);
+        if(isBusiness){
+          refreshGraph(m);
+        }
+        else{
+          fetchAttendees();
+        }
+        
         updateAttendee(userObj.user_uid, m.data);
       });
     } else {
       onAttendeeUpdate((m) => {
-        refreshGraph(m);
+        if(isBusiness){
+          refreshGraph(m);
+        }
+        else{
+          fetchAttendees();
+        }
       });
     }
     subscribe((e) => {
@@ -184,11 +218,129 @@ const NetworkingActivity = () => {
     navigate("/");
   };
 
+  const fetchAttendees = async () => {
+    const response = await axios.get(
+      `${BASE_URL}/eventAttendees?eventId=${eventObj.event_uid}&attendFlag=1`
+    );
+    const data = response["data"];
+    let updatedUsers = { ...eventUsers };
+    // let nodesImg = [...nodesarr];
+    let users=data["attendees"];
+    let nodesImg = {};
+    for(let i=0;i<users.length;i++){
+        let user_obj=users[i];
+        const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
+        updatedUsers[user_obj.first_name]={
+            user_uid: user_obj.user_uid,
+            images: user_obj.images,
+            qas:JSON.parse(qa.data.registrant.eu_qas),
+            first_name:user_obj.first_name,
+            last_name:user_obj.last_name
+        }
+        let img_url=user_obj.images.replace(/[\[\]"]/g,'')
+            
+        if (img_url == ''){
+            img_url=pfp
+        }
+        nodesImg[user_obj.first_name]={
+            id:user_obj.first_name,
+            // image:img_url,
+            marker:{
+                symbol: `url(${img_url})`,
+                width: 50,
+                height: 50,
+            }
+        }
+    }
+    setEventUsers(updatedUsers);
+    setAttendees(data["attendees"]);
+    setNodesarr(nodesImg);
+  };
+  const get_cosine_data = async ()=>{
+    setLoading(true);
+    try{
+        if(eventUsers!==undefined){
+            let arg=JSON.stringify(eventUsers);
+            
+            let response = await axios.get(
+                `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
+            )
+            let node_images=[];
+            if(response!==undefined || response.data!==undefined){
+                response=response.data;
+                // console.log("inside",response.replace(/'/g, '"'));
+                
+                response = JSON.parse(response.replace(/'/g, '"'));
+
+                if (response[userObj.user_uid].length==0){
+                  // console.log("user",userObj);
+                  let node_img=[nodesarr[userObj.first_name]];
+
+                  setOptions({
+                    series: [{
+                        data:[userObj.first_name],
+                        nodes:node_img,
+                        marker:{
+                          radius:20,
+                        }
+                    }]
+                  })
+                }
+                let graph_data=[];
+                let user_name=response[userObj.user_uid][0]["from"];
+                node_images.push(nodesarr[user_name]);
+                for(let i=0;i<response[userObj.user_uid].length;i++){
+                  graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
+                  node_images.push(nodesarr[response[userObj.user_uid][i]["to"]]);
+                }
+                //pushes all nodes that point to the user to graph data
+                for(const key in response){
+                  for(let i=0;i<response[key].length;i++){
+                    if(response[key][i]["to"]==user_name){
+                      graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
+                      node_images.push(nodesarr[response[key][i]["from"]]);
+                    }
+                  }
+                }
+
+                
+                
+                setNodeData(graph_data);
+                setOptions({
+                    series: [{
+                        data:graph_data,
+                        nodes:node_images,
+                        marker:{
+                          radius:20,
+                        }
+                    }]
+                })
+            }      
+        }
+    }
+    catch(error){
+        console.log("error in getting algorithm",error)
+    }
+    setLoading(false);
+  }
   useEffect(() => {
-    isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
+    if(!isBusiness){
+      fetchAttendees();
+      onAttendeeEnterExit((m) => {
+          console.log("in the attendee enter exit");
+          fetchAttendees();
+      });
+    }
+    // isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
+    isAttendeePresent(eventObj.event_organizer_uid,(m) => refreshGraph(m));
     broadcastAndExitSubscribe();
     return () => unSubscribe();
   }, []);
+  useEffect(()=>{
+    if(!isBusiness){
+      get_cosine_data();
+    }
+  },[eventUsers]);
 
   return (
     <Box display="flex" flexDirection="column">
@@ -216,10 +368,39 @@ const NetworkingActivity = () => {
       >
         <EventCard event={eventObj} isRegistered={true} />
       </Stack>
-
+      <h1>Personal Graph</h1>
       <Stack spacing={2} direction="column">
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>
+      {(isOrganizer.current) ?  
+        (isBusiness ?
+          <>
+            <h1>Graph of the overall Attendees</h1>
+            <Stack spacing={2} direction="column">
+              <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={false}/>
+            </Stack>
+            <h1>Graph of the overall Registrants</h1>
+            <Stack spacing={2} direction="column">
+              <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={true}/>
+            </Stack>
+          </>
+          :
+          <>
+            <h1>Graph of the overall Attendees</h1>
+            <Stack spacing={2} direction="column">
+              <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={false}/>
+            </Stack>
+            <h1>Graph of the overall Registrants</h1>
+            <Stack spacing={2} direction="column">
+              <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true}/>
+            </Stack>
+          </>
+        )
+        :
+        <></>
+      }
+      
+
 
       <Button
         variant="contained"

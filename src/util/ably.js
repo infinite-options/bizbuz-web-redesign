@@ -23,6 +23,7 @@ const useAbly = (() => {
 
     const isAttendeePresent = (clientId, callback) => {
       channel.presence.get({ clientId }, (err, members) => {
+        console.log("member",members)
         if (err) console.error("Error when checking presence: " + err.message);
         if (members.length > 0) callback(members[0]);
       });

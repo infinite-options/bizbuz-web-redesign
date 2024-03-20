@@ -81,7 +81,7 @@ export default function EmailSignup() {
       });
   };
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column",}}>
       <UserAlreadyExistsModal
         isOpen={userAlreadyExists}
         onCancel={onCancel}
@@ -99,6 +99,7 @@ export default function EmailSignup() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            maxWidth:"600px",
           }}
         >
           <div
@@ -106,16 +107,17 @@ export default function EmailSignup() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              width:"100%",
             }}
           >
-            <FormControl>
+            <FormControl style={{width:"100%"}}>
               {" "}
               <FormGroup>
                 <Typography variant="h3">Username</Typography>
                 <TextField
                   sx={{
                     backgroundColor: "white",
-                    width: "92vw",
+                    width: "100%",
                     height: "44px",
                     borderRadius: "8px",
                   }}
@@ -132,7 +134,7 @@ export default function EmailSignup() {
                 <TextField
                   sx={{
                     backgroundColor: "white",
-                    width: "92vw",
+                    width: "100%",
                     height: "44px",
                     borderRadius: "8px",
                   }}
@@ -156,7 +158,7 @@ export default function EmailSignup() {
                     textTransform: "none",
                     backgroundColor: "#F26457",
                     color: "white",
-                    width: "92vw",
+                    width: "100%",
                     height: "44px",
                     "&.MuiButtonBase-root:hover, &.Mui-selected": {
                       backgroundColor: "#F26457",

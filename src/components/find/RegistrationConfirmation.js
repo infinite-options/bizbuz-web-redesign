@@ -44,6 +44,7 @@ const RegistrationConfirmation = () => {
       setEvent(chkResponse.data.result[0]);
     } else {
       const regResponse = await axios.post(BASE_URL + "/EventUser", eObj);
+
       setEvent(regResponse.data.result[0]);
       setMessage("Registration Confirmed!");
     }
