@@ -144,6 +144,7 @@ const NetworkingActivity = () => {
       await axios.put(
         `${BASE_URL}/eventAttend?userId=${userObj.user_uid}&eventId=${eventObj.event_uid}&attendFlag=0`
       );
+      console.log(" handle");
     }
     catch(error){
       console.log("error in end event handle",error);
@@ -153,14 +154,13 @@ const NetworkingActivity = () => {
   const handleLeaveEvent = async () => {
     try{
       await handleEndEvent();
-      if(isBusiness){
-        const response = await axios.get(
-          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-        );
-        
-        removeAttendee(userObj.user_uid, { ...response["data"] });
-        navigate("/");
-      }     
+      const response = await axios.get(
+        `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      );
+      
+      removeAttendee(userObj.user_uid, { ...response["data"] });
+      fetchAttendees()
+      navigate("/");
     }
     catch(error){
       console.log("error in leaving",error);
@@ -282,7 +282,20 @@ const NetworkingActivity = () => {
                 response = JSON.parse(response.replace(/'/g, '"'));
                 console.log("the response",response);
                 console.log("result of user response",response[userObj.user_uid]);
-
+                if (response[userObj.user_uid].length==0){
+                  // console.log("user",userObj);
+                  let node_img=[nodesarr[userObj.first_name]];
+                  console.log("the node_img",node_img);
+                  setOptions({
+                    series: [{
+                        data:[userObj.first_name],
+                        nodes:node_img,
+                        marker:{
+                          radius:20,
+                        }
+                    }]
+                  })
+                }
                 let graph_data=[];
                 let user_name=response[userObj.user_uid][0]["from"];
                 node_images.push(nodesarr[user_name]);
