@@ -133,6 +133,10 @@ const NetworkingActivity = () => {
   };
 
   const refreshGraph = async ({ data }) => {
+    const response = await axios.get(
+      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+    );
+    data=response["data"];
     if (Object.keys(data).length === 0) return;
     setLoading(true);
     const [nodesArr, linksArr] = transformGraph(
@@ -382,6 +386,9 @@ const NetworkingActivity = () => {
           console.log("in the attendee enter exit");
           fetchAttendees();
       });
+    }
+    else{
+      refreshGraph("");
     }
     // isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     isAttendeePresent(eventObj.event_organizer_uid,(m) => refreshGraph(m));
