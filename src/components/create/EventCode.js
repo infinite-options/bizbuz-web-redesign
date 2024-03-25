@@ -5,7 +5,6 @@ import { ReactComponent as Brand } from "../../assets/brand.svg";
 import Button from "@mui/material/Button";
 import Loading from "../common/Loading";
 import QRCode from "../common/QRCode";
-import { S } from "react-share-social";
 import ShareButtons from "../common/ShareButtons";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
