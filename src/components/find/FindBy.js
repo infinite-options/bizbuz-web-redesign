@@ -1,6 +1,6 @@
 import { MenuItem, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
@@ -33,7 +33,7 @@ export default function FindBy() {
 	const [miles, setMiles] = useState(5);
 	const [zipCode, setZipCode] = useState("");
 	const [type, setType] = useState("");
-	const [registionCode, setRegistionCode] = useState("");
+	const [registrationCode, setRegistrationCode] = useState("");
 	const [isLoading, setLoading] = useState(false);
 	const [userEvents, setUserEvents] = useState([]);
 
@@ -41,7 +41,7 @@ export default function FindBy() {
 		let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		// let queries = [];
 		setLoading(true);
-		// !selectedDate && !city && !type && !registionCode && !zipCode) {
+		// !selectedDate && !city && !type && !registrationCode && !zipCode) {
 		axios
 			.get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
 			.then((response) => {
@@ -57,7 +57,7 @@ export default function FindBy() {
 		let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		let queries = [];
 		setLoading(true);
-		if (!selectedDate && !city && !type && !registionCode && !zipCode) {
+		if (!selectedDate && !city && !type && !registrationCode && !zipCode) {
 			axios
 				.get(BASE_URL + `/GetEvents?timeZone=${user_timezone}`)
 				.then((response) => {
@@ -110,9 +110,9 @@ export default function FindBy() {
 				);
 			}
 
-			if (registionCode) {
+			if (registrationCode) {
 				queries.push(
-					axios.get(BASE_URL + `/verifyRegCode/${registionCode}`)
+					axios.get(BASE_URL + `/verifyRegCode/${registrationCode}`)
 				);
 			}
 
@@ -174,7 +174,16 @@ export default function FindBy() {
 	}, []);
 
 	const handleRegisterClick = (event) => {
-		navigate("/eventInfo", { state: { event } });
+		console.log(event);
+		navigate(
+			"/eventInfo/$registrationCode".replace(
+				"$registrationCode",
+				event.event_registration_code
+			),
+			{
+				state: { event },
+			}
+		);
 	};
 
 	return (
@@ -394,9 +403,9 @@ export default function FindBy() {
 								endAdornment={
 									<InputAdornment position="end"></InputAdornment>
 								}
-								value={registionCode}
+								value={registrationCode}
 								onChange={(e) => {
-									setRegistionCode(e.target.value);
+									setRegistrationCode(e.target.value);
 								}}
 								sx={{
 									width: "355px",
