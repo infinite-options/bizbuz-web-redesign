@@ -7,12 +7,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import OverallNetwork from './OverallNetwork';
 import ClassGraph from './Graphs/ClassGraph';
 function RegisteredGraph() {
+    console.log("in cosine register graph");
     const navigate = useNavigate();
     const location = useLocation();
     const { eventObj, userObj, isBusiness } = location.state;
-    useEffect(()=>{
-        console.log("isbusiness",isBusiness);
-    },[]);
+    // useEffect(()=>{
+    //     console.log("isbusiness",isBusiness);
+    // },[]);
     return (
         <div>
             <Stack direction="row" sx={{ mt: "36px" }}>
@@ -22,6 +23,7 @@ function RegisteredGraph() {
                     onClick={() => navigate(-1, { state: { eventObj, userObj } })}
                 />
             </Stack>
+            <h1>Registrant Graph</h1>
             {isBusiness? <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={true}/> :<CosineGraph eventObj={eventObj} userObj={userObj} registergraph={true} />}            
         </div>
         // <>

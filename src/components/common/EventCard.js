@@ -21,7 +21,7 @@ import { ReactComponent as DoneRingBlackIcon } from "../../assets/done-ring-blac
 import DefaultEventImage from "../../assets/event-default.png";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const getEventTypeColor = (event) => {
   const eventTypeColors = {
     "Business Marketing": {

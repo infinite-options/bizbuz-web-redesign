@@ -15,7 +15,7 @@ import EventCard from "../../common/EventCard";
 import Loading from '../../common/Loading';
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function ClassGraph({registergraph}) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -92,6 +92,12 @@ function ClassGraph({registergraph}) {
         );
         data=response["data"];
       }
+      else{
+        const response = await axios.get(
+          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+        );
+        data=response["data"];
+      }
       const [nodesArr, linksArr] = transformGraph(
         data["user_groups"],
         data["users"],
@@ -99,7 +105,7 @@ function ClassGraph({registergraph}) {
         handleUserImage,
         userObj.user_uid
       );
-      
+      // console.log("linksarr",linksArr)
       setOptions({
         series: [
           {
@@ -111,6 +117,7 @@ function ClassGraph({registergraph}) {
     };
   
     const handleNodeClick = (e) => {
+      // console.log("this is e",e,"userOBJ",e.id)
       navigate("/attendeeDetails", {
         state: { event: eventObj, user: userObj, id: e.id },
       });
@@ -119,6 +126,7 @@ function ClassGraph({registergraph}) {
       //need
       // isAttendeePresent(userObj.user_uid, (m) =>  (m));
       // registergraphdata();
+      refreshGraph("");
       isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
       onAttendeeEnterExit((m) => {
         refreshGraph(m);

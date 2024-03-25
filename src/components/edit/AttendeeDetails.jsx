@@ -19,6 +19,7 @@ import EventCard from "../common/EventCard";
 import Loading from "../common/Loading";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const AttendeeDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,6 +43,7 @@ const AttendeeDetails = () => {
   };
 
   useEffect(() => {
+    // console.log("nametoid",id);
     fetchRegistrantDetails();
   }, []);
 

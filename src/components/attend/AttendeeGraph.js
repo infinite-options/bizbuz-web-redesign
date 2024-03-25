@@ -11,6 +11,7 @@ import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import OverallNetwork from './OverallNetwork';
 import CosineGraph from './Graphs/CosineGraph'
 import pfp from "../../images/pfp.jpg"
+import ClassGraph from './Graphs/ClassGraph';
 // const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 // const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 function AttendeeGraph() {
@@ -22,7 +23,7 @@ function AttendeeGraph() {
     // },[]);
     return (
         <>
-            {isBusiness ?  
+            {/* {isBusiness ?  
                 <OverallNetwork eventObj={eventObj} userObj={userObj}/>
                 : 
                 <div>
@@ -33,10 +34,22 @@ function AttendeeGraph() {
                             onClick={() => navigate(-1, { state: { eventObj, userObj } })}
                         />
                     </Stack>
+                    <h1>Attendee Graph</h1>
                     <CosineGraph eventObj={eventObj} userObj={userObj} registergraph={false} />
                     
                 </div>
-            }
+            } */}
+            <div>
+                <Stack direction="row" sx={{ mt: "36px" }}>
+                    <Brand onClick={() => navigate("/")} style={{ cursor: "pointer" }} />
+                    <BackIcon
+                        style={{ marginLeft: "auto", cursor: "pointer" }}
+                        onClick={() => navigate(-1, { state: { eventObj, userObj } })}
+                    />
+                </Stack>
+                <h1>Attendees Graph</h1>
+                {isBusiness? <ClassGraph eventObj={eventObj} userObj={userObj} registergraph={false}/> :<CosineGraph eventObj={eventObj} userObj={userObj} registergraph={false} />}            
+            </div>
         </>
         
     )

@@ -21,7 +21,7 @@ import CosineGraph from "./Graphs/CosineGraph";
 import ClassGraph from "./Graphs/ClassGraph";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-// const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 
 const SlideTransition = (props) => {
   return <Slide {...props} direction="down" />;
@@ -54,6 +54,17 @@ const NetworkingActivity = () => {
   const [message, setMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
   const isOrganizer = useRef(eventObj.event_organizer_uid === userObj.user_uid);
+  const [nametoid,setNametoid]=useState({})
+  const matchNameToId = async (attendees) =>{
+      let matchid={}
+      for(let i =0; i<attendees.length;i++){
+          matchid[attendees[i].first_name]=attendees[i].user_uid;
+      }
+      setNametoid(matchid)
+  }
+  useEffect(()=>{
+    console.log("match now",nametoid);
+  },[nametoid])
   const [options, setOptions] = useState({
     chart: {
       type: "networkgraph",
@@ -104,11 +115,18 @@ const NetworkingActivity = () => {
   });
 
   const handleNodeClick = (e) => {
-    navigate("/attendeeDetails", {
-      state: { event: eventObj, user: userObj, id: e.id },
-    });
+    if (!isBusiness){
+      // console.log("this handle node is clicked",nametoid,e.point.id);
+      navigate("/attendeeDetails", {
+        state: { event: eventObj, user: userObj, id: nametoid[e.point.id]},
+      });
+    }
+    else{
+      navigate("/attendeeDetails", {
+        state: { event: eventObj, user: userObj, id: e.id },
+      });
+    }
   };
-
   const handleUserImage = (images) => {
     const imagesArr = JSON.parse(images);
     return imagesArr.length > 0 ? imagesArr[0] : NoUserImage;
@@ -132,6 +150,17 @@ const NetworkingActivity = () => {
             nodes: nodesArr,
           },
         ],
+        plotOptions: {
+          networkgraph: {
+              point: {
+                events: {
+                  click(e) {
+                    handleNodeClick(e);
+                  },
+                },
+              },
+          },
+      },
       });
     }
     
@@ -226,6 +255,7 @@ const NetworkingActivity = () => {
     let updatedUsers = { ...eventUsers };
     // let nodesImg = [...nodesarr];
     let users=data["attendees"];
+    await matchNameToId(data["attendees"]);
     let nodesImg = {};
     for(let i=0;i<users.length;i++){
         let user_obj=users[i];
@@ -283,7 +313,18 @@ const NetworkingActivity = () => {
                         marker:{
                           radius:20,
                         }
-                    }]
+                    }],
+                    plotOptions: {
+                      networkgraph: {
+                          point: {
+                            events: {
+                              click(e) {
+                                handleNodeClick(e);
+                              },
+                            },
+                          },
+                      },
+                    },
                   })
                 }
                 let graph_data=[];
@@ -313,7 +354,18 @@ const NetworkingActivity = () => {
                         marker:{
                           radius:20,
                         }
-                    }]
+                    }],
+                    plotOptions: {
+                      networkgraph: {
+                          point: {
+                            events: {
+                              click(e) {
+                                handleNodeClick(e);
+                              },
+                            },
+                          },
+                      },
+                  },
                 })
             }      
         }

@@ -27,7 +27,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const EarlyArrival = () => {
 	const location = useLocation();
 	const { eventObj, user: userObj } = location.state;

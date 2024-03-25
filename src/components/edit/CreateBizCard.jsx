@@ -17,7 +17,7 @@ import Typography from "@mui/material/Typography";
 import UploadPhotos from "./UploadPhotos";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const CreateBizCard = () => {
 	const navigate = useNavigate();
 	const location = useLocation();

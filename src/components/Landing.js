@@ -17,7 +17,7 @@ import { getCookieParam } from "../util/helper";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const Landing = () => {
 	const navigate = useNavigate();
 	const [isLoggedOut, setLoggedOut] = useState(false);

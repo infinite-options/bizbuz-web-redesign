@@ -14,7 +14,7 @@ import Avatar from "@mui/material/Avatar";
 import EventCard from "../common/EventCard";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const EventRegistrants = () => {
   const navigate = useNavigate();
   const location = useLocation();

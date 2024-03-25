@@ -15,6 +15,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const EventDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();

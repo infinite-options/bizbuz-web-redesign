@@ -13,7 +13,7 @@ import axios from "axios";
 import { getCookieParam } from "../../util/helper";
 
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const CurrentEvents = () => {
 	const navigate = useNavigate();
 	const [events, setEvents] = useState([]);
