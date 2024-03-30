@@ -30,7 +30,7 @@ const Landing = () => {
 	const [user, setUser] = useState();
 	const [email, setEmail] = useState();
 	const [userUID, setUserUID] = useState();
-
+	const [displayName,setDisplayName]=useState();
 	const handleGlobeClick = (event) => {
 		if (getCookieParam(document, "loggedIn=") === "true") {
 			// If logged in
@@ -76,10 +76,30 @@ const Landing = () => {
 		setEmail(getCookieParam(document, "user_email="));
 		setUserUID(getCookieParam(document, "user_uid="));
 	}, []);
-
+	useEffect(() => {
+		if(user!==undefined){
+			const fixedString = user.replace(/'/g, '"');
+            setDisplayName(JSON.parse(fixedString));
+		}
+	}, [user]);
 	return (
 		<Box display="flex" justifyContent="center" flexDirection="column">
-			<Brand style={{ marginTop: "36px", marginBottom: "5rem" }} />
+			<div style={{display:"flex"}}>
+				<Brand style={{ marginTop: "36px", marginBottom: "5rem"}} />
+				{(() => {
+					if (getCookieParam(document, "loggedIn=") !== undefined && user !== undefined && displayName !==undefined) {
+						return (
+							<div style={{display: "flex", justifyContent: "flex-end", width: "55%", marginTop: "25px"}}>
+								<h1 style={{marginLeft:'20%',color:"white"}}>Hello</h1>
+								<h1 style={{marginLeft:'5%',color:'rgb(242,100,87)'}}>{displayName.first_name}!</h1>
+							</div>
+						);
+					} else {
+						return null;
+					}
+				})()}
+			</div>
+			
 			<Loading isLoading={isLoading} />
 			<Grid
 				container

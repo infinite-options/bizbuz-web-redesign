@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Highcharts from "../../util/networking";
 import HighchartsReact from "highcharts-react-official";
 import useAbly from "../../util/ably";
-import axios from "axios";
 import Loading from "../common/Loading";
 import Stack from "@mui/material/Stack";
 import { ReactComponent as Brand } from "../../assets/brand.svg";

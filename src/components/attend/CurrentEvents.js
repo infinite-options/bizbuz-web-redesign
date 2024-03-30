@@ -57,12 +57,18 @@ const CurrentEvents = () => {
 	};
 
 	const getEventsByUser = async () => {
-		let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-		const response = await axios.get(
-			`${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
-		);
-		setEvents(response.data.result);
-		setLoading(false);
+		try{
+			let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			const response = await axios.get(
+				`${BASE_URL}/GetEvents?event_start_date=${new Date().toLocaleDateString()}&timeZone=${user_timezone}`
+			);
+			setEvents(response.data.result);
+			setLoading(false);
+		}
+		catch(error){
+			console.log("error in get event by user",error);
+		}
+		
 	};
 
 	useEffect(() => {

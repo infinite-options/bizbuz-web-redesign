@@ -133,42 +133,48 @@ const NetworkingActivity = () => {
   };
 
   const refreshGraph = async ({ data }) => {
-    const response = await axios.get(
-      `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-    );
-    data=response["data"];
-    if (Object.keys(data).length === 0) return;
-    setLoading(true);
-    const [nodesArr, linksArr] = transformGraph(
-      data["user_groups"],
-      data["users"],
-      false,
-      handleUserImage,
-      userObj.user_uid
-    );
-    if(isBusiness){
-      setOptions({
-        series: [
-          {
-            data: linksArr,
-            nodes: nodesArr,
-          },
-        ],
-        plotOptions: {
-          networkgraph: {
-              point: {
-                events: {
-                  click(e) {
-                    handleNodeClick(e);
+    try{
+      const response = await axios.get(
+        `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+      );
+      data=response["data"];
+      if (Object.keys(data).length === 0) return;
+      setLoading(true);
+      const [nodesArr, linksArr] = transformGraph(
+        data["user_groups"],
+        data["users"],
+        false,
+        handleUserImage,
+        userObj.user_uid
+      );
+      if(isBusiness){
+        setOptions({
+          series: [
+            {
+              data: linksArr,
+              nodes: nodesArr,
+            },
+          ],
+          plotOptions: {
+            networkgraph: {
+                point: {
+                  events: {
+                    click(e) {
+                      handleNodeClick(e);
+                    },
                   },
                 },
-              },
-          },
-      },
-      });
+            },
+        },
+        });
+      }
+      
+      setLoading(false);
+    }
+    catch(error){
+      console.log("refresh graph",error);
     }
     
-    setLoading(false);
   };
 
   const handleEndEvent = async () => {
@@ -202,7 +208,12 @@ const NetworkingActivity = () => {
     if (eventObj.event_organizer_uid === userObj.user_uid) {
       onAttendeeEnterExit((m) => {
         if(isBusiness){
-          refreshGraph(m);
+          try{
+            refreshGraph(m);
+          }
+          catch(error){
+            console.log("refresh graph",error);
+          }
         }
         else{
           fetchAttendees();
@@ -213,7 +224,12 @@ const NetworkingActivity = () => {
     } else {
       onAttendeeUpdate((m) => {
         if(isBusiness){
-          refreshGraph(m);
+          try{
+            refreshGraph(m);
+          }
+          catch(error){
+            console.log("refresh graph",error);
+          }
         }
         else{
           fetchAttendees();
@@ -262,29 +278,36 @@ const NetworkingActivity = () => {
     await matchNameToId(data["attendees"]);
     let nodesImg = {};
     for(let i=0;i<users.length;i++){
-        let user_obj=users[i];
-        const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
-        updatedUsers[user_obj.first_name]={
-            user_uid: user_obj.user_uid,
-            images: user_obj.images,
-            qas:JSON.parse(qa.data.registrant.eu_qas),
-            first_name:user_obj.first_name,
-            last_name:user_obj.last_name
+        
+        try{
+          let user_obj=users[i];
+          const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
+          updatedUsers[user_obj.first_name]={
+              user_uid: user_obj.user_uid,
+              images: user_obj.images,
+              qas:JSON.parse(qa.data.registrant.eu_qas),
+              first_name:user_obj.first_name,
+              last_name:user_obj.last_name
+          }
+          let img_url=user_obj.images.replace(/[\[\]"]/g,'')
+              
+          if (img_url == ''){
+              img_url=pfp
+          }
+          nodesImg[user_obj.first_name]={
+              id:user_obj.first_name,
+              // image:img_url,
+              marker:{
+                  symbol: `url(${img_url})`,
+                  width: 50,
+                  height: 50,
+              }
+          }
         }
-        let img_url=user_obj.images.replace(/[\[\]"]/g,'')
-            
-        if (img_url == ''){
-            img_url=pfp
+        catch(error){
+          console.log("error in registrant fetching of network")
         }
-        nodesImg[user_obj.first_name]={
-            id:user_obj.first_name,
-            // image:img_url,
-            marker:{
-                symbol: `url(${img_url})`,
-                width: 50,
-                height: 50,
-            }
-        }
+        
     }
     setEventUsers(updatedUsers);
     setAttendees(data["attendees"]);
@@ -388,7 +411,12 @@ const NetworkingActivity = () => {
       });
     }
     else{
-      refreshGraph("");
+      try{
+        refreshGraph("");
+      }
+      catch(error){
+        console.log("refresh graph",error);
+      }
     }
     // isAttendeePresent(eventObj.event_organizer_uid, (m) => refreshGraph(m));
     isAttendeePresent(eventObj.event_organizer_uid,(m) => refreshGraph(m));
