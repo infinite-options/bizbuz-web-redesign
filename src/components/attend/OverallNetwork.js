@@ -110,7 +110,12 @@ const OverallNetwork = () => {
     // isAttendeePresent(userObj.user_uid, (m) =>  (m));
     isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
     onAttendeeEnterExit((m) => {
-      refreshGraph(m);
+      try{
+        refreshGraph(m);
+      }
+      catch(error){
+        console.log("refresh graph",error);
+      }
     });
     return () => unSubscribe();
   }, []);

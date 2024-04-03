@@ -86,34 +86,39 @@ function ClassGraph({registergraph}) {
     };
     
     const refreshGraph = async ({ data }) => {
-      if(registergraph){
-        const response = await axios.get(
-          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}&registrant="True"`
+      try{
+        if(registergraph){
+          const response = await axios.get(
+            `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}&registrant="True"`
+          );
+          data=response["data"];
+        }
+        else{
+          const response = await axios.get(
+            `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
+          );
+          data=response["data"];
+        }
+        const [nodesArr, linksArr] = transformGraph(
+          data["user_groups"],
+          data["users"],
+          true,
+          handleUserImage,
+          userObj.user_uid
         );
-        data=response["data"];
+        // console.log("linksarr",linksArr)
+        setOptions({
+          series: [
+            {
+              data: linksArr,
+              nodes: nodesArr,
+            },
+          ],
+        });
       }
-      else{
-        const response = await axios.get(
-          `${BASE_URL}/networkingGraph?eventId=${eventObj.event_uid}`
-        );
-        data=response["data"];
+      catch(error){
+        console.log("refresh graph",error);
       }
-      const [nodesArr, linksArr] = transformGraph(
-        data["user_groups"],
-        data["users"],
-        true,
-        handleUserImage,
-        userObj.user_uid
-      );
-      // console.log("linksarr",linksArr)
-      setOptions({
-        series: [
-          {
-            data: linksArr,
-            nodes: nodesArr,
-          },
-        ],
-      });
     };
   
     const handleNodeClick = (e) => {
@@ -126,10 +131,20 @@ function ClassGraph({registergraph}) {
       //need
       // isAttendeePresent(userObj.user_uid, (m) =>  (m));
       // registergraphdata();
-      refreshGraph("");
+      try{
+        refreshGraph("");
+      }
+      catch(error){
+        console.log("refresh graph",error);
+      }
       isAttendeePresent(userObj.user_uid, (m) => refreshGraph(m));
       onAttendeeEnterExit((m) => {
-        refreshGraph(m);
+        try{
+          refreshGraph(m);
+        }
+        catch(error){
+          console.log("refresh graph",error);
+        }
       });
       return () => unSubscribe();
     }, []);
