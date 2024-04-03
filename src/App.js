@@ -10,6 +10,7 @@ import CreateBizCard from "./components/edit/CreateBizCard";
 import CreateEvent from "./components/create/CreateEvent";
 import CurrentEvents from "./components/attend/CurrentEvents";
 import CurrentRsvp from "./components/rsvp/CurrentRsvp";
+import EventRedirect from "./components/find/EventRedirect";
 import EarlyArrival from "./components/attend/EarlyArrival";
 import EditEvent from "./components/edit/EditEvent";
 import EmailSignup from "./components/signup/EmailSignup";
@@ -146,6 +147,7 @@ const App = () => {
 					/>
 					<Route path="/currentRsvp" element={<CurrentRsvp />} />
 					<Route path="/rsvpEventInfo" element={<RsvpEventInfo />} />
+					<Route path="/:regCode" element={<EventRedirect />} />
 				</Routes>
 			</LoginContext.Provider>
 		</Container>

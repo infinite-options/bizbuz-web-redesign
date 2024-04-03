@@ -18,7 +18,7 @@ const EventCode = () => {
 	const [isLoading, setLoading] = useState(true);
 
 	const handleShare = () => {
-		navigator.clipboard.writeText(event.event_registration_code);
+		navigator.clipboard.writeText("https://bizbuz.design/"+event.event_registration_code);
 		setButtonText("Copied!");
 		setTimeout(() => {
 			setButtonText("Share");

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import { ReactComponent as Back } from "../../assets/back.svg";
 import Box from "@mui/material/Box";
@@ -11,8 +11,14 @@ import Typography from "@mui/material/Typography";
 const EventInfo = () => {
 	const location = useLocation();
 	const { event } = location.state;
+	// console.log("location.state", location.state)
+	// const event = location.state.registrationCode;
+	const { registrationCode } = useParams();
+	console.log("registrationCode" ,registrationCode)
+	console.log("event obj", location.state)
+	console.log(event)
 	const navigate = useNavigate();
-
+	// const event = registrationCode
 	return (
 		<Box display="flex" justifyContent="center" flexDirection="column">
 			<Box
