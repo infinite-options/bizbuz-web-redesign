@@ -26,7 +26,8 @@ function CosineResults() {
                     images: user_obj.images,
                     qas:JSON.parse(qa.data.registrant.eu_qas),
                     first_name:user_obj.first_name,
-                    last_name:user_obj.last_name
+                    last_name:user_obj.last_name,
+                    event_id : eventObj.event_uid
                 }
             }
             console.log("updated users",updatedUsers);
@@ -38,11 +39,33 @@ function CosineResults() {
     }
     const fetchResults = async()=>{
         try{
-            console.log("the value of encode",users,typeof(users),encodeURIComponent(JSON.stringify(users)));
+            let payload ={}
+            payload["event_id"] = eventObj.event_uid;
+
+            payload["user_ids"] = [];
+
+            for( let key in users){
+                payload["user_ids"].push(users[key]["user_uid"])
+            }
+            
+            console.log("users object", users)
+            console.log("the value of payload",payload);
             if(users!==undefined && users.length !== 0 ){
                 console.log("the endpoint is",users);
-                let response = await axios.get(
-                    `${BASE_URL}/showcosineresults?EventUsers=${encodeURIComponent(JSON.stringify(users))}`
+                // old api call
+                // let response = await axios.get(
+                //     //  old api call
+                //     // `${BASE_URL}/showcosineresults?EventUsers=${encodeURIComponent(JSON.stringify(users))}`
+                // )
+                let response = await axios.post(
+                    `${BASE_URL}/showcosineresults`,
+                    payload,
+                    {
+                        headers: {
+                          'Content-Type': 'application/json',
+                          // Add any other necessary headers here
+                        },
+                      }
                 )
                 const fixedString = response["data"].replace(/'/g, '"');
                 setResults(JSON.parse(fixedString));
