@@ -59,11 +59,13 @@ export default function CosineGraph({registergraph}) {
             for(let i=0;i<users.length;i++){
                 let user_obj=users[i];
                 // console.log("logging:",users[i]);
-                const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
+                //  commenting the api loop
+                // const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
                 updatedUsers[user_obj.first_name]={
                     user_uid: user_obj.user_uid,
                     images: user_obj.images,
-                    qas:JSON.parse(qa.data.registrant.eu_qas),
+                    // qas:JSON.parse(qa.data.registrant.eu_qas),
+                    qas : user_obj.eu_qas,
                     first_name:user_obj.first_name,
                     last_name:user_obj.last_name
                 }
@@ -104,23 +106,74 @@ export default function CosineGraph({registergraph}) {
             if(eventUsers!==undefined){
                 let arg=JSON.stringify(eventUsers);
                 console.log("BEFORE ENDPOINT CALL");
+                let payload ={}
+                payload["event_id"] = eventObj.event_uid;
+    
+                payload["user_ids"] = [];
+    
+                for( let key in eventUsers){
+                    payload["user_ids"].push(eventUsers[key]["user_uid"])
+                }
+
+                console.log("the payload is ", payload)
                 // let temp="%7B%22marty1%22%3A%7B%22user_uid%22%3A%22100-000077%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000077%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22swimming%22%7D%5D%2C%22first_name%22%3A%22marty1%22%2C%22last_name%22%3A%22%22%7D%2C%22mart3%22%3A%7B%22user_uid%22%3A%22100-000080%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22surfing%22%7D%5D%2C%22first_name%22%3A%22mart3%22%2C%22last_name%22%3A%22%22%7D%2C%22mart2%22%3A%7B%22user_uid%22%3A%22100-000081%22%2C%22images%22%3A%22%5B%5C%22https%3A%2F%2Fs3-us-west-1.amazonaws.com%2Fio-find-me%2Fuser%2F100-000080%2Fimg_cover%5C%22%5D%22%2C%22qas%22%3A%5B%7B%22id%22%3A1%2C%22question%22%3A%22What%20Are%20you%20really%20good%20at%3F%22%2C%22answer%22%3A%22running%22%7D%5D%2C%22first_name%22%3A%22mart2%22%2C%22last_name%22%3A%22%22%7D%7D"
                 console.log("the value of encode on re",eventUsers)
-                let response = await axios.get(
-                    `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
-                )
+
+                //  old api call
+                // let response = await axios.get(
+                //     `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
+                // )
                 // console.log("response of alg",response.data);
                 // console.log("AFTER ENDPOINT CALL");
+
+                let response  = await axios.post(`${BASE_URL}/algorithmgraph`,
+            
+                payload,
+                {
+                    headers: {
+                        "Content-Type" : "application/json"
+                    }
+                })
+
                 if(response!==undefined || response.data!==undefined){
                     response=response.data;
                     const jsonStr = response.replace(/'/g, '"')
                     response = JSON.parse(jsonStr);
                     let graph_data=[]
+                    console.log("eventUsers", eventUsers)
+                    console.log("response", response)
                     for (let key in response) {
+                        let fromId  = key
                         for(let i=0;i<response[key].length;i++){
-                            graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
+                            // let fromId = response[key][i]["from"];
+                            let toId = response[key][i]["to"]
+                            
+                            let from  =""
+                            let to = "";
+
+                            // for( let [u, e] in eventUsers){
+                            //     if(e.user_id === fromId){
+                            //         from = u
+                            //     }
+                            //     if(e.user_id === toId){
+                            //         to = u
+                            //     }
+                            // }
+                            console.log(fromId, toId)
+                            for (let userKey in eventUsers) {
+                                let user = eventUsers[userKey];
+                                if (user.user_uid == fromId) {
+                                    from = userKey;
+                                }
+                                if (user.user_uid == toId) {
+                                    to = userKey
+                                }
+                            }
+                    
+                            graph_data.push([from ,to]);
                         }
                     }
+                    console.log(graph_data)
                     // for (const key of Object.keys(response)) {
                     //     console.log("this is the key", key);
                     // }
