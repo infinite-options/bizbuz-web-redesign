@@ -20,11 +20,11 @@ function CosineResults() {
             let updatedUsers = {};
             for(let i=0;i<users.length;i++){
                 let user_obj=users[i];
-                const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
+                // const qa= await  axios.get(`${BASE_URL}/eventRegistrant?eventId=${eventObj.event_uid}&registrantId=${user_obj.user_uid}`)
                 updatedUsers[user_obj.first_name]={
                     user_uid: user_obj.user_uid,
                     images: user_obj.images,
-                    qas:JSON.parse(qa.data.registrant.eu_qas),
+                    // qas:JSON.parse(qa.data.registrant.eu_qas),
                     first_name:user_obj.first_name,
                     last_name:user_obj.last_name,
                     event_id : eventObj.event_uid
