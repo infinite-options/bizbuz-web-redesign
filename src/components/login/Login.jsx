@@ -27,8 +27,8 @@ export default function Login() {
         <BackIcon style={{ marginLeft: "auto" }} onClick={() => navigate(-1)} />
       </Stack>
 
-      <Typography variant="h1" sx={{ mt: "58px" }}>
-        {"Login here"}
+      <Typography variant="h2" sx={{ mt: "58px" }}>
+        {"Please signup or login to register"}
       </Typography>
       <Stack
         direction="column"
