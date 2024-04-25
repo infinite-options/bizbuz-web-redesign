@@ -1,5 +1,4 @@
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { ReactComponent as AddIcon } from "../../assets/add.svg";
 import { ReactComponent as BackIcon } from "../../assets/back.svg";
 import Box from "@mui/material/Box";
@@ -37,7 +36,7 @@ const EventQuestions = () => {
 			? JSON.parse(event.pre_event_questionnaire)
 			: []
 	);
-	const [customQuestion, setCustomQuestion] = useState("");
+	let [customQuestion, setCustomQuestion] = useState("");
 
 	const isDuplicateQuestion = (questions, question) => {
 		for (let i = 0; i < questions.length; i++) {
@@ -71,7 +70,20 @@ const EventQuestions = () => {
 		setCustomQuestion(e.target.value);
 	};
 
+
 	const handleAddQuestion = () => {
+		//  making first letter capital
+		let str = ""
+		console.log("here questions", customQuestion)
+		for( let i=0; i< customQuestion.length;i++){
+			if( i == 0) str += customQuestion[i].toUpperCase()
+			else str += customQuestion[i].toLowerCase()
+		}
+		console.log("here questions after change", str)
+		customQuestion = str;
+		setCustomQuestion(str);
+		console.log("here questions after changing customQuestion", customQuestion)
+		
 		if (
 			selectedQuestions.length < 3 &&
 			!isDuplicateQuestion(selectedQuestions, customQuestion) &&
