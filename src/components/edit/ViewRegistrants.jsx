@@ -30,7 +30,8 @@ const ViewRegistrants = () => {
 
   const fetchAttendees = async () => {
     const response = await axios.get(
-      `${BASE_URL}/eventAttendees?eventId=${event.event_uid}&attendFlag=1`
+      // `${BASE_URL}/eventAttendees?eventId=${event.event_uid}&attendFlag=1`
+      `${BASE_URL}/eventAttendees?eventId=${event.event_uid}`
     );
     const data = response["data"];
     setAttendees(data["attendees"]);

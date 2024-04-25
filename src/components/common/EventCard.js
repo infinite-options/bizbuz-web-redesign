@@ -166,7 +166,17 @@ const EventCard = ({
                 color={eventTypeColor.textColor}
                 align="right"
               >
-                {dayjs(eventObj.event_start_date).format("MMMM DD")}
+                
+                {/* {dayjs(eventObj.event_start_date).format("MMMM DD")} - {dayjs(eventObj.event_end_date).format("MMMM DD")} */}
+                {
+                  dayjs(eventObj.event_start_date).format("MMMM DD") === dayjs(eventObj.event_end_date).format("MMMM DD") ? (
+                    <span>{dayjs(eventObj.event_start_date).format("MMMM DD")}</span>
+                  ) : (
+                    <span>
+                      {dayjs(eventObj.event_start_date).format("MMMM DD")} - {dayjs(eventObj.event_end_date).format("MMMM DD")}
+                    </span>
+                  )
+                }
               </Typography>
             </Box>
           </Stack>

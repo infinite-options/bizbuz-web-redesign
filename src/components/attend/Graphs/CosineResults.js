@@ -87,7 +87,8 @@ function CosineResults() {
     },[results]);
     return (
         <div>
-            {(results!== undefined && results.length!=0)? 
+            {/* Empty div */}
+            {/* {(results!== undefined && results.length!=0)? 
                 (results.map((obj,i)=>(
                     <div key={i} style={{width:"150%"}}>
                         <h1 style={{color:'white',display:'flex'}}>
@@ -114,7 +115,7 @@ function CosineResults() {
                 )))
                 :
                 "" 
-            }
+            } */}
         </div>
     )
 }

@@ -21,7 +21,8 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import axios from "axios";
-
+import { ReactComponent as GetAllEvents } from "../../assets/get-all-events.svg";
+import { ReactComponent as ViewFilteredEvents } from "../../assets/view-filtered-events.svg";
 const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
 export default function FindBy() {
 	const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function FindBy() {
 	const [registrationCode, setRegistrationCode] = useState("");
 	const [isLoading, setLoading] = useState(false);
 	const [userEvents, setUserEvents] = useState([]);
-
+	const [toggleSearch, setToggleSearch] = useState(false);
 	const getEvents = () => {
 		let user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		// let queries = [];
@@ -169,6 +170,17 @@ export default function FindBy() {
 		}
 	};
 
+	const handleToggle = ()=>{
+		if( toggleSearch ) {
+			setToggleSearch(false);
+			// toggleSearch = false
+		}
+		else {
+			setToggleSearch(true);
+			// toggleSearch = true
+		}
+	}
+
 	useEffect(() => {
 		getUserRegisteredEvents();
 	}, []);
@@ -210,8 +222,75 @@ export default function FindBy() {
 					justifyContent="center"
 					alignItems="center"
 					flexDirection="column"
+					style={{marginTop: "60px"}}
 				>
-					<Typography
+					{/* <Typography
+						gutterBottom
+						variant="h4"
+						align="center"
+						sx={{
+							fontFamily: "Fira Sans Condensed",
+							fontSize: "20px",
+							lineHeight: "24px",
+							color: "#FFFFFF",
+							marginTop: "32px",
+							marginLeft: "139dp",
+						}}
+					>
+						{"Search Events"}
+					</Typography> */}
+
+					<Button
+						color="info"
+						variant="contained"
+						sx={{
+							width: "355px",
+							height: "56px",
+							mt: "16px",
+							marginBottom: "20px",
+						}}
+						onClick={getEvents}
+					>
+						{"View All Events"}
+
+					</Button>
+					<Button
+						variant="contained"
+						sx={{
+							width: "355px",
+							height: "56px",
+							mt: "16px",
+						}}
+						// onClick={getFilteredEvents}
+						onClick = {handleToggle}
+					>
+						<circle cx="85.625" cy="45.625" r="13.125" stroke="#33363F" stroke-width="2"/>
+
+						{"Search Events"}
+					</Button>
+					{/* <div sx={{
+					display:"flex"
+						
+					}}>
+					<GetAllEvents 
+					onClick={getEvents} 
+					style={{
+
+						margin:"20px !important"
+					}}
+					
+					/>
+
+					<ViewFilteredEvents 
+					 onClick={handleToggle}
+					 style={{
+
+						margin:"20px !important"
+					}}
+					 /></div> */}
+					{toggleSearch ? <div>
+
+											<Typography
 						gutterBottom
 						variant="h4"
 						align="center"
@@ -226,20 +305,6 @@ export default function FindBy() {
 					>
 						{"Search Events"}
 					</Typography>
-
-					<Button
-						color="info"
-						variant="contained"
-						sx={{
-							width: "355px",
-							height: "56px",
-							mt: "16px",
-							marginBottom: "20px",
-						}}
-						onClick={getEvents}
-					>
-						{"View All Events"}
-					</Button>
 
 					<LocalizationProvider dateAdapter={AdapterDayjs}>
 						<DatePicker
@@ -418,20 +483,26 @@ export default function FindBy() {
 							/>
 						</FormControl>
 					</Grid>
-
+					<Grid item sx={{ pl: "0 !important" }}>
 					<Button
 						variant="contained"
 						sx={{
-							width: "355px",
+							width: "155px",
 							height: "56px",
 							mt: "16px",
 						}}
 						onClick={getFilteredEvents}
 					>
-						{"View Filtered Events"}
+						{"Get Events"}
 					</Button>
+					</Grid>
+
+					</div> : <></>}
+
 				</Box>
 
+
+	{/*  events data list */}
 				<Grid container>
 					{" "}
 					<Grid

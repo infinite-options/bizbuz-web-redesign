@@ -32,9 +32,12 @@ const EventInfo = () => {
 				spacing={2}
 				sx={{ mt: 10 }}
 			>
+				
 				<EventCard
 					event={event}
-					onRegisterClick={() => {
+					// onRegisterClick={() => {
+						onButtonClick={() => {
+							console.log("herer")
 						navigate("/eventQuestionnaire", {
 							state: { event: event },
 						});
