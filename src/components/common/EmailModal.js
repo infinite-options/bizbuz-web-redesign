@@ -32,7 +32,7 @@ const EmailModal = ({ open, onClose, onSend }) => {
   };
 
   const handleSendEmail = () => {
-    onSend(list);
+    onSend(Array.from(list));
   };
 
   return (
