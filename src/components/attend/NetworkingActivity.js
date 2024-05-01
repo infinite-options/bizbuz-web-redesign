@@ -113,7 +113,7 @@ const NetworkingActivity = () => {
       enabled: false,
     },
   });
-
+  // console.log(options)
   const handleNodeClick = (e) => {
     if (!isBusiness){
       // console.log("this handle node is clicked",nametoid,e.point.id);
@@ -319,9 +319,27 @@ const NetworkingActivity = () => {
         if(eventUsers!==undefined){
             let arg=JSON.stringify(eventUsers);
             
-            let response = await axios.get(
-                `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
-            )
+            let payload ={};
+            payload["event_id"] = eventObj.event_uid;
+    
+            payload["user_ids"] = [userObj.user_uid];
+
+            // for( let key in eventUsers){
+            //     payload["user_ids"].push(eventUsers[key]["user_uid"])
+            // }
+
+            // let response = await axios.get(
+            //     `${BASE_URL}/algorithmgraph?EventUsers=${encodeURIComponent(JSON.stringify(eventUsers))}`
+            // )
+            let response  = await axios.post(`${BASE_URL}/algorithmgraph`,
+            
+            payload,
+            {
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            })
+
             let node_images=[];
             if(response!==undefined || response.data!==undefined){
                 response=response.data;
@@ -330,9 +348,7 @@ const NetworkingActivity = () => {
                 response = JSON.parse(response.replace(/'/g, '"'));
 
                 if (response[userObj.user_uid].length==0){
-                  // console.log("user",userObj);
                   let node_img=[nodesarr[userObj.first_name]];
-
                   setOptions({
                     series: [{
                         data:[userObj.first_name],
@@ -356,28 +372,62 @@ const NetworkingActivity = () => {
                 }
                 let graph_data=[];
                 let user_name=response[userObj.user_uid][0]["from"];
+                // console.log("nodesarr", nodesarr)
                 node_images.push(nodesarr[user_name]);
+
                 for(let i=0;i<response[userObj.user_uid].length;i++){
-                  graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
+                  // graph_data.push([response[userObj.user_uid][i]["from"],response[userObj.user_uid][i]["to"]]);
+                  // console.log("response[userObj.user_uid][i][to]", response[userObj.user_uid][i])
                   node_images.push(nodesarr[response[userObj.user_uid][i]["to"]]);
                 }
                 //pushes all nodes that point to the user to graph data
-                for(const key in response){
+                // for(const key in response){
+                //   for(let i=0;i<response[key].length;i++){
+                //     if(response[key][i]["to"]==user_name){
+                //       graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
+                //       node_images.push(nodesarr[response[key][i]["from"]]);
+                //     }
+                //   }
+                // }
+                // console.log("node_images after response", node_images)
+                for (let key in response) {
+                  let fromId  = key
                   for(let i=0;i<response[key].length;i++){
-                    if(response[key][i]["to"]==user_name){
-                      graph_data.push([response[key][i]["from"],response[key][i]["to"]]);
-                      node_images.push(nodesarr[response[key][i]["from"]]);
-                    }
-                  }
-                }
+                      // let fromId = response[key][i]["from"];
+                      let toId = response[key][i]["to"]
+                      
+                      let from  =""
+                      let to = "";
 
-                
+                      // for( let [u, e] in eventUsers){
+                      //     if(e.user_id === fromId){
+                      //         from = u
+                      //     }
+                      //     if(e.user_id === toId){
+                      //         to = u
+                      //     }
+                      // }
+                      for (let userKey in eventUsers) {
+                          let user = eventUsers[userKey];
+                          if (user.user_uid == fromId) {
+                              from = userKey;
+                          }
+                          if (user.user_uid == toId) {
+                              to = userKey
+                          }
+                      }
+              
+                      graph_data.push([from ,to]);
+                  }
+              }
+          
                 
                 setNodeData(graph_data);
                 setOptions({
                     series: [{
                         data:graph_data,
-                        nodes:node_images,
+                        // nodes:node_images,
+                        nodes:[],
                         marker:{
                           radius:20,
                         }
@@ -456,6 +506,7 @@ const NetworkingActivity = () => {
         <EventCard event={eventObj} isRegistered={true} />
       </Stack>
       <h1>Personal Graph</h1>
+
       <Stack spacing={2} direction="column">
         <HighchartsReact highcharts={Highcharts} options={options} />
       </Stack>
