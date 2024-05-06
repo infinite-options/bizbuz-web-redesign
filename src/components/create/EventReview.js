@@ -19,8 +19,8 @@ import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
 import { useState } from "react";
 
-// const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-const BASE_URL = process.env.REACT_APP_SERVER_LOCAL;
+const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
 const EventReview = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
