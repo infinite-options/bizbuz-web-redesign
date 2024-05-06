@@ -19,8 +19,8 @@ import dayjs from "dayjs";
 import useLocalStorage from "../../util/localStorage";
 import { useState } from "react";
 
-const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
-const LOCAL_URL = process.env.REACT_APP_SERVER_LOCAL;
+// const BASE_URL = process.env.REACT_APP_SERVER_BASE_URI;
+const BASE_URL = process.env.REACT_APP_SERVER_LOCAL;
 const EventReview = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -28,7 +28,8 @@ const EventReview = () => {
 	const [getEvent, setEvent, removeEvent] = useLocalStorage("event");
 	const event = getEvent();
 	const [isLoading, setLoading] = useState(false);
-
+	console.log("local storage functions getEvent, setEvent, removeEvent" ,getEvent, setEvent, removeEvent)
+	console.log("event" , event)
 	const handleAddEvent = async () => {
 		setLoading(true);
 		const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -74,8 +75,15 @@ const EventReview = () => {
 				requestBody.append(key, event[key]);
 			}
 		}
-		if (!requestBody.has(fileName))
-			requestBody.append(fileName, JSON.parse(event["event_photo"])[0]);
+		if (!requestBody.has(fileName)){
+			let val = JSON.parse(event["event_photo"]);
+			// if( val.length == 0) requestBody.append(fileName, "")
+			if( val.length == 0) console.log("do nothing")
+			else requestBody.append(fileName, val[0])
+			// requestBody.append(fileName, JSON.parse(event["event_photo"])[0]);
+
+		}
+		console.log("request body", requestBody)
 		const response = await fetch(BASE_URL + "/UpdateEvent", {
 			method: "PUT",
 			headers: headers,
@@ -228,14 +236,18 @@ const EventReview = () => {
 											/>
 										) : event.isEdit ? (
 											<CardMedia
+											// {DefaultEventImage}
 												component="img"
 												height="120rem"
 												image={
-													JSON.parse(
-														event.event_photo
-													)[0]
+													JSON.parse( event.event_photo )[0]
+													// JSON.parse(
+													// 	event.event_photo
+													// ).length ==0? DefaultEventImage: JSON.parse(
+													// 	event.event_photo
+													// )[0]
 												}
-												alt="event"
+												alt="missing event image"
 												sx={{
 													borderRadius: 3,
 													cursor: "pointer",
