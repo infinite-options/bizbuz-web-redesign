@@ -23,8 +23,8 @@ const EventImage = () => {
 		event.img_cover ? { image: event.img_cover } : {}
 	);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [isDefault, setDefault] = useState(true);
-
+	// const [isDefault, setDefault] = useState(true);
+	const [isDefault, setDefault] = useState(false);
 	const readImage = (file) => {
 		const reader = new FileReader();
 		reader.onload = (e) => {
