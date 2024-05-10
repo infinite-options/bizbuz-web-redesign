@@ -31,6 +31,7 @@ const EventReview = () => {
 	console.log("local storage functions getEvent, setEvent, removeEvent" ,getEvent, setEvent, removeEvent)
 	console.log("event" , event)
 	const handleAddEvent = async () => {
+		console.log("in handle event")
 		setLoading(true);
 		const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		event.user_timezone = user_timezone;
@@ -39,11 +40,16 @@ const EventReview = () => {
 		};
 		const requestBody = new FormData();
 		for (const key of Object.keys(event)) {
+
 			if (typeof event[key] === "object" && key !== "img_cover") {
+				console.log("key != img cover" )
 				requestBody.append(key, JSON.stringify(event[key]));
+				console.log(requestBody)
 			} else if (key === "img_cover") {
+				console.log("key is img_cover", key)
 				requestBody.append(key, getImage(event[key]));
 			} else {
+				console.log("else check what key is", key)
 				requestBody.append(key, event[key]);
 			}
 		}
@@ -59,6 +65,7 @@ const EventReview = () => {
 	};
 
 	const handleUpdateEvent = async () => {
+		console.log("here in upadte event", event)
 		const user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 		event.user_timezone = user_timezone;
 		const headers = {
@@ -67,11 +74,19 @@ const EventReview = () => {
 		const requestBody = new FormData();
 		const fileName = "img_cover";
 		for (const key of Object.keys(event)) {
+			// console.log(" before if event[key]", event[key], key)
 			if (typeof event[key] === "object" && key !== "img_cover") {
+
+				console.log("if key != img _cover", key)
 				requestBody.append(key, JSON.stringify(event[key]));
 			} else if (key === fileName && event[key]) {
+				console.log("if key = img _cover", key)
+				// if( event[key] != null)
 				requestBody.append(key, getImage(event[key]));
 			} else {
+				console.log("else key ", key, event[key])
+				// if( key === "img_cover" && event[key] == null) console.log("do nothing")
+				// else
 				requestBody.append(key, event[key]);
 			}
 		}
@@ -235,7 +250,24 @@ const EventReview = () => {
 												}
 											/>
 										) : event.isEdit ? (
-											<CardMedia
+											JSON.parse( event.event_photo ).length == 0 ? 
+											(<CardMedia
+												// {DefaultEventImage}
+													component="img"
+													height="120rem"
+													image={DefaultEventImage}
+													alt="missing event image"
+													sx={{
+														borderRadius: 3,
+														cursor: "pointer",
+													}}
+													onClick={() =>
+														handleChange("/eventImage")
+													}
+												/>)
+											
+											:
+											(<CardMedia
 											// {DefaultEventImage}
 												component="img"
 												height="120rem"
@@ -255,7 +287,7 @@ const EventReview = () => {
 												onClick={() =>
 													handleChange("/eventImage")
 												}
-											/>
+											/>)
 										) : (
 											<CardMedia
 												component="img"
