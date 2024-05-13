@@ -191,9 +191,15 @@ const EventReview = () => {
 				/>
 			</Stack>
 			<Loading isLoading={isLoading} />
-			<Typography variant="h1" sx={{ mt: "58px" }}>
-				{"Create new Event"}
-			</Typography>
+			{event.isEdit ? (
+				<Typography variant="h1" sx={{ mt: "58px" }}>
+					{"Edit Event"}
+				</Typography>
+			):(
+				<Typography variant="h1" sx={{ mt: "58px" }}>
+					{"Create new Event"}
+				</Typography>
+			)}
 			<Stack direction="column" spacing={2} sx={{ mt: "36px" }}>
 				<Box
 					display="flex"
@@ -249,7 +255,24 @@ const EventReview = () => {
 													handleChange("/eventImage")
 												}
 											/>
-										) : event.isEdit ? (
+										) : event.img_cover === null ?(
+										
+										<CardMedia
+												component="img"
+												height="120rem"
+												image={DefaultEventImage}
+												alt="event"
+												sx={{
+													borderRadius: 3,
+													cursor: "pointer",
+												}}
+												onClick={() =>
+													handleChange("/eventImage")
+												}
+											/>)
+										
+										
+										:(event.isEdit ? (
 											JSON.parse( event.event_photo ).length == 0 ? 
 											(<CardMedia
 												// {DefaultEventImage}
@@ -302,7 +325,7 @@ const EventReview = () => {
 													handleChange("/eventImage")
 												}
 											/>
-										)}
+										))}
 									</Box>
 									<Box
 										width="50%"
