@@ -52,7 +52,8 @@ const EditEvent = () => {
 				<Brand onClick={() => navigate("/")} />
 				<BackIcon
 					style={{ marginLeft: "auto" }}
-					onClick={() => navigate(-1)}
+					// onClick={() => navigate(-1)}
+					onClick={() => navigate("/createEvent", {state : { event, user}})}
 				/>
 			</Stack>
 			<Typography variant="h1" sx={{ mt: "40px" }}>
